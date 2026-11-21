@@ -88,6 +88,8 @@ When updating by hand, delete the old `Warcrest` folder first so no old files ar
 | `/warcrest sound` | Turn alert sounds on or off for you |
 | `/warcrest warn` | Turn on-screen alert banners on or off for you |
 | `/warcrest minimap` | Show or hide the minimap button |
+| `/warcrest share` | A short message about Warcrest, to copy and send to a friend or another guild |
+| `/warcrest invite` | Invite your guildmates to get Warcrest (officers post it in guild chat) |
 | `/warcrest debug` | Show error details in chat, for troubleshooting |
 | `/warcrest updates` | Show what changed in recent versions |
 | `/warcrest addon` | See who has the addon installed |

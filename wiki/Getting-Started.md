@@ -8,6 +8,14 @@ Install **Warcrest** from CurseForge, and everything else is shared with the gui
 2. Start the game and make sure **Warcrest** is ticked in the **AddOns** list on the character screen.
 3. Keep it updated. You'll get a reminder in game when a newer version is out, and a **What's new** window after each update (reopen it with `/warcrest updates`).
 
+## Get your guild on it
+
+Warcrest shares what each member sees with everyone else who has it, so it gets better the more of your guild installs it.
+
+- **Officers:** open **Guild > Who has Warcrest** and click **Invite the guild**. You'll see the message first; it goes to guild chat only when you click **Post in guild chat**. Warcrest never posts anything on its own.
+- **Members:** type `/warcrest invite` to get a short message to copy and send your officers, or `/warcrest share` for one to send a friend or another guild.
+- New to it? **Help > See it in action** shows a short picture tour of what it looks like once the guild has it.
+
 ## Open it
 
 - Click the **guild emblem** on the edge of your minimap. Left-click opens the addon, right-click opens Settings, Shift-click opens Kills. Drag it to move it around the minimap.

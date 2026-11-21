@@ -11,6 +11,12 @@ local UI = ns.UI
 
 -- Newest first. Players see every entry newer than the version they last used.
 local CHANGES = {
+  { version = "4.2.0", date = "Nov 21, 2026", items = {
+    "Get your guild on Warcrest: officers have Invite the guild in Guild > Who has Warcrest, which shows the message first and posts it in guild chat only when you click Post. Warcrest never posts anything on its own.",
+    "Share Warcrest (on Home, in Help, or /warcrest share): a short message to copy and send to a friend or another guild.",
+    "The welcome window opens with a picture tour of Warcrest. See it again any time from Help > See it in action.",
+    "Pages that are empty because few guildmates have Warcrest yet say so, and officers get one reminder on Home when fewer than half the active members have it.",
+  } },
   { version = "4.1.0", date = "Nov 21, 2026", items = {
     "Profiles and Crafters are now views in the Guild section, next to Roster and Who has Warcrest, instead of separate windows. /warcrest profiles, craft and orders open them there.",
     "Help, tooltips and messages name the new sections and views (for example Loot > Standings or PvP > Kills) instead of the old tabs.",

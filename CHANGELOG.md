@@ -1,5 +1,16 @@
 # Changelog
 
+## 4.2.0
+### Get your guild on Warcrest
+Warcrest gets better the more of your guild has it, so this update makes it easy to bring the rest in, without ever spamming anyone.
+- **Invite the guild** (officers, in **Guild > Who has Warcrest**, or `/warcrest invite`): a short message about Warcrest that you can edit, then post in guild chat with **Post in guild chat**. Nothing is sent until you click it, and the window shows when it was last posted. Members get the same message to copy and send their officers. Right-click someone without Warcrest in the list for a message to whisper them yourself.
+- **Share Warcrest** (on Home, in Help, or `/warcrest share`): a one-line message with where to get it, to paste to a friend, a Discord or another guild.
+- **A picture tour** in the welcome window: what Home, Kills, Raids, Loot and Profiles look like once the guild is on it. **Help > See it in action** shows it again.
+- **Empty pages explain themselves:** while few guildmates have Warcrest, pages like Kills, Wanted, Standings, Profiles, Crafters, Polls and Guild wars say how many have it and how to invite the rest.
+- **One reminder for officers:** when fewer than half of the guild's active members (online in the last 14 days) have Warcrest, Home shows it with an **Invite** button. **Hide** puts it away for good, unless 5 or more active members are still missing it later on.
+- **Getting started** has an extra first step when you're the only one in the guild with Warcrest: officers invite the guild, members tell their officers.
+- Warcrest never whispers, posts or advertises on its own, and it doesn't track anyone.
+
 ## 4.1.0
 - **Profiles and Crafters are views in the Guild section** now, next to Roster and Who has Warcrest, instead of windows of their own. They fill the Warcrest window and grow with it. `/warcrest profiles`, `/warcrest craft` and `/warcrest orders` open them there, and Getting started's "Share your recipes" step goes straight to Crafters. Crafters' Recipes and Orders switch, and Profiles' sort and **Edit my profile**, sit at the top right. Editing your own profile is still a small window.
 - **Help, tooltips and messages use the new names.** Everything that still said "the DKP tab", "the Kills tab" and so on now names the section and view, for example Loot > Standings, PvP > Kills, Events > Polls or Officers > Recruit, in all four languages.

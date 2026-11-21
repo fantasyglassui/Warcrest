@@ -34,6 +34,8 @@ All commands start with `/warcrest`, or the short `/wc`. The old `/imperium` and
 | `/warcrest warn` | Turn on-screen alert banners on or off |
 | `/warcrest quiet` | Hold alerts during combat, on or off |
 | `/warcrest minimap` | Show or hide the minimap button |
+| `/warcrest share` | A short message about Warcrest, to copy and send to a friend or another guild |
+| `/warcrest invite` | Invite your guildmates to get Warcrest (officers post it in guild chat) |
 | `/warcrest sync` | Catch up on guild history now |
 | `/warcrest recap` | Last week's guild recap |
 | `/warcrest recap now` | This week's recap so far |
