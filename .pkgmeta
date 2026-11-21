@@ -16,3 +16,4 @@ ignore:
   - tools
   - wiki
   - RELEASE_NOTES.md
+  - design
