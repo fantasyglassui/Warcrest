@@ -72,6 +72,7 @@ Guild\Polls.lua
 # 6. Interface: the theme, shared widgets and the guild panel
 UI\Theme.lua
 UI\Widgets.lua
+UI\Spread.lua
 UI\Access.lua
 UI\Banner.lua
 UI\Panel.lua

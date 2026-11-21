@@ -733,6 +733,10 @@ SlashCmdList.WARCREST = function(input)
       ns.SetMinimapButtonShown(show)
       ns.Say("Minimap button " .. (show and "shown." or "hidden. Type /warcrest minimap to bring it back."))
     end
+  elseif msg == "share" then
+    ns.ShowShare()
+  elseif msg == "invite" then
+    ns.ShowInvite()
   elseif msg == "council" or msg == "lc" then
     ns.OpenCouncil()
   elseif msg == "raidrecap" or msg == "night" then
@@ -811,6 +815,7 @@ SlashCmdList.WARCREST = function(input)
     print("  /warcrest - open Warcrest (or /wc)")
     print("  /warcrest raids | dkp | kills | wanted | wishlist | achievements - open that page")
     print("  /warcrest card [name] - a guild member's player card")
+    print("  /warcrest share | invite - spread the word about Warcrest")
     print("  /warcrest help - the help window, with every command")
   end
 end

@@ -8,7 +8,7 @@ local _, ns = ...
 local UI = ns.UI
 local C = UI.C
 
-local WIDTH, HEIGHT = 640, 460
+local WIDTH, HEIGHT = 640, 492
 local LIST_W = 170
 local win
 local current = 1
@@ -118,6 +118,8 @@ local TOPICS = {
     CMD("/warcrest test", "show a test alert"),
     CMD("/warcrest sync", "fetch recent history from guildmates"),
     CMD("/warcrest minimap", "show or hide the minimap button"),
+    CMD("/warcrest share", "a short message about Warcrest, to copy and send"),
+    CMD("/warcrest invite", "invite guildmates to get Warcrest"),
     CMD("/warcrest start", "the Getting started checklist"),
     CMD("/warcrest access", "accessibility: text size, colours and alert banners"),
     CMD("/warcrest updates", "what's new"),
@@ -168,18 +170,8 @@ local function Build()
 
   -- The website and the Discord, to copy (the game can't open links).
   local function copyBox(text, bottom, title, tip)
-    local box = UI.EditBox(win, LIST_W - 24)
-    box:SetHeight(24)
+    local box = UI.CopyBox(win, LIST_W - 24, text)
     box:SetPoint("BOTTOMLEFT", 12, bottom)
-    box:SetFontObject(UI.Fonts.Small)
-    box:SetText(text)
-    box:SetCursorPosition(0)
-    -- Read only: clicking selects it, ready for Ctrl+C.
-    box:SetScript("OnTextChanged", function(self, userInput)
-      if userInput then self:SetText(text); self:HighlightText() end
-    end)
-    box:HookScript("OnEditFocusGained", function(self) self:HighlightText() end)
-    box:HookScript("OnEditFocusLost", function(self) self:HighlightText(0, 0); self:SetCursorPosition(0) end)
     UI.Tooltip(box, title, tip)
     return box
   end
@@ -191,6 +183,11 @@ local function Build()
     "Guides, every achievement, and a form to send bugs and ideas to the developer. Click, then press Ctrl+C to copy the address.")
   win.discord = copyBox(ns.DISCORD, 16, "Warcrest Discord",
     "Help with setting it up, news about new versions, and other guilds using Warcrest. Click, then press Ctrl+C to copy the invite.")
+  win.share = UI.Button(win, "Share Warcrest", LIST_W - 24)
+  win.share:SetHeight(22)
+  win.share:SetPoint("BOTTOMLEFT", 12, 102)
+  win.share:SetScript("OnClick", function() ns.ShowShare() end)
+  UI.Tooltip(win.share, "Share Warcrest", "Opens a short message about Warcrest to copy and send to a friend or another guild.")
 
   win.heading = UI.Label(win, "", "Title")
   win.heading:SetPoint("TOPLEFT", LIST_W + 24, -44)

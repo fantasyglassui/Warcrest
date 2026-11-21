@@ -27,6 +27,7 @@ local C = UI.C
 local query = ""
 
 local function Refresh()
+  if P.invite then P.invite:SetShown(ns.CanInvite()) end
   local all, newest = rows()
   local q = query:lower()
   local shown, counts = {}, { yes = 0, old = 0, no = 0, onlineWith = 0, online = 0 }
@@ -100,6 +101,12 @@ local function Build(page)
     ns.RefreshPanel()
   end)
   P.search:SetPoint("TOPLEFT", 1, -86)
+  -- Officers: post a short invitation in guild chat (nothing is sent until they click Post).
+  P.invite = UI.Button(page, "Invite the guild", 150, "primary")
+  P.invite:SetHeight(26)
+  P.invite:SetPoint("TOPRIGHT", -1, -86)
+  UI.Tooltip(P.invite, "Invite the guild", "Post a short invitation to get Warcrest in guild chat. Nothing is sent until you click Post.")
+  P.invite:SetScript("OnClick", function() ns.ShowInvite() end)
 
   local card = UI.Box(page, 0, -120, 740, 290)
   P.card = card
@@ -116,7 +123,15 @@ local function Build(page)
         row.cols[i] = fs
       end
       UI.RowLine(row)
-      row:SetScript("OnClick", function(self) ns.ShowPlayerCard(self.item.m.name) end)
+      row:RegisterForClicks("LeftButtonUp", "RightButtonUp")
+      row:SetScript("OnClick", function(self, button)
+        if button == "RightButton" then
+          -- Someone without Warcrest: a ready-made invite to copy and send them.
+          if self.item.status == "no" then ns.ShowShare(ns.InviteText()) end
+        else
+          ns.ShowPlayerCard(self.item.m.name)
+        end
+      end)
     end,
     function(row, r)
       local m = r.m

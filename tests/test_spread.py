@@ -127,3 +127,69 @@ def test_nudge_and_dismissal():
     off.ns.db.invite = off.lua.eval("{}")
     stub_roster(off, "function(list) return list end")
     assert not off.ns.ShouldNudge() and not off.ns.AloneInGuild()
+
+
+def test_invite_refuses_empty_text():
+    guild = Guild(M)
+    off = guild["Off"]
+    for text in ("", "   \n\t ", None):
+        assert tuple(off.ns.PostGuildInvite(text)) == (False, "empty")
+    assert guild_chat(off) == []
+    assert off.ns.LastInvite() is None
+
+
+def window(c, name):
+    return c.lua.eval(name)
+
+
+def test_invite_window_officer_and_member():
+    guild = Guild(M)
+    off, bob = guild["Off"], guild["Bob"]
+    w = off.ns.ShowInvite()
+    assert w.post.IsShown(w.post)
+    assert str(w.box.GetText(w.box)) == str(off.ns.InviteText())
+    assert not w.copy.IsShown(w.copy)
+    w = bob.ns.ShowInvite()
+    assert not w.post.IsShown(w.post)
+    assert w.copy.IsShown(w.copy)
+    assert str(w.copy.GetText(w.copy)) == str(bob.ns.InviteText())
+    assert window(bob, "WarcrestInvite") is not None
+    assert off.errors() == [] and bob.errors() == []
+
+
+def test_invite_post_button_posts_and_closes():
+    guild = Guild(M)
+    off = guild["Off"]
+    w = off.ns.ShowInvite()
+    w.post.GetScript(w.post, "OnClick")(w.post)
+    assert len(guild_chat(off)) == 1
+    assert not w.IsShown(w)
+    assert off.ns.LastInvite() is not None
+    w = off.ns.ShowInvite()
+    assert "Last posted" in str(w.last.GetText(w.last))
+
+
+def test_share_command():
+    c = Guild(M)["Off"]
+    c.run('SlashCmdList.WARCREST("share")')
+    w = window(c, "WarcrestShare")
+    assert w.IsShown(w)
+    assert str(w.box.GetText(w.box)) == str(c.ns.ShareText())
+    c.ns.ShowShare("custom text")
+    assert str(w.box.GetText(w.box)) == "custom text"
+    c.run('SlashCmdList.WARCREST("invite")')
+    assert window(c, "WarcrestInvite").IsShown(window(c, "WarcrestInvite"))
+    assert c.errors() == []
+
+
+def test_no_send_on_open():
+    guild = Guild(M)
+    for n in ("Off", "Bob"):
+        c = guild[n]
+        c.ns.ShowInvite()
+        c.ns.ShowShare()
+        c.run('SlashCmdList.WARCREST("invite")')
+        c.run('SlashCmdList.WARCREST("share")')
+    guild.run(60)
+    assert guild_chat(guild["Off"]) == [] and guild_chat(guild["Bob"]) == []
+    assert guild["Off"].ns.LastInvite() is None

@@ -69,7 +69,9 @@ end
 -- The one thing Warcrest says in guild chat, and only when asked.
 function ns.PostGuildInvite(text)
   if not ns.CanInvite() then return false, "officer" end
-  text = tostring(text or ""):gsub("|", "||"):sub(1, MAX_CHAT)
+  text = tostring(text or "")
+  if not text:find("%S") then return false, "empty" end
+  text = text:gsub("|", "||"):sub(1, MAX_CHAT)
   -- Trimming must not cut an escaped pair in half.
   local bars = text:match("|+$")
   if bars and #bars % 2 == 1 then text = text:sub(1, -2) end

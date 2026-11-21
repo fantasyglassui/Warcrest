@@ -179,6 +179,28 @@ end
 ------------------------------------------------------------------------
 -- Inputs
 ------------------------------------------------------------------------
+-- A read-only box that selects all when clicked, ready for Ctrl+C. The caller places it.
+function UI.CopyBox(parent, width, text)
+  local box = UI.EditBox(parent, width)
+  box:SetHeight(24)
+  box:SetFontObject(UI.Fonts.Small)
+  box.copyText = text
+  box:SetText(text)
+  box:SetCursorPosition(0)
+  box:SetScript("OnTextChanged", function(self, userInput)
+    if userInput then self:SetText(self.copyText); self:HighlightText() end
+  end)
+  box:HookScript("OnEditFocusGained", function(self) self:HighlightText() end)
+  box:HookScript("OnEditFocusLost", function(self) self:HighlightText(0, 0); self:SetCursorPosition(0) end)
+  -- Change what the box holds (it stays read only for the person typing).
+  function box:SetCopyText(t)
+    self.copyText = t
+    self:SetText(t)
+    self:SetCursorPosition(0)
+  end
+  return box
+end
+
 function UI.EditBox(parent, width, maxLetters)
   local e = CreateFrame("EditBox", nil, parent)
   e:SetSize(width, 22)
