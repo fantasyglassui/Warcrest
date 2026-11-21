@@ -4,3 +4,4 @@ Thumbs.db
 __pycache__/
 .pytest_cache/
 RELEASE_NOTES.md
+.superpowers/
