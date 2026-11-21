@@ -534,18 +534,18 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 18px 40px; justify-content: 
     ["wanted", "Wanted", "Enemy players who keep killing guild members. When anyone spots one, the whole guild is alerted.", "PvP > Wanted: the most wanted ganker and how many guildmates they've killed."],
     ["war", "Guild wars", "The score against every enemy guild you've met. Rival guilds are listed first.", "PvP > Guild wars: enemy guilds with kills each way."],
     ["raids", "Raids", "Sign-ups by role, a check that tanks and healers are covered, and the raid night in progress.", "Raids: an upcoming raid with sign-ups."],
-    ["dkp", "DKP", "Standings and attendance, awarding DKP, and a live loot auction ready to start.", "Loot > Standings: standings, awards and a loot auction."],
+    ["dkp", "Loot", "Standings and attendance, awarding DKP, and a live loot auction ready to start.", "Loot > Standings: standings, awards and a loot auction."],
     ["events", "Events", "PvP nights, world bosses and anything else that isn't a raid. Anyone can plan one.", "Events: upcoming guild events and answers."],
     ["achievements", "Achievements", "Your achievements as tiles, with progress on the ones you're still working on.", "Achievements: PvP achievements and progress."],
-    ["progress", "Progress", "Bosses killed in each raid, with first kills, wipes and the best kill time.", "The Progress view: the guild's bosses in Hyjal Summit with first kills and wipes."],
-    ["polls", "Polls", "Ask the guild a question; everyone with Warcrest votes, and sees the results as they come in.", "The Polls view: which night for Blackwing Lair, with the votes so far."],
-    ["crafters", "Crafters", "Search what the guild can make. Online crafters come first; click a recipe to order it.", "Guild > Crafters: recipes and who makes them."]
+    ["progress", "Progress", "Bosses killed in each raid, with first kills, wipes and the best kill time.", "Raids, Progress view: the guild's bosses in Hyjal Summit with first kills and wipes."],
+    ["polls", "Polls", "Ask the guild a question; everyone with Warcrest votes, and sees the results as they come in.", "Events > Polls: which night for Blackwing Lair, with the votes so far."],
+    ["crafters", "Crafters", "Search what the guild can make. Online crafters come first; click a recipe to order it.", "Guild > Crafters: recipes and who makes them."],
+    ["profiles", "Profiles", "Everyone's main spec, role, item level and when they play. Sort by role or item level to plan a raid.", "Guild > Profiles: specs, roles, item levels and play times."]
   ];
   var tabs = document.querySelector("#tour .tabs"), img = document.getElementById("tour-img"), cap = document.getElementById("tour-cap");
   function pick(i) {
     var t = TABS[i];
     img.src = "img/" + t[0] + ".webp"; img.alt = t[3]; cap.textContent = t[2];
-    img.style.objectFit = t[0] === "crafters" ? "contain" : "cover";
     Array.prototype.forEach.call(tabs.children, function (b, j) { b.setAttribute("aria-selected", j === i ? "true" : "false"); b.tabIndex = j === i ? 0 : -1; });
   }
   TABS.forEach(function (t, i) {

@@ -534,18 +534,18 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 18px 40px; justify-content: 
     ["wanted", "Recherchés", "Les joueurs ennemis qui tuent sans cesse des membres. Quand quelqu'un en repère un, toute la guilde est prévenue.", "PvP > Recherchés : le ganker le plus recherché et combien de membres il a tués."],
     ["war", "Guerres de guildes", "Le score contre chaque guilde ennemie rencontrée. Les rivales en premier.", "PvP > Guerres de guilde : guildes ennemies avec les victoires de chaque côté."],
     ["raids", "Raids", "Sign-ups by role, a check that tanks and healers are covered, and the raid night in progress.", "Raids : un raid à venir avec les inscriptions."],
-    ["dkp", "DKP", "Classement et présence, attribution de DKP, et une enchère de butin prête à démarrer.", "Loot > Standings: standings, awards and a loot auction."],
+    ["dkp", "Butin", "Classement et présence, attribution de DKP, et une enchère de butin prête à démarrer.", "Loot > Standings: standings, awards and a loot auction."],
     ["events", "Événements", "Soirées PvP, boss mondiaux et tout ce qui n'est pas un raid. Tout le monde peut en organiser.", "Événements : les prochains événements de guilde et les réponses."],
     ["achievements", "Hauts faits", "Tes hauts faits en tuiles, avec la progression de ceux que tu vises encore.", "Hauts faits : hauts faits PvP et progression."],
-    ["progress", "Progression", "Les boss vaincus dans chaque raid, avec les premières victoires, les wipes et le meilleur temps.", "La vue Progression : les boss de la guilde au sommet d'Hyjal avec premières victoires et wipes."],
-    ["polls", "Sondages", "Pose une question à la guilde ; tous ceux qui ont Warcrest votent et voient les résultats au fur et à mesure.", "La vue Sondages : quel soir pour le repaire de l'Aile noire, avec les votes jusqu'ici."],
-    ["crafters", "Artisans", "Cherche ce que la guilde sait fabriquer. Les artisans en ligne d'abord ; clique sur une recette pour la commander.", "Guilde > Artisans : les recettes et qui les fabrique."]
+    ["progress", "Progression", "Les boss vaincus dans chaque raid, avec les premières victoires, les wipes et le meilleur temps.", "Raids, vue Progression : les boss de la guilde au sommet d'Hyjal avec premières victoires et wipes."],
+    ["polls", "Sondages", "Pose une question à la guilde ; tous ceux qui ont Warcrest votent et voient les résultats au fur et à mesure.", "Événements > Sondages : quel soir pour le repaire de l'Aile noire, avec les votes jusqu'ici."],
+    ["crafters", "Artisans", "Cherche ce que la guilde sait fabriquer. Les artisans en ligne d'abord ; clique sur une recette pour la commander.", "Guilde > Artisans : les recettes et qui les fabrique."],
+    ["profiles", "Profils", "La spécialisation principale, le rôle, le niveau d'objet et les horaires de chacun. Triez par rôle ou niveau d'objet pour préparer un raid.", "Guilde > Profils : spécialisations, rôles, niveaux d'objet et horaires de jeu."]
   ];
   var tabs = document.querySelector("#tour .tabs"), img = document.getElementById("tour-img"), cap = document.getElementById("tour-cap");
   function pick(i) {
     var t = TABS[i];
     img.src = "../img/" + t[0] + ".webp"; img.alt = t[3]; cap.textContent = t[2];
-    img.style.objectFit = t[0] === "crafters" ? "contain" : "cover";
     Array.prototype.forEach.call(tabs.children, function (b, j) { b.setAttribute("aria-selected", j === i ? "true" : "false"); b.tabIndex = j === i ? 0 : -1; });
   }
   TABS.forEach(function (t, i) {

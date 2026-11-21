@@ -534,18 +534,18 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 18px 40px; justify-content: 
     ["wanted", "Buscados", "Jugadores enemigos que no paran de matar a miembros. Cuando alguien ve a uno, toda la hermandad recibe un aviso.", "PvP > Buscados: el ganker más buscado y a cuántos miembros ha matado."],
     ["war", "Guerras de hermandades", "El marcador contra cada hermandad enemiga que os habéis cruzado. Las rivales primero.", "PvP > Guerras de hermandad: hermandades enemigas con las muertes de cada lado."],
     ["raids", "Bandas", "Sign-ups by role, a check that tanks and healers are covered, and the raid night in progress.", "Bandas: una próxima banda con inscripciones."],
-    ["dkp", "DKP", "Clasificación y asistencia, reparto de DKP y una subasta de botín lista para empezar.", "Loot > Standings: standings, awards and a loot auction."],
+    ["dkp", "Botín", "Clasificación y asistencia, reparto de DKP y una subasta de botín lista para empezar.", "Loot > Standings: standings, awards and a loot auction."],
     ["events", "Eventos", "Noches JcJ, jefes del mundo y todo lo que no es una banda. Cualquiera puede organizar uno.", "Eventos: próximos eventos de la hermandad y respuestas."],
     ["achievements", "Logros", "Tus logros en casillas, con el progreso de los que aún persigues.", "Logros: logros JcJ y progreso."],
-    ["progress", "Progreso", "Jefes derrotados en cada banda, con primeras muertes, wipes y el mejor tiempo.", "La vista Progreso: los jefes de la hermandad en la Cima Hyjal con primeras muertes y wipes."],
-    ["polls", "Encuestas", "Haz una pregunta a la hermandad; todos los que tienen Warcrest votan y ven los resultados según llegan.", "La vista Encuestas: qué noche para Guarida Alanegra, con los votos hasta ahora."],
-    ["crafters", "Artesanos", "Busca lo que la hermandad puede fabricar. Primero los artesanos conectados; haz clic en una receta para pedirla.", "Hermandad > Artesanos: recetas y quién las fabrica."]
+    ["progress", "Progreso", "Jefes derrotados en cada banda, con primeras muertes, wipes y el mejor tiempo.", "Bandas, vista Progreso: los jefes de la hermandad en la Cima Hyjal con primeras muertes y wipes."],
+    ["polls", "Encuestas", "Haz una pregunta a la hermandad; todos los que tienen Warcrest votan y ven los resultados según llegan.", "Eventos > Encuestas: qué noche para Guarida Alanegra, con los votos hasta ahora."],
+    ["crafters", "Artesanos", "Busca lo que la hermandad puede fabricar. Primero los artesanos conectados; haz clic en una receta para pedirla.", "Hermandad > Artesanos: recetas y quién las fabrica."],
+    ["profiles", "Perfiles", "La especialización principal, el rol, el nivel de objeto y cuándo juega cada uno. Ordena por rol o nivel de objeto para planear una banda.", "Hermandad > Perfiles: especializaciones, roles, niveles de objeto y horarios de juego."]
   ];
   var tabs = document.querySelector("#tour .tabs"), img = document.getElementById("tour-img"), cap = document.getElementById("tour-cap");
   function pick(i) {
     var t = TABS[i];
     img.src = "../img/" + t[0] + ".webp"; img.alt = t[3]; cap.textContent = t[2];
-    img.style.objectFit = t[0] === "crafters" ? "contain" : "cover";
     Array.prototype.forEach.call(tabs.children, function (b, j) { b.setAttribute("aria-selected", j === i ? "true" : "false"); b.tabIndex = j === i ? 0 : -1; });
   }
   TABS.forEach(function (t, i) {

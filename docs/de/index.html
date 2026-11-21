@@ -534,18 +534,18 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 18px 40px; justify-content: 
     ["wanted", "Gesucht", "Feindliche Spieler, die immer wieder Gildenmitglieder töten. Sieht jemand einen, wird die ganze Gilde gewarnt.", "PvP > Gesucht: der meistgesuchte Ganker und wie viele Gildenmitglieder er getötet hat."],
     ["war", "Gildenkriege", "Der Punktestand gegen jede feindliche Gilde, der ihr begegnet seid. Rivalen stehen oben.", "PvP > Gildenkriege: feindliche Gilden mit Kills auf beiden Seiten."],
     ["raids", "Schlachtzüge", "Sign-ups by role, a check that tanks and healers are covered, and the raid night in progress.", "Schlachtzüge: ein kommender Schlachtzug mit Anmeldungen."],
-    ["dkp", "DKP", "Rangliste und Anwesenheit, DKP vergeben und eine Live-Beuteauktion bereit zum Start.", "Loot > Standings: standings, awards and a loot auction."],
+    ["dkp", "Beute", "Rangliste und Anwesenheit, DKP vergeben und eine Live-Beuteauktion bereit zum Start.", "Loot > Standings: standings, awards and a loot auction."],
     ["events", "Veranstaltungen", "PvP-Abende, Weltbosse und alles andere, was kein Schlachtzug ist. Jeder kann eine planen.", "Veranstaltungen: kommende Gildenveranstaltungen und Antworten."],
     ["achievements", "Erfolge", "Deine Erfolge als Kacheln, mit Fortschritt bei denen, an denen du noch arbeitest.", "Erfolge: PvP-Erfolge und Fortschritt."],
-    ["progress", "Fortschritt", "Besiegte Bosse in jedem Schlachtzug, mit Erstkills, Wipes und Bestzeit.", "Die Ansicht Fortschritt: die Bosse der Gilde auf dem Hyjalgipfel mit Erstkills und Wipes."],
-    ["polls", "Umfragen", "Stell der Gilde eine Frage; alle mit Warcrest stimmen ab und sehen die Ergebnisse, sobald sie eintreffen.", "Die Ansicht Umfragen: welcher Abend für den Pechschwingenhort, mit den bisherigen Stimmen."],
-    ["crafters", "Handwerker", "Durchsuche, was die Gilde herstellen kann. Handwerker, die online sind, zuerst; klicke auf ein Rezept, um es zu bestellen.", "Gilde > Handwerker: Rezepte und wer sie herstellt."]
+    ["progress", "Fortschritt", "Besiegte Bosse in jedem Schlachtzug, mit Erstkills, Wipes und Bestzeit.", "Schlachtzüge, Ansicht Fortschritt: die Bosse der Gilde auf dem Hyjalgipfel mit Erstkills und Wipes."],
+    ["polls", "Umfragen", "Stell der Gilde eine Frage; alle mit Warcrest stimmen ab und sehen die Ergebnisse, sobald sie eintreffen.", "Veranstaltungen > Umfragen: welcher Abend für den Pechschwingenhort, mit den bisherigen Stimmen."],
+    ["crafters", "Handwerker", "Durchsuche, was die Gilde herstellen kann. Handwerker, die online sind, zuerst; klicke auf ein Rezept, um es zu bestellen.", "Gilde > Handwerker: Rezepte und wer sie herstellt."],
+    ["profiles", "Profile", "Hauptspezialisierung, Rolle, Gegenstandsstufe und Spielzeiten aller. Nach Rolle oder Gegenstandsstufe sortieren, um einen Schlachtzug zu planen.", "Gilde > Profile: Spezialisierungen, Rollen, Gegenstandsstufen und Spielzeiten."]
   ];
   var tabs = document.querySelector("#tour .tabs"), img = document.getElementById("tour-img"), cap = document.getElementById("tour-cap");
   function pick(i) {
     var t = TABS[i];
     img.src = "../img/" + t[0] + ".webp"; img.alt = t[3]; cap.textContent = t[2];
-    img.style.objectFit = t[0] === "crafters" ? "contain" : "cover";
     Array.prototype.forEach.call(tabs.children, function (b, j) { b.setAttribute("aria-selected", j === i ? "true" : "false"); b.tabIndex = j === i ? 0 : -1; });
   }
   TABS.forEach(function (t, i) {

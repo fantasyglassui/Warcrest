@@ -48,7 +48,6 @@
  "Copy": "Copiar",
  "Copy %s": "Copiar %s",
  "Crafters": "Artesanos",
- "DKP": "DKP",
  "Discord": "Discord",
  "Does everyone need it?": "¿Lo necesitan todos?",
  "Download": "Descargar",
@@ -150,9 +149,8 @@
  "Events: a PvP night and a world boss hunt, with answers from guildmates.": "Eventos: una noche JcJ y una caza de jefe del mundo, con respuestas de los miembros.",
  "Events: upcoming guild events and answers.": "Eventos: próximos eventos de la hermandad y respuestas.",
  "PvP > Kills: guild PvP kills and the Top Head Hunters board.": "PvP > Muertes: muertes JcJ de la hermandad y el tablero de cazadores de cabezas.",
- "The Kills tab: guild PvP kills this month and the Top Head Hunters board.": "La pestaña Muertes: muertes JcJ de la hermandad este mes y el tablero de cazadores de cabezas.",
- "The Polls view: which night for Blackwing Lair, with the votes so far.": "La vista Encuestas: qué noche para Guarida Alanegra, con los votos hasta ahora.",
- "The Progress view: the guild's bosses in Hyjal Summit with first kills and wipes.": "La vista Progreso: los jefes de la hermandad en la Cima Hyjal con primeras muertes y wipes.",
+ "Events > Polls: which night for Blackwing Lair, with the votes so far.": "Eventos > Encuestas: qué noche para Guarida Alanegra, con los votos hasta ahora.",
+ "Raids, Progress view: the guild's bosses in Hyjal Summit with first kills and wipes.": "Bandas, vista Progreso: los jefes de la hermandad en la Cima Hyjal con primeras muertes y wipes.",
  "Open Raids (also dkp, kills, wanted, wishlist, events, achievements)": "Abre Bandas (también dkp, kills, wanted, wishlist, events, achievements)",
  "Raids: an upcoming raid with sign-ups.": "Bandas: una próxima banda con inscripciones.",
  "PvP > Wanted: the most wanted ganker and how many guildmates they've killed.": "PvP > Buscados: el ganker más buscado y a cuántos miembros ha matado.",
@@ -197,5 +195,8 @@
  "Accessibility: text size, colours, alert banners": "Accesibilidad: tamaño del texto, colores, avisos",
  "What's happening in the guild on one page: the next raid and your job in it, your DKP, the open poll, PvP this week and guild news.": "Lo que pasa en la hermandad en una página: la próxima banda y tu tarea, tus DKP, la encuesta abierta, el JcJ de la semana y las noticias.",
  "The Home page: the raid night in progress, your DKP, an open poll, PvP this week and guild news.": "La página de inicio: la noche de banda en curso, tus DKP, una encuesta abierta, el JcJ de la semana y las noticias.",
- "Home": "Inicio"
+ "Home": "Inicio",
+ "Profiles": "Perfiles",
+ "Everyone's main spec, role, item level and when they play. Sort by role or item level to plan a raid.": "La especialización principal, el rol, el nivel de objeto y cuándo juega cada uno. Ordena por rol o nivel de objeto para planear una banda.",
+ "Guild > Profiles: specs, roles, item levels and play times.": "Hermandad > Perfiles: especializaciones, roles, niveles de objeto y horarios de juego."
 }

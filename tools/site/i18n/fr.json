@@ -48,7 +48,6 @@
  "Copy": "Copier",
  "Copy %s": "Copier %s",
  "Crafters": "Artisans",
- "DKP": "DKP",
  "Discord": "Discord",
  "Does everyone need it?": "Tout le monde en a-t-il besoin ?",
  "Download": "Télécharger",
@@ -150,9 +149,8 @@
  "Events: a PvP night and a world boss hunt, with answers from guildmates.": "Événements : une soirée PvP et une chasse au boss mondial, avec les réponses des membres.",
  "Events: upcoming guild events and answers.": "Événements : les prochains événements de guilde et les réponses.",
  "PvP > Kills: guild PvP kills and the Top Head Hunters board.": "PvP > Éliminations : les victoires PvP de la guilde et le classement des chasseurs de têtes.",
- "The Kills tab: guild PvP kills this month and the Top Head Hunters board.": "L'onglet Victoires : les victoires PvP de la guilde ce mois-ci et le classement des chasseurs de têtes.",
- "The Polls view: which night for Blackwing Lair, with the votes so far.": "La vue Sondages : quel soir pour le repaire de l'Aile noire, avec les votes jusqu'ici.",
- "The Progress view: the guild's bosses in Hyjal Summit with first kills and wipes.": "La vue Progression : les boss de la guilde au sommet d'Hyjal avec premières victoires et wipes.",
+ "Events > Polls: which night for Blackwing Lair, with the votes so far.": "Événements > Sondages : quel soir pour le repaire de l'Aile noire, avec les votes jusqu'ici.",
+ "Raids, Progress view: the guild's bosses in Hyjal Summit with first kills and wipes.": "Raids, vue Progression : les boss de la guilde au sommet d'Hyjal avec premières victoires et wipes.",
  "Open Raids (also dkp, kills, wanted, wishlist, events, achievements)": "Ouvre Raids (aussi dkp, kills, wanted, wishlist, events, achievements)",
  "Raids: an upcoming raid with sign-ups.": "Raids : un raid à venir avec les inscriptions.",
  "PvP > Wanted: the most wanted ganker and how many guildmates they've killed.": "PvP > Recherchés : le ganker le plus recherché et combien de membres il a tués.",
@@ -197,5 +195,8 @@
  "Accessibility: text size, colours, alert banners": "Accessibilité : taille du texte, couleurs, bannières",
  "What's happening in the guild on one page: the next raid and your job in it, your DKP, the open poll, PvP this week and guild news.": "Ce qui se passe dans la guilde sur une page : le prochain raid et votre tâche, vos DKP, le sondage ouvert, le JcJ de la semaine et les nouvelles.",
  "The Home page: the raid night in progress, your DKP, an open poll, PvP this week and guild news.": "La page d'accueil : la soirée de raid en cours, vos DKP, un sondage ouvert, le JcJ de la semaine et les nouvelles.",
- "Home": "Accueil"
+ "Home": "Accueil",
+ "Profiles": "Profils",
+ "Everyone's main spec, role, item level and when they play. Sort by role or item level to plan a raid.": "La spécialisation principale, le rôle, le niveau d'objet et les horaires de chacun. Triez par rôle ou niveau d'objet pour préparer un raid.",
+ "Guild > Profiles: specs, roles, item levels and play times.": "Guilde > Profils : spécialisations, rôles, niveaux d'objet et horaires de jeu."
 }

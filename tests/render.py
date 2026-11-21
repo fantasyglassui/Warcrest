@@ -430,8 +430,9 @@ def demo_guild(guild_name=None, locale=None):
         guild.run(0.5)
     weekdays = [True] * 5 + [False] * 2
     profile(me, "Protection", "tank", weekdays, "19:00-23:00", "03-14", "Main tank, raid lead on Thursdays", 66)
-    profile(guild["Lyra"], "Holy", "healer", [False, False, True, True, False, True, True], "20:00-00:00", "", "", 63)
-    profile(guild["Mira"], "Frost", "dps", weekdays, "18:00-22:00", "", "Loves Alterac Valley", 61)
+    profile(guild["Lyra"], "Frost", "dps", [False, False, True, True, False, True, True], "20:00-00:00", "", "", 63)
+    profile(guild["Mira"], "Holy", "healer", weekdays, "18:00-22:00", "", "Loves Alterac Valley", 61)
+    profile(guild["Brakk"], "Combat", "dps", [False] * 5 + [True] * 2, "14:00-18:00", "", "", 58)
     # Recruits.
     me.ns.SetRecruit("Jaina", me.lua.eval('{ class = "MAGE", level = 60, note = "Frost mage, raided Naxx before" }'))
     guild.run(0.5)

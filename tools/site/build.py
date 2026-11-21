@@ -182,6 +182,19 @@ def script_bounds(src):
     return a, src.index("</script>", a)
 
 
+class Used(dict):
+    """A translation table that remembers which keys were looked up."""
+    def __init__(self, *a):
+        super().__init__(*a)
+        self.used = set()
+
+    def __contains__(self, k):
+        hit = super().__contains__(k)
+        if hit:
+            self.used.add(k)
+        return hit
+
+
 def translate_page(lang, src, tr, ach, missing):
     """The English page in another language."""
     def t(s):
@@ -302,13 +315,15 @@ def changelog_pages(pages):
 
 def main():
     show_missing = "--missing" in sys.argv
+    prune = "--prune" in sys.argv  # drop translations the page no longer uses
     index = os.path.join(DOCS, "index.html")
     src = links(fill_news(read(index), "en", {}), "en")
     write(index, src)
     pages = {"en": src}
     for code, loc, hl, ogl, name, short in LANGS[1:]:
-        tr = json.load(open(os.path.join(os.path.dirname(__file__), "i18n", code + ".json"), encoding="utf-8"))
-        tr = {norm(k): v for k, v in tr.items()}
+        tr_path = os.path.join(os.path.dirname(__file__), "i18n", code + ".json")
+        raw = json.load(open(tr_path, encoding="utf-8"))
+        tr = Used({norm(k): v for k, v in raw.items()})
         addon = addon_locale(loc)
         missing = set()
         page = re.sub(r"<!--news-->.*?<!--/news-->", "<!--news--><!--/news-->", src, count=1, flags=re.S)
@@ -325,6 +340,13 @@ def main():
         page = re.sub(r'(src|href)="img/', r'\1="../img/', page)
         page = page.replace('"img/"', '"../img/"')
         write(os.path.join(DOCS, code, "index.html"), page)
+        unused = [k for k in raw if norm(k) not in tr.used]
+        if unused:
+            print("%s: %d unused%s" % (code, len(unused), ", removed" if prune else " (--prune removes them)"))
+            if prune:
+                with open(tr_path, "w", encoding="utf-8") as f:
+                    json.dump({k: v for k, v in raw.items() if k not in unused}, f, ensure_ascii=False, indent=1)
+                    f.write("\n")
         pages[code] = page
         if show_missing or missing:
             print("%s: %d missing" % (code, len(missing)))

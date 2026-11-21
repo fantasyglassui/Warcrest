@@ -48,7 +48,6 @@
  "Copy": "Kopieren",
  "Copy %s": "%s kopieren",
  "Crafters": "Handwerker",
- "DKP": "DKP",
  "Discord": "Discord",
  "Does everyone need it?": "Braucht es jeder?",
  "Download": "Herunterladen",
@@ -150,9 +149,8 @@
  "Events: a PvP night and a world boss hunt, with answers from guildmates.": "Veranstaltungen: ein PvP-Abend und eine Weltboss-Jagd, mit Antworten der Gildenmitglieder.",
  "Events: upcoming guild events and answers.": "Veranstaltungen: kommende Gildenveranstaltungen und Antworten.",
  "PvP > Kills: guild PvP kills and the Top Head Hunters board.": "PvP > Kills: PvP-Kills der Gilde und die Top-Kopfjäger-Tafel.",
- "The Kills tab: guild PvP kills this month and the Top Head Hunters board.": "Der Reiter Kills: PvP-Kills der Gilde in diesem Monat und die Top-Kopfjäger-Tafel.",
- "The Polls view: which night for Blackwing Lair, with the votes so far.": "Die Ansicht Umfragen: welcher Abend für den Pechschwingenhort, mit den bisherigen Stimmen.",
- "The Progress view: the guild's bosses in Hyjal Summit with first kills and wipes.": "Die Ansicht Fortschritt: die Bosse der Gilde auf dem Hyjalgipfel mit Erstkills und Wipes.",
+ "Events > Polls: which night for Blackwing Lair, with the votes so far.": "Veranstaltungen > Umfragen: welcher Abend für den Pechschwingenhort, mit den bisherigen Stimmen.",
+ "Raids, Progress view: the guild's bosses in Hyjal Summit with first kills and wipes.": "Schlachtzüge, Ansicht Fortschritt: die Bosse der Gilde auf dem Hyjalgipfel mit Erstkills und Wipes.",
  "Open Raids (also dkp, kills, wanted, wishlist, events, achievements)": "Öffnet Schlachtzüge (auch dkp, kills, wanted, wishlist, events, achievements)",
  "Raids: an upcoming raid with sign-ups.": "Schlachtzüge: ein kommender Schlachtzug mit Anmeldungen.",
  "PvP > Wanted: the most wanted ganker and how many guildmates they've killed.": "PvP > Gesucht: der meistgesuchte Ganker und wie viele Gildenmitglieder er getötet hat.",
@@ -197,5 +195,8 @@
  "Accessibility: text size, colours, alert banners": "Barrierefreiheit: Textgröße, Farben, Meldungsbanner",
  "What's happening in the guild on one page: the next raid and your job in it, your DKP, the open poll, PvP this week and guild news.": "Was in der Gilde los ist, auf einer Seite: der nächste Schlachtzug und deine Aufgabe darin, deine DKP, die offene Umfrage, PvP diese Woche und Gildennews.",
  "The Home page: the raid night in progress, your DKP, an open poll, PvP this week and guild news.": "Die Startseite: der laufende Raidabend, deine DKP, eine offene Umfrage, PvP diese Woche und Gildennews.",
- "Home": "Start"
+ "Home": "Start",
+ "Profiles": "Profile",
+ "Everyone's main spec, role, item level and when they play. Sort by role or item level to plan a raid.": "Hauptspezialisierung, Rolle, Gegenstandsstufe und Spielzeiten aller. Nach Rolle oder Gegenstandsstufe sortieren, um einen Schlachtzug zu planen.",
+ "Guild > Profiles: specs, roles, item levels and play times.": "Gilde > Profile: Spezialisierungen, Rollen, Gegenstandsstufen und Spielzeiten."
 }
