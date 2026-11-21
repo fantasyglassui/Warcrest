@@ -198,5 +198,18 @@
  "Home": "Start",
  "Profiles": "Profile",
  "Everyone's main spec, role, item level and when they play. Sort by role or item level to plan a raid.": "Hauptspezialisierung, Rolle, Gegenstandsstufe und Spielzeiten aller. Nach Rolle oder Gegenstandsstufe sortieren, um einen Schlachtzug zu planen.",
- "Guild > Profiles: specs, roles, item levels and play times.": "Gilde > Profile: Spezialisierungen, Rollen, Gegenstandsstufen und Spielzeiten."
+ "Guild > Profiles: specs, roles, item levels and play times.": "Gilde > Profile: Spezialisierungen, Rollen, Gegenstandsstufen und Spielzeiten.",
+ "Ask on the Discord": "Im Discord fragen",
+ "For guild leaders": "Für Gildenleiter",
+ "Get your whole guild on it in five minutes.": "Deine ganze Gilde in fünf Minuten startklar.",
+ "Guild leaders": "Gildenleiter",
+ "In <b style=\"color:var(--text)\">Guild &gt; Who has Warcrest</b>, click <b style=\"color:var(--text)\">Invite the guild</b>. You see the message first, and it's posted only when you click Post:": "Unter <b style=\"color:var(--text)\">Gilde &gt; Wer Warcrest hat</b> klickst du auf <b style=\"color:var(--text)\">Gilde einladen</b>. Du siehst die Nachricht zuerst, und sie wird erst gepostet, wenn du auf Posten klickst:",
+ "Install it": "Installieren",
+ "Post the message in guild chat": "Die Nachricht im Gildenchat posten",
+ "Run the setup": "Die Einrichtung durchgehen",
+ "Search for <b style=\"color:var(--text)\">Warcrest</b> in the CurseForge app, or download it from CurseForge.": "Suche in der CurseForge-App nach <b style=\"color:var(--text)\">Warcrest</b> oder lade es von CurseForge herunter.",
+ "The welcome window asks two things: which ranks run Warcrest, and whether your guild uses DKP. Save it, and every member gets the same settings.": "Das Willkommensfenster fragt zwei Dinge: welche Ränge Warcrest leiten und ob deine Gilde DKP nutzt. Speichern, und alle Mitglieder bekommen dieselben Einstellungen.",
+ "Warcrest is free and shares everything between the guildmates who have it: raid sign-ups, DKP and loot, PvP kills, polls and achievements. There's no website to log in to and nothing to host. The more of your guild installs it, the more it does.": "Warcrest ist kostenlos und teilt alles zwischen den Gildenmitgliedern, die es haben: Schlachtzug-Anmeldungen, DKP und Beute, PvP-Kills, Umfragen und Erfolge. Keine Website zum Einloggen, nichts zu hosten. Je mehr deiner Gilde es installieren, desto mehr kann es.",
+ "Warcrest's main window, moving through Home, PvP kills, Raids, Loot, Profiles and Crafters.": "Das Hauptfenster von Warcrest mit Start, PvP-Kills, Schlachtzügen, Beute, Profilen und Handwerkern.",
+ "[Guild] Our guild uses Warcrest for raids, DKP and more. Get it free on CurseForge or at warcrest-addon.com": "[Gilde] Unsere Gilde nutzt Warcrest für Schlachtzüge, DKP und mehr. Kostenlos auf CurseForge oder unter warcrest-addon.com"
 }

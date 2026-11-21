@@ -124,6 +124,11 @@ section { padding-block: 64px; }
 .banner .m { color: var(--text); font-size: .95rem; line-height: 1.4; }
 .banner .m b { color: var(--k); font-weight: 600; }
 .points { display: grid; gap: 22px; }
+.leaders .shot img { width: 100%; height: auto; display: block; border: 1px solid var(--edge); border-radius: 4px; }
+.leaders ol.points { list-style: none; padding: 0; margin: 0; counter-reset: l; }
+.leaders ol.points li { counter-increment: l; display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 12px; }
+.leaders ol.points li::before { content: counter(l); width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: color-mix(in srgb, var(--gold) 20%, transparent); color: var(--gold); font-weight: 700; }
+.chatline { margin-top: 8px; padding: 10px 12px; background: var(--panel); border: 1px solid var(--edge); border-radius: 3px; font: 500 .86rem var(--f-mono); color: #40ff40; overflow-wrap: anywhere; }
 .points h3 { margin-bottom: 4px; }
 .points p { color: var(--muted); font-size: .95rem; }
 
@@ -261,6 +266,7 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 18px 40px; justify-content: 
       Warcrest
     </a>
     <nav aria-label="Sections">
+      <a href="#leaders">Guild leaders</a>
       <a href="#features">Features</a>
       <a href="#news">What's new</a>
       <a href="/changelog/">Changelog</a>
@@ -305,6 +311,28 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 18px 40px; justify-content: 
         <div class="shot"><img id="tour-img" src="img/home.webp" width="1400" height="880" alt="The Home page: the raid night in progress, your DKP, an open poll, PvP this week and guild news."></div>
         <figcaption id="tour-cap">PvP kills by guild members, with killing blows and assists, and the monthly Top Head Hunters board.</figcaption>
       </figure>
+    </div>
+  </section>
+
+  <section class="leaders" id="leaders" aria-labelledby="leaders-h">
+    <div class="wrap alert-grid">
+      <div>
+        <div class="sec-head" style="margin-bottom:28px">
+          <span class="label">For guild leaders</span>
+          <h2 id="leaders-h">Get your whole guild on it in five minutes.</h2>
+          <p>Warcrest is free and shares everything between the guildmates who have it: raid sign-ups, DKP and loot, PvP kills, polls and achievements. There's no website to log in to and nothing to host. The more of your guild installs it, the more it does.</p>
+        </div>
+        <ol class="points">
+          <li><div><h3>Install it</h3><p>Search for <b style="color:var(--text)">Warcrest</b> in the CurseForge app, or download it from CurseForge.</p></div></li>
+          <li><div><h3>Run the setup</h3><p>The welcome window asks two things: which ranks run Warcrest, and whether your guild uses DKP. Save it, and every member gets the same settings.</p></div></li>
+          <li><div><h3>Post the message in guild chat</h3><p>In <b style="color:var(--text)">Guild &gt; Who has Warcrest</b>, click <b style="color:var(--text)">Invite the guild</b>. You see the message first, and it's posted only when you click Post:</p><div class="chatline">[Guild] Our guild uses Warcrest for raids, DKP and more. Get it free on CurseForge or at warcrest-addon.com</div></div></li>
+        </ol>
+        <div class="ctas" style="margin-top:28px">
+          <a class="btn gold" href="https://www.curseforge.com/wow/addons/warcrest" target="_blank" rel="noopener">Download on CurseForge</a>
+          <a class="btn" href="https://discord.gg/qeSMwQWyPR" target="_blank" rel="noopener">Ask on the Discord</a>
+        </div>
+      </div>
+      <figure class="shot" style="margin:0"><img src="img/tour.webp" width="1000" height="628" loading="lazy" alt="Warcrest's main window, moving through Home, PvP kills, Raids, Loot, Profiles and Crafters."></figure>
     </div>
   </section>
 

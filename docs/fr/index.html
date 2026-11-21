@@ -124,6 +124,11 @@ section { padding-block: 64px; }
 .banner .m { color: var(--text); font-size: .95rem; line-height: 1.4; }
 .banner .m b { color: var(--k); font-weight: 600; }
 .points { display: grid; gap: 22px; }
+.leaders .shot img { width: 100%; height: auto; display: block; border: 1px solid var(--edge); border-radius: 4px; }
+.leaders ol.points { list-style: none; padding: 0; margin: 0; counter-reset: l; }
+.leaders ol.points li { counter-increment: l; display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 12px; }
+.leaders ol.points li::before { content: counter(l); width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: color-mix(in srgb, var(--gold) 20%, transparent); color: var(--gold); font-weight: 700; }
+.chatline { margin-top: 8px; padding: 10px 12px; background: var(--panel); border: 1px solid var(--edge); border-radius: 3px; font: 500 .86rem var(--f-mono); color: #40ff40; overflow-wrap: anywhere; }
 .points h3 { margin-bottom: 4px; }
 .points p { color: var(--muted); font-size: .95rem; }
 
@@ -261,6 +266,7 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 18px 40px; justify-content: 
       Warcrest
     </a>
     <nav aria-label="Sections">
+      <a href="#leaders">Maîtres de guilde</a>
       <a href="#features">Fonctionnalités</a>
       <a href="#news">Nouveautés</a>
       <a href="/fr/changelog/">Journal</a>
@@ -305,6 +311,28 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 18px 40px; justify-content: 
         <div class="shot"><img id="tour-img" src="../img/home.webp" width="1400" height="880" alt="La page d&#x27;accueil : la soirée de raid en cours, vos DKP, un sondage ouvert, le JcJ de la semaine et les nouvelles."></div>
         <figcaption id="tour-cap">Les victoires PvP des membres, avec coups fatals et assistances, et le classement mensuel des meilleurs chasseurs de têtes.</figcaption>
       </figure>
+    </div>
+  </section>
+
+  <section class="leaders" id="leaders" aria-labelledby="leaders-h">
+    <div class="wrap alert-grid">
+      <div>
+        <div class="sec-head" style="margin-bottom:28px">
+          <span class="label">Pour les maîtres de guilde</span>
+          <h2 id="leaders-h">Toute ta guilde équipée en cinq minutes.</h2>
+          <p>Warcrest est gratuit et partage tout entre les membres qui l'ont : inscriptions aux raids, DKP et butin, victoires JcJ, sondages et hauts faits. Aucun site où se connecter, rien à héberger. Plus ta guilde l'installe, plus il en fait.</p>
+        </div>
+        <ol class="points">
+          <li><div><h3>Installe-le</h3><p>Cherche <b style="color:var(--text)">Warcrest</b> dans l'application CurseForge, ou télécharge-le sur CurseForge.</p></div></li>
+          <li><div><h3>Fais la configuration</h3><p>La fenêtre de bienvenue demande deux choses : quels rangs gèrent Warcrest, et si ta guilde utilise les DKP. Enregistre, et chaque membre reçoit les mêmes réglages.</p></div></li>
+          <li><div><h3>Publie le message dans la guilde</h3><p>Dans <b style="color:var(--text)">Guilde &gt; Qui a Warcrest</b>, clique sur <b style="color:var(--text)">Inviter la guilde</b>. Tu vois d'abord le message, et il n'est publié que quand tu cliques sur Publier :</p><div class="chatline">[Guilde] Notre guilde utilise Warcrest pour les raids, les DKP et plus. Gratuit sur CurseForge ou sur warcrest-addon.com</div></div></li>
+        </ol>
+        <div class="ctas" style="margin-top:28px">
+          <a class="btn gold" href="https://www.curseforge.com/wow/addons/warcrest" target="_blank" rel="noopener">Télécharger sur CurseForge</a>
+          <a class="btn" href="https://discord.gg/qeSMwQWyPR" target="_blank" rel="noopener">Demander sur le Discord</a>
+        </div>
+      </div>
+      <figure class="shot" style="margin:0"><img src="../img/tour.webp" width="1000" height="628" loading="lazy" alt="La fenêtre principale de Warcrest : Accueil, victoires JcJ, Raids, Butin, Profils et Artisans."></figure>
     </div>
   </section>
 
