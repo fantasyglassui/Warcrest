@@ -193,3 +193,82 @@ def test_no_send_on_open():
     guild.run(60)
     assert guild_chat(guild["Off"]) == [] and guild_chat(guild["Bob"]) == []
     assert guild["Off"].ns.LastInvite() is None
+
+
+# Home's reminder and the Getting started step.
+from render import Renderer
+from test_render import walk_text
+
+
+def panel_text(c):
+    c.ns.OpenPanel("home")
+    rd = Renderer(c)
+    return "\n".join(str(fs["_GetText"] or "") for fs in walk_text(rd, c.lua.eval("WarcrestPanel")))
+
+
+def test_nudge_card_shows_and_hides():
+    guild = Guild(M)
+    off = guild["Off"]
+    off.ns.db.started.dismissed = True
+    only_have(off, ["Gm", "Off"])
+    assert "2 of 6 active members have Warcrest" in panel_text(off)
+    off.ns.DismissNudge()
+    off.ns.RefreshPanel()
+    assert "active members have Warcrest" not in panel_text(off)
+    assert off.errors() == []
+
+
+def test_nudge_returns_after_five_more():
+    guild = Guild(M)
+    off = guild["Off"]
+    off.ns.db.started.dismissed = True
+    only_have(off, ["Gm", "Off"])
+    off.ns.DismissNudge()                              # 4 missing
+    add = """function(n) return function(list)
+      for i = 1, n do list[#list + 1] = { name = "X" .. i, full = "X" .. i .. "-Realm", online = true, offlineDays = 0 } end
+      return list end end"""
+    stub_roster(off, "(%s)(2)" % add)                  # 6 missing
+    assert "active members have Warcrest" not in panel_text(off)
+    stub_roster(off, "(%s)(5)" % add)                  # 9 missing
+    assert "2 of 11 active members have Warcrest" in panel_text(off)
+
+
+def test_members_never_see_nudge():
+    guild = Guild(M)
+    bob = guild["Bob"]
+    bob.ns.db.started.dismissed = True
+    only_have(bob, ["Bob"])
+    assert "active members have Warcrest" not in panel_text(bob)
+
+
+def test_alone_step():
+    guild = Guild(M)
+    off, bob = guild["Off"], guild["Bob"]
+    only_have(off, ["Off"])
+    step = off.ns.NextStartedStep()
+    assert step.id == "invite" and str(step.title) == "Invite your guild"
+    _, n, total = off.ns.StartedSteps()
+    assert total == 6
+    off.ns.PostGuildInvite(off.ns.InviteText())
+    done, _, _ = off.ns.StartedSteps()
+    assert done["invite"]
+    # Members are asked to tell their officers; getting the message is the step done.
+    only_have(bob, ["Bob"])
+    step = bob.ns.NextStartedStep()
+    assert step.id == "invite" and str(step.title) == "Tell your officers"
+    bob.ns.ShowInvite()
+    done, _, _ = bob.ns.StartedSteps()
+    assert done["invite"]
+    # The window grows a row for it.
+    bob.ns.ShowGettingStarted()
+    w = bob.lua.eval("WarcrestGettingStarted")
+    assert w.rows[6].IsShown(w.rows[6])
+    assert bob.errors() == [] and off.errors() == []
+
+
+def test_no_invite_step_when_others_have_it():
+    guild = Guild(M)
+    off = guild["Off"]
+    only_have(off, ["Gm", "Off", "Alice"])
+    _, _, total = off.ns.StartedSteps()
+    assert total == 5

@@ -81,6 +81,8 @@ function ns.ShowInvite()
   win.last:SetText(last and ns.TF("Last posted: %s", ago(last)) or "")
   -- Members can't post, so they get the same text to copy.
   win.hint:SetShown(not can)
+  -- For members, getting the message is the Getting started step done.
+  if not can and ns.NoteStarted then ns.NoteStarted("invite") end
   win.copy:SetShown(not can)
   win.copy:SetCopyText(ns.InviteText())
   win:Show()

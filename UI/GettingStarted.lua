@@ -42,22 +42,54 @@ local STEPS = {
     go = function() ns.ShowTitleChooser() end },
 }
 
+-- When you're the only one in the guild with Warcrest, the first step is
+-- getting the others to install it. Officers post an invite in guild chat;
+-- members copy a message for their officers. Once shown, it stays in the list.
+local INVITE = { id = "invite", button = "Invite",
+  done = function()
+    local have = ns.WarcrestCount()
+    return ns.LastInvite() ~= nil or have > 1
+  end,
+  go = function() if win then win:Hide() end; ns.ShowInvite() end }
+
+local function inviteText(step)
+  if ns.CanInvite() then
+    return "Invite your guild", "Post a short invitation in guild chat, so everyone gets Warcrest"
+  end
+  return "Tell your officers", "Copy a short message about Warcrest to send your officers"
+end
+INVITE.title, INVITE.hint = inviteText()
+
+local withInvite = { INVITE }
+for _, s in ipairs(STEPS) do withInvite[#withInvite + 1] = s end
+
+local function steps()
+  local db = ns.db.started
+  if not db.invite and not db.inviteShown and ns.AloneInGuild() then db.inviteShown = true end
+  if db.invite or db.inviteShown then
+    INVITE.title, INVITE.hint = inviteText()
+    return withInvite
+  end
+  return STEPS
+end
+
 -- Which steps are done. Once done, a step stays done.
 function ns.StartedSteps()
   local db = ns.db.started
   local out, n = {}, 0
-  for _, s in ipairs(STEPS) do
+  local list = steps()
+  for _, s in ipairs(list) do
     local ok = db[s.id] or (IsInGuild() and s.done() and true)
     if ok then db[s.id] = true; n = n + 1 end
     out[s.id] = ok and true or false
   end
-  return out, n, #STEPS
+  return out, n, #list
 end
 
 -- The first step not done yet ({ id, title, hint, button, go }), or nil when all are.
 function ns.NextStartedStep()
   local done = ns.StartedSteps()
-  for _, s in ipairs(STEPS) do
+  for _, s in ipairs(steps()) do
     if not done[s.id] then return s end
   end
 end
@@ -126,7 +158,7 @@ local function Build()
   win.fill:SetColorTexture(C.accent[1], C.accent[2], C.accent[3], 1)
 
   win.rows = {}
-  for i, s in ipairs(STEPS) do win.rows[i] = Row(win, i, s) end
+  for i, s in ipairs(withInvite) do win.rows[i] = Row(win, i, s) end
 
   -- The footer: officers' guild setup, and hiding it.
   local rule = win:CreateTexture(nil, "BORDER")
@@ -167,16 +199,26 @@ function ns.RefreshGettingStarted()
   local done, n, total = ns.StartedSteps()
   win.heading:SetText(n == total and ns.T("You're all set") or ns.TF("Welcome, %s", me()))
   win.sub:SetText(n == total and ns.T("The guild can see you, and you can see the guild. Have fun out there.")
+    or total > #STEPS and ns.T("Six quick things so the guild sees you, and you see the guild.")
     or ns.T("Five quick things so the guild sees you, and you see the guild."))
   win.count:SetText(ns.TF("%d of %d done", n, total))
   win.fill:SetShown(n > 0)
   win.fill:SetWidth(math.max(1, (WIDTH - 48) * n / total))
+  local list = steps()
+  win:SetHeight(HEIGHT + (#list - #STEPS) * (ROW_H + ROW_GAP))
   local nextStep
-  for i, s in ipairs(STEPS) do
+  for i, s in ipairs(list) do
     if not done[s.id] then nextStep = nextStep or i end
   end
-  for i, s in ipairs(STEPS) do
+  for i, r in ipairs(win.rows) do r:SetShown(i <= #list) end
+  for i, s in ipairs(list) do
     local r, ok, isNext = win.rows[i], done[s.id], i == nextStep
+    r.title:SetText(ns.T(s.title))
+    r.hint:SetText(ns.T(s.hint))
+    r.button:SetText(ns.T(s.button))
+    r.primary:SetText(ns.T(s.button))
+    r.button:SetScript("OnClick", s.go)
+    r.primary:SetScript("OnClick", s.go)
     r.check:SetShown(ok)
     r.num:SetShown(not ok)
     r.done:SetShown(ok)

@@ -59,11 +59,14 @@ local function BuildStrip(page)
   s.text = UI.Label(s, "", "Body")
   s.text:SetPoint("LEFT", s.label, "RIGHT", 14, 0)
   s.text:SetWordWrap(false)
-  s.later = UI.Button(s, "Later", 70)
+  s.later = UI.Button(s, "Later", 96)
   s.later:SetHeight(26)
   s.later:SetPoint("RIGHT", -8, 0)
   s.later:SetScript("OnClick", function() P.later = true; ns.RefreshPanel() end)
-  UI.Tooltip(s.later, "Later", "Hides this until you next log in. The Getting started card in the side menu stays.")
+  UI.Tooltip(s.later, function() return s.later.tip == "nudge" and ns.T("Hide") or ns.T("Later") end,
+    function() return s.later.tip == "nudge"
+      and ns.T("Hides this reminder. It comes back only if 5 or more active members are still without Warcrest.")
+      or ns.T("Hides this until you next log in. The Getting started card in the side menu stays.") end)
   s.go = UI.Button(s, "", 150, "primary")
   s.go:SetHeight(26)
   s.go:SetPoint("RIGHT", s.later, "LEFT", -6, 0)
@@ -211,6 +214,13 @@ local function Build(page)
   BuildPoll(holder)
   BuildPvP(holder)
   BuildNews(holder)
+  -- Anyone can pass Warcrest on: a short message to copy.
+  local share = UI.Button(page.headerBar, "Share Warcrest", 130)
+  share:SetHeight(26)
+  share:SetPoint("RIGHT")
+  share:SetScript("OnClick", function() ns.ShowShare() end)
+  UI.Tooltip(share, "Share Warcrest", "A short message about Warcrest to copy and send to a friend or another guild.")
+  P.share = share
   -- Laid out for the page's size, and again whenever the window is resized.
   P.w, P.h = UI.PAGE_W, UI.PAGE_H
   page.growth = page.growth or {}
@@ -223,14 +233,37 @@ end
 ------------------------------------------------------------------------
 -- Filling in
 ------------------------------------------------------------------------
+-- The strip: officers are reminded to invite the guild when fewer than half
+-- the active members have Warcrest; otherwise your next Getting started step.
+local function laterButton(label, tip, onClick)
+  P.strip.later:SetText(ns.T(label))
+  P.strip.later:SetScript("OnClick", onClick)
+  P.strip.later.tip = tip
+end
+
 local function RefreshStrip()
+  local s = P.strip
+  if ns.ShouldNudge() then
+    local have, active = ns.WarcrestCount()
+    s:Show()
+    s.label:SetText(ns.T("Your guild"))
+    s.text:SetText(ns.TF("%d of %d active members have Warcrest. Invite the rest.", have, active))
+    s.go:SetText(ns.T("Invite"))
+    s.go:SetScript("OnClick", function() ns.ShowInvite() end)
+    laterButton("Hide", "nudge", function() ns.DismissNudge(); ns.RefreshPanel() end)
+    P.nudging = true
+    return
+  end
+  P.nudging = false
   local step = ns.NextStartedStep and ns.NextStartedStep()
   local show = step and not P.later and not ns.db.started.dismissed
-  P.strip:SetShown(show and true or false)
+  s:SetShown(show and true or false)
   if not show then return end
-  P.strip.text:SetText(ns.T(step.title) .. UI.Code("muted") .. "  ·  " .. ns.T(step.hint) .. "|r")
-  P.strip.go:SetText(step.button)
-  P.strip.go:SetScript("OnClick", step.go)
+  s.label:SetText(ns.T("Next step"))
+  s.text:SetText(ns.T(step.title) .. UI.Code("muted") .. "  ·  " .. ns.T(step.hint) .. "|r")
+  s.go:SetText(step.button)
+  s.go:SetScript("OnClick", step.go)
+  laterButton("Later", "later", function() P.later = true; ns.RefreshPanel() end)
 end
 
 -- The next raid that hasn't finished (or tonight's raid night).
