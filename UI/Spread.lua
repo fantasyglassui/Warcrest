@@ -31,6 +31,7 @@ local function BuildInvite()
   win.intro = intro
 
   local bg = win:CreateTexture(nil, "BORDER")
+  win.boxBg = bg
   bg:SetPoint("TOPLEFT", 16, -76)
   bg:SetSize(428, 64)
   bg:SetColorTexture(C.control[1], C.control[2], C.control[3], 1)
@@ -58,10 +59,10 @@ local function BuildInvite()
   win.last:SetPoint("LEFT", win.post, "RIGHT", 12, 0)
 
   win.hint = UI.Label(win, "Copy this and send it to your officers.", "MutedSmall")
-  win.hint:SetPoint("TOPLEFT", 16, -154)
+  win.hint:SetPoint("TOPLEFT", 16, -42)
   win.hint:SetWidth(428)
   win.copy = UI.CopyBox(win, 428, ns.InviteText())
-  win.copy:SetPoint("TOPLEFT", 16, -176)
+  win.copy:SetPoint("TOPLEFT", 16, -64)
   return win
 end
 
@@ -71,6 +72,10 @@ function ns.ShowInvite()
   win.box:SetText(ns.InviteText())
   win.box:SetCursorPosition(0)
   win.post:SetShown(can)
+  win.box:SetShown(can)
+  win.boxBg:SetShown(can)
+  win:SetHeight(can and 250 or 130)
+  win.intro:SetShown(can)
   local last = ns.LastInvite()
   win.last:SetShown(can and last ~= nil)
   win.last:SetText(last and ns.TF("Last posted: %s", ago(last)) or "")
