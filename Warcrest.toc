@@ -26,6 +26,7 @@ Locales\frFR.lua
 Locales\esES.lua
 Core\Release.lua
 Guild\Guild.lua
+Guild\Spread.lua
 
 # 2. Alerts: PvP kills, deaths (for the Wanted list), the Wanted list, streaks and revenge, level-ups
 PvP\Deaths.lua

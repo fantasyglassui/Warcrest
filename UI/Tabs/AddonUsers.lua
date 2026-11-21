@@ -20,25 +20,7 @@ local function ago(t)
   return math.floor(s / 86400) .. " d ago"
 end
 
--- Every guild member with their addon status.
-local function rows()
-  local newest = ns.NewestVersion()
-  local users = ns.db.addonUsers or {}
-  local out = {}
-  for _, m in ipairs(ns.GetRoster()) do
-    local u = users[ns.Key(m.name)]
-    local live = ns.versions[m.full]               -- confirmed this session
-    local version = live or (u and u.version)
-    local status
-    if live or u then
-      status = (version and ns.CompareVersions(version, newest) < 0) and "old" or "yes"
-    else
-      status = "no"
-    end
-    out[#out + 1] = { m = m, version = version, seen = u and u.t, status = status, live = live ~= nil }
-  end
-  return out, newest
-end
+local rows = ns.AddonUserRows
 
 local ORDER = { yes = 1, old = 2, no = 3 }
 local C = UI.C
