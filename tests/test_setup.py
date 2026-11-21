@@ -184,3 +184,22 @@ def test_bug_report_and_discord():
     assert bob.said("discord.gg/qeSMwQWyPR")
     assert shown(bob, "WarcrestHelp")
     assert not [e for e in bob.errors() if "boom" not in e]
+
+
+def test_tour_pages():
+    guild = Guild(MEMBERS)
+    ready(guild)
+    bob = guild["Bob"]
+    bob.ns.ShowTour()
+    assert shown(bob, "WarcrestWelcome")
+    tour = bob.lua.eval("WarcrestWelcome.tour")
+    assert tour.IsShown(tour)
+    def pic():
+        return str(tour.pic["_layout"]["tex"])
+    assert pic().endswith("Media\\Tour\\home")
+    seen = []
+    for _ in range(5):
+        tour.nextPic.GetScript(tour.nextPic, "OnClick")(tour.nextPic)
+        seen.append(pic().rsplit("\\", 1)[1])
+    assert seen == ["kills", "raids", "dkp", "profiles", "home"]
+    assert not bob.errors()

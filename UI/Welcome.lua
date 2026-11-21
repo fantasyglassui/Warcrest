@@ -17,7 +17,7 @@ local _, ns = ...
 local UI = ns.UI
 local C = UI.C
 
-local WIDTH, HEIGHT = 520, 420
+local WIDTH, HEIGHT = 520, 448
 local INNER = WIDTH - 48
 local win
 local step = 1
@@ -70,6 +70,17 @@ local function Feature(parent, y, icon, title, text)
   return t, d
 end
 
+-- The tour's pictures (Media/Tour, made by tools/tour_images.py) and captions.
+local TOUR = {
+  { "home", "Everything happening in your guild, on one page." },
+  { "kills", "Every PvP kill and death, with a monthly leaderboard." },
+  { "raids", "Sign up for raids by role; officers see who's coming." },
+  { "dkp", "DKP, live loot auctions and wishlists, shared by everyone." },
+  { "profiles", "Specs, roles, item levels and when people play." },
+}
+local TOUR_W, TOUR_H = 432, 216
+local tourAt = 1
+
 local function BuildWelcome()
   local p = Page("Welcome to Warcrest", "")
   p.refresh = function()
@@ -77,10 +88,39 @@ local function BuildWelcome()
     p.sub:SetText(guild and ns.TF("Guild tools for %s, shared automatically with every guildmate who has Warcrest.", UI.Code("accent") .. guild .. "|r")
       or "Guild tools, shared automatically with every guildmate who has Warcrest. Join a guild to get started.")
   end
-  Feature(p, -92, "raids", "Raids, sign-ups and DKP", "Schedule raids, sign up as Tank, Healer or DPS, track attendance, and run loot auctions.")
-  Feature(p, -138, "kills", "PvP kills and the Wanted list", "Hear about guild kills and streaks, and who keeps ganking your guild.")
-  Feature(p, -184, "trophy", "Achievements and player cards", "Earn achievements and titles; click any name to see someone's record.")
-  Feature(p, -230, "roster", "Officer tools", "Roster, notes, ranks, invites and a log of every change.")
+  -- The tour: what Warcrest looks like once the guild is on it.
+  local pic = p:CreateTexture(nil, "ARTWORK")
+  pic:SetPoint("TOP", 0, -92)
+  pic:SetSize(TOUR_W, TOUR_H)
+  local edge = CreateFrame("Frame", nil, p)
+  edge:SetAllPoints(pic)
+  UI.Border(edge, C.cardEdge[1], C.cardEdge[2], C.cardEdge[3], 1)
+  p.pic = pic
+  p.caption = UI.Label(p, "", "Body")
+  p.caption:SetPoint("TOPLEFT", pic, "BOTTOMLEFT", 0, -10)
+  p.caption:SetWidth(TOUR_W - 60)
+  p.count = UI.Label(p, "", "MutedSmall")
+  p.count:SetPoint("TOPRIGHT", pic, "BOTTOMRIGHT", 0, -12)
+  local function arrow(text, d, point, x)
+    local b = UI.Button(p, text, 28)
+    b:SetHeight(28)
+    b:SetPoint(point, pic, point, x, 0)
+    b:SetScript("OnClick", function() ns.TourStep(d) end)
+    return b
+  end
+  p.prev = arrow("<", -1, "LEFT", 6)
+  p.nextPic = arrow(">", 1, "RIGHT", -6)
+  win.tour = p
+end
+
+function ns.TourStep(d)
+  tourAt = (tourAt - 1 + d) % #TOUR + 1
+  local p = win and win.tour
+  if not p then return end
+  local t = TOUR[tourAt]
+  p.pic:SetTexture("Interface\\AddOns\\Warcrest\\Media\\Tour\\" .. t[1])
+  p.caption:SetText(ns.T(t[2]))
+  p.count:SetText(tourAt .. " / " .. #TOUR)
 end
 
 local function BuildSetup()
@@ -267,8 +307,15 @@ function ns.ShowWelcome(first)
     if officer or not p.officerOnly then order[#order + 1] = p end
   end
   setStep(math.max(1, math.min(tonumber(first) or 1, #order)))
+  ns.TourStep(0)
   win:Show()
   ns.db.welcomed = true
+end
+
+-- The tour, from Help: the welcome window's first page.
+function ns.ShowTour()
+  tourAt = 1
+  ns.ShowWelcome(1)
 end
 
 -- Officers in a guild nobody has set Warcrest up for: a reminder, once a session.
