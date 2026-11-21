@@ -66,6 +66,15 @@ local function inviteState()
   return ns.db.invite
 end
 
+-- An empty page's text, plus how many have Warcrest while few do: most pages
+-- fill up from guildmates who have it, so that's usually why it's empty.
+function ns.EmptyHint(text)
+  text = ns.T(text)
+  local have, active = ns.WarcrestCount()
+  if not (ns.AloneInGuild() or (active > 0 and have < 3)) then return text end
+  return text .. "\n\n" .. ns.TF("%d of %d members have Warcrest. Officers can invite the rest from Guild > Who has Warcrest.", have, active)
+end
+
 -- The one thing Warcrest says in guild chat, and only when asked.
 function ns.PostGuildInvite(text)
   if not ns.CanInvite() then return false, "officer" end

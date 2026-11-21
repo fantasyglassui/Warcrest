@@ -272,3 +272,18 @@ def test_no_invite_step_when_others_have_it():
     only_have(off, ["Gm", "Off", "Alice"])
     _, _, total = off.ns.StartedSteps()
     assert total == 5
+
+
+def test_empty_hint_only_when_few_have_it():
+    c = Guild(M)["Off"]
+    only_have(c, ["Off"])
+    hint = str(c.ns.EmptyHint("x"))
+    assert hint.startswith("x") and "1 of 6" in hint
+    only_have(c, ["Gm", "Off", "Alice", "Bob"])
+    assert str(c.ns.EmptyHint("x")) == "x"
+    # The page shows it.
+    only_have(c, ["Off"])
+    c.ns.OpenPanel("kills")
+    rd = Renderer(c)
+    texts = "\n".join(str(fs["_GetText"] or "") for fs in walk_text(rd, c.lua.eval("WarcrestPanel")))
+    assert "1 of 6 members have Warcrest" in texts

@@ -72,7 +72,7 @@ end
 local function Refresh()
   local kills, period = shownKills()
   P.clear:SetShown(ns.IsGuildMaster()) -- only the Guild Master can clear logs
-  P.list:SetEmptyText(period == "all" and "No kills recorded yet." or "No kills in this period yet.")
+  P.list:SetEmptyText(ns.EmptyHint(period == "all" and "No kills recorded yet." or "No kills in this period yet."))
   P.list:SetItems(kills)
 
   -- This period's leader.

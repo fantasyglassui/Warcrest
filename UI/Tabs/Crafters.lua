@@ -276,8 +276,8 @@ local function Refresh()
     UI.SetEnabled(o.send, orderTo ~= nil)
     UI.SetEnabled(o.whisper, orderTo ~= nil)
   end
-  win.rows:SetEmptyText(ns.T(query ~= "" and "Nobody in the guild makes that yet."
-    or "No recipes shared yet. They show up once guildmates open their profession windows."))
+  win.rows:SetEmptyText(query ~= "" and ns.T("Nobody in the guild makes that yet.")
+    or ns.EmptyHint("No recipes shared yet. They show up once guildmates open their profession windows."))
   win.rows:SetItems(list)
 end
 

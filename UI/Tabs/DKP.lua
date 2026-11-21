@@ -152,7 +152,7 @@ local function Refresh()
   if q ~= "" or raidOnly then
     P.list:SetEmptyText(raidOnly and "Nobody in your raid matches." or "Nobody matches your search.")
   else
-    P.list:SetEmptyText("Nobody has any DKP yet. Officers award it here, or it builds up from raid nights.")
+    P.list:SetEmptyText(ns.EmptyHint("Nobody has any DKP yet. Officers award it here, or it builds up from raid nights."))
   end
   P.list:SetItems(shown)
 

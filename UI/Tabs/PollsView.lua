@@ -180,7 +180,7 @@ end
 function M.Refresh()
   local polls = ns.Polls()
   if not ns.Poll(selected) then selected = polls[1] and polls[1].id end
-  M.list:SetEmptyText(ns.T("No polls yet."))
+  M.list:SetEmptyText(ns.EmptyHint("No polls yet."))
   M.list:SetItems(polls)
   local can, why = ns.CanStartPoll()
   UI.SetEnabled(M.new, can)

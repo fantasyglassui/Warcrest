@@ -168,7 +168,7 @@ function M.Refresh()
   local found
   for _, r in ipairs(list) do if r.guild == selected then found = r end end
   if not found then found = list[1]; selected = found and found.guild or nil end
-  M.list:SetEmptyText(ns.T("No enemy guilds yet. They show up once guildmates have met some."))
+  M.list:SetEmptyText(ns.EmptyHint("No enemy guilds yet. They show up once guildmates have met some."))
   M.list:SetItems(list)
 
   for i, o in ipairs(PERIODS) do if o[1] == period then M.period.index, M.period.value = i, o[1] end end

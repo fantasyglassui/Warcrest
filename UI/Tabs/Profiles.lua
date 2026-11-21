@@ -221,7 +221,6 @@ local function BuildList(page)
       row.plays:SetText(avail ~= "" and avail or (UI.Code("faint") .. "-|r"))
     end, true)
   list.rows.frame:SetPoint("TOPLEFT", box, "TOPLEFT", 0, y - 1)
-  list.rows:SetEmptyText(ns.T("Nobody has shared a profile yet. Ask your guild to fill theirs in: /warcrest profile."))
   UI.Grow(page, box, 1, 1)
   UI.Grow(page, list.rows, 1, 1)
 end
@@ -229,6 +228,7 @@ end
 local function Refresh()
   list.sort:SetValue(sortBy)
   local r = rows()
+  list.rows:SetEmptyText(ns.EmptyHint("Nobody has shared a profile yet. Ask your guild to fill theirs in: /warcrest profile."))
   list.rows:SetItems(r)
   local roster = #ns.GetRoster()
   local tanks, healers, sum, geared = 0, 0, 0, 0

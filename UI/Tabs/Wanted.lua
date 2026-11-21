@@ -85,8 +85,8 @@ local function Refresh()
     return
   end
   local list = ns.WantedList()
-  P.list:SetEmptyText(ns.TF("Nobody has killed guild members %d or more times in world PvP in the last 30 days.",
-    ns.db.wantedThreshold or 3))
+  P.list:SetEmptyText(ns.EmptyHint(ns.TF("Nobody has killed guild members %d or more times in world PvP in the last 30 days.",
+    ns.db.wantedThreshold or 3)))
   local current = selectedEntry(list)
   P.current = current
   P.list:SetItems(list)
