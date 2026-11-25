@@ -2674,4 +2674,6 @@ ns.LOCALES.frFR = {
   ["A link to add the guild to the guild boards at warcrest-addon.com/guilds, with the Warcrest badge."] = "Un lien pour ajouter la guilde aux classements de warcrest-addon.com/guilds, avec le badge Warcrest.",
   ["Put the guild on the website"] = "Mettre la guilde sur le site",
   ["Copy this link (click it, then Ctrl+C) and open it in your browser. Within the hour the guild shows on warcrest-addon.com/guilds with the Warcrest badge."] = "Copiez ce lien (cliquez dessus, puis Ctrl+C) et ouvrez-le dans votre navigateur. Dans l'heure, la guilde apparaît sur warcrest-addon.com/guilds avec le badge Warcrest.",
+  ["WoW: Forever guild boards at warcrest-addon.com/guilds: race to 60, raid progress, gear, activity and more, updated every hour from Blizzard's armory."] = "Classements des guildes de WoW: Forever sur warcrest-addon.com/guilds : course au niveau 60, progression en raid, équipement, activité et plus, mis à jour chaque heure depuis l'Armurerie de Blizzard.",
+  ["Officers: Put us on the website (Guild > Who has Warcrest) gives a link that adds the guild to the boards with the Warcrest badge."] = "Officiers : Sur le site (Guilde > Qui a Warcrest) donne un lien qui ajoute la guilde aux classements avec le badge Warcrest.",
 }

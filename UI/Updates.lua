@@ -11,6 +11,10 @@ local UI = ns.UI
 
 -- Newest first. Players see every entry newer than the version they last used.
 local CHANGES = {
+  { version = "4.4.0", date = "Nov 25, 2026", items = {
+    "WoW: Forever guild boards at warcrest-addon.com/guilds: race to 60, raid progress, gear, activity and more, updated every hour from Blizzard's armory.",
+    "Officers: Put us on the website (Guild > Who has Warcrest) gives a link that adds the guild to the boards with the Warcrest badge.",
+  } },
   { version = "4.3.1", date = "Nov 25, 2026", items = {
     "Much less memory and lag in big guilds: achievements are worked out far less often and more cheaply, and pages make much less garbage when they redraw.",
     "Achievement progress shows thousands separators, and Who has Warcrest says \"Has it\" when a version isn't known yet.",

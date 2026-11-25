@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.4.0
+### Guilds on warcrest-addon.com
+- **New: WoW: Forever guild boards** at [warcrest-addon.com/guilds](https://warcrest-addon.com/guilds/), from Blizzard's armory and updated every hour: race to 60, raid progress, gear, most active, quests, monsters slain, PvP and the biggest guilds, with a page for every guild and player, search, and the latest firsts (members reaching 60, each guild's first boss kills).
+- **Put us on the website** (officers, in **Guild > Who has Warcrest**): a link to copy into your browser that adds the guild to the boards with the Warcrest badge. Warcrest itself never goes online.
+
+### Fixes
+- The secret achievement now goes by the character's full name as WoW: Forever writes it, first name and surname (it was looking at the realm, which WoW: Forever doesn't have).
+
 ## 4.3.1
 ### Memory and speed
 In a big guild Warcrest's memory could climb past 100 MB. This release brings it well down:
