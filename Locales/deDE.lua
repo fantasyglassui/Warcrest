@@ -2577,5 +2577,5 @@ ns.LOCALES.deDE = {
   ["More accessibility settings: 130% text, a choice of font, thicker letters, more space between lines, bigger banners, alerts read aloud, a flashing taskbar icon, and a key to open Warcrest."] = "Mehr Barrierefreiheit: Text bis 130 %, Schriftwahl, dickere Buchstaben, mehr Zeilenabstand, größere Banner, vorgelesene Alarme, ein blinkendes Taskleistensymbol und eine Taste zum Öffnen von Warcrest.",
   ["Organize the guild roster: sort by any column, and show only members with or without Warcrest, at level 60, or officers. Search also finds classes, zones and notes."] = "Ordne die Gildenliste: Sortiere nach jeder Spalte und zeige nur Mitglieder mit oder ohne Warcrest, auf Stufe 60 oder Offiziere. Die Suche findet auch Klassen, Gebiete und Notizen.",
   ["The Blades"] = "Die Klingen",
-  ["A secret achievement, earned by logging in as Sathryus."] = "Ein geheimer Erfolg, verdient durch das Einloggen als Sathryus.",
+  ["A secret achievement, earned by logging in as Sathryus Wraithblade."] = "Ein geheimer Erfolg, verdient durch das Einloggen als Sathryus Wraithblade.",
 }

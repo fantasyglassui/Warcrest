@@ -2577,5 +2577,5 @@ ns.LOCALES.esES = {
   ["More accessibility settings: 130% text, a choice of font, thicker letters, more space between lines, bigger banners, alerts read aloud, a flashing taskbar icon, and a key to open Warcrest."] = "Más opciones de accesibilidad: texto al 130 %, elección de fuente, letras más gruesas, más espacio entre líneas, avisos más grandes, avisos leídos en voz alta, icono parpadeante en la barra de tareas y una tecla para abrir Warcrest.",
   ["Organize the guild roster: sort by any column, and show only members with or without Warcrest, at level 60, or officers. Search also finds classes, zones and notes."] = "Organiza la lista de la hermandad: ordena por cualquier columna y muestra solo a los miembros con o sin Warcrest, de nivel 60 o a los oficiales. La búsqueda también encuentra clases, zonas y notas.",
   ["The Blades"] = "Las Hojas",
-  ["A secret achievement, earned by logging in as Sathryus."] = "Un logro secreto, conseguido al conectarse como Sathryus.",
+  ["A secret achievement, earned by logging in as Sathryus Wraithblade."] = "Un logro secreto, conseguido al conectarse como Sathryus Wraithblade.",
 }

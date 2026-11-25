@@ -356,7 +356,7 @@ local LIST = {
   { id = "recruits15", cat = "social", name = "Growing the Ranks", desc = "Add 15 recruits who go on to join the guild.", stat = "recruits", goal = 15 },
   { id = "recruits25", cat = "social", name = "Guild Builder", desc = "Add 25 recruits who go on to join the guild.", stat = "recruits", goal = 25 },
   -- Secret: hidden from everyone until it's earned.
-  { id = "blades", cat = "social", name = "The Blades", desc = "A secret achievement, earned by logging in as Sathryus.", stat = "blades", goal = 1, secret = true },
+  { id = "blades", cat = "social", name = "The Blades", desc = "A secret achievement, earned by logging in as Sathryus Wraithblade.", stat = "blades", goal = 1, secret = true },
   { id = "decorated", cat = "social", name = "Decorated", desc = "Earn 15 other achievements.", stat = "others", goal = 15, title = "the Decorated" },
   { id = "hero", cat = "social", name = "Guild Hero", desc = "Earn 40 other achievements.", stat = "others", goal = 40, title = "the Hero" },
   { id = "meta50", cat = "social", name = "Overachiever", desc = "Earn 75 other achievements.", stat = "others", goal = 75, title = "the Overachiever" },
@@ -664,8 +664,8 @@ local function statTimes(name, stat)
   if ix[stat] then return ix[stat][k] or {} end
   if stat == "raids" then return ns.RaidNightsAttended(name) end
   if stat == "blades" then
-    -- The Blades: Sathryus earns it by logging in (Sathryus Wraithblade's own
-    -- characters). Guildmates see it once it's recorded with the guild.
+    -- The Blades: Sathryus Wraithblade earns it by logging in. Guildmates see
+    -- it once it's recorded with the guild.
     local at = ns.IsMe(name) and ns.db.bladesAt
     return at and { at } or {}
   end
@@ -791,11 +791,21 @@ local function freshness()
     .. ":" .. (ns.CraftersVersion and ns.CraftersVersion() or 0)
 end
 
+local BLADES_OWNER = "sathryus-wraithblade" -- full name: character-realm
+
+-- Is this character Sathryus Wraithblade? (Realm names are compared without spaces or dashes.)
+function ns.IsBladesOwner()
+  local name = (UnitName("player") or ""):lower()
+  local realm = GetRealmName and GetRealmName() or GetNormalizedRealmName and GetNormalizedRealmName() or ""
+  realm = realm:gsub("[%s%-']", ""):lower()
+  return name .. "-" .. realm == BLADES_OWNER
+end
+
 ns.OnLoad(function()
   ns.db.achievements = ns.db.achievements or {}
-  -- The Blades (secret): logging in as Sathryus or Wraithblade earns it.
-  local me = (UnitName("player") or ""):lower()
-  if (me == "sathryus" or me == "wraithblade") and not ns.db.bladesAt then ns.db.bladesAt = time() end
+  -- The Blades (secret): logging in as Sathryus Wraithblade (the character
+  -- Sathryus on the realm Wraithblade, by full name) earns it.
+  if ns.IsBladesOwner() and not ns.db.bladesAt then ns.db.bladesAt = time() end
 end)
 
 -- Achievements members have recorded with the guild (AE entries): key -> { id -> when }.

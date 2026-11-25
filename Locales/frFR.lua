@@ -2577,5 +2577,5 @@ ns.LOCALES.frFR = {
   ["More accessibility settings: 130% text, a choice of font, thicker letters, more space between lines, bigger banners, alerts read aloud, a flashing taskbar icon, and a key to open Warcrest."] = "Plus d'options d'accessibilité : texte à 130 %, choix de la police, lettres plus épaisses, plus d'espace entre les lignes, bannières plus grandes, alertes lues à voix haute, icône clignotante dans la barre des tâches et une touche pour ouvrir Warcrest.",
   ["Organize the guild roster: sort by any column, and show only members with or without Warcrest, at level 60, or officers. Search also finds classes, zones and notes."] = "Organisez la liste de guilde : triez par n'importe quelle colonne, et n'affichez que les membres avec ou sans Warcrest, au niveau 60, ou les officiers. La recherche trouve aussi les classes, les zones et les notes.",
   ["The Blades"] = "Les Lames",
-  ["A secret achievement, earned by logging in as Sathryus."] = "Un haut fait secret, obtenu en se connectant en tant que Sathryus.",
+  ["A secret achievement, earned by logging in as Sathryus Wraithblade."] = "Un haut fait secret, obtenu en se connectant en tant que Sathryus Wraithblade.",
 }

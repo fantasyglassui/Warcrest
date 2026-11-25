@@ -17,8 +17,14 @@ def tiles(client, cat="social"):
       return out end""")(client.ns, cat)
 
 
+def WRAITHBLADE(c):
+    # Sathryus's own game is on the realm Wraithblade.
+    if c.name == "Sathryus":
+        c.run('GetRealmName = function() return "Wraithblade" end')
+
+
 def test_sathryus_earns_it_on_login_and_the_guild_sees_it():
-    guild = Guild(MEMBERS)
+    guild = Guild(MEMBERS, setup=WRAITHBLADE)
     for c in guild.clients.values():
         c.login()
     guild.run(60)
@@ -41,3 +47,11 @@ def test_it_stays_secret_for_everyone_else():
     sath = guild["Sathryus"]
     sath.ns.OpenPanel("achievements", "social")
     assert not bob.errors() and not sath.errors()
+
+
+def test_only_the_full_name_counts():
+    guild = Guild(MEMBERS)  # Sathryus, but on another realm
+    for c in guild.clients.values():
+        c.login()
+    guild.run(30)
+    assert "blades" not in earned(guild["Sathryus"], "Sathryus")
