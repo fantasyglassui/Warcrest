@@ -35,16 +35,16 @@ jobs:
             echo "$code $1" >> out/index.txt
           }
           P="namespace=profile-forever-us&locale=en_US"
-          C=/profile/wow/character/sathryus-wraithblade
-          for sub in "" /encounters /encounters/dungeons /encounters/raids /equipment /achievements /statistics /reputations /professions /pvp-summary /character-media /titles /status; do
-            call "$C$sub?$P"
+          S="namespace=static-forever-us&locale=en_US"
+          for c in sathryus-wraithblade bambo-dreadborne; do
+            C=/profile/wow/character/$c
+            for sub in /achievements/statistics /quests /quests/completed /encounters/dungeons /encounters/raids /equipment; do
+              call "$C$sub?$P"
+            done
           done
-          call "/data/wow/guild/the-imperium?$P"
-          call "/data/wow/guild/the-imperium/roster?$P"
-          call "/data/wow/guild/the-imperium/achievements?$P"
+          call "/data/wow/item/8348?$S"
+          call "/data/wow/achievement-category/index?$S"
           call "/data/wow/guild/the-imperium/activity?$P"
-          call "/data/wow/achievement/index?namespace=static-forever-us&locale=en_US"
-          call "/data/wow/journal-encounter/index?namespace=static-forever-us&locale=en_US"
           cat out/index.txt
       - name: Save the answers
         run: |
