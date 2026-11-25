@@ -25,24 +25,25 @@ local function rgb(hex)
 end
 
 -- What each kind of alert looks like: heading, colour, icon, the tab a click opens, how long it stays.
+-- Every kind has its own colour (at least 13 apart in CIE ΔE2000 from every other on the dark banner).
 ns.BANNER_KINDS = {
-  kill        = { title = "Guild kill",         color = rgb("ff5a4f"), icon = "kills",    tab = "kills" },
-  death       = { title = "Guild member down",  color = rgb("ff6b6b"), icon = "warning",  tab = "kills" },
-  wanted      = { title = "Wanted ganker spotted", color = rgb("e070ff"), icon = "wanted", tab = "wanted", hold = 7 },
-  streak      = { title = "Kill streak",        color = rgb("ffad33"), icon = "kills",    tab = "kills" },
-  revenge     = { title = "Revenge",            color = rgb("ff8a3d"), icon = "kills",    tab = "kills" },
-  champion    = { title = "Top head hunters",   color = C.accent,      icon = "trophy",   tab = "kills", hold = 8 },
-  bounty      = { title = "Bounty",             color = C.accent,      icon = "wanted",   tab = "wanted" },
-  boss        = { title = "Boss down",          color = C.accent,      icon = "progress",    tab = "raids", hold = 7 },
-  raid        = { title = "Raid",               color = rgb("66ccff"), icon = "calendar", tab = "raids", hold = 7 },
-  rival       = { title = "Rival guild",        color = rgb("ff8c3a"), icon = "wanted",   tab = "wanted", hold = 7 },
-  event       = { title = "Guild event",        color = rgb("4fd1c5"), icon = "events",   tab = "events", hold = 7 },
-  loot        = { title = "Loot auction",       color = rgb("ffd200"), icon = "dkp",      tab = "dkp" },
+  kill        = { title = "Guild kill",         color = rgb("ff4f4f"), icon = "kills",    tab = "kills" },
+  death       = { title = "Guild member down",  color = rgb("e8467c"), icon = "warning",  tab = "kills" },
+  wanted      = { title = "Wanted ganker spotted", color = rgb("b56cff"), icon = "wanted", tab = "wanted", hold = 7 },
+  streak      = { title = "Kill streak",        color = rgb("ffa31a"), icon = "kills",    tab = "kills" },
+  revenge     = { title = "Revenge",            color = rgb("ff7438"), icon = "kills",    tab = "kills" },
+  champion    = { title = "Top head hunters",   color = rgb("cfd8e3"),      icon = "trophy",   tab = "kills", hold = 8 },
+  bounty      = { title = "Bounty",             color = rgb("b8865b"),      icon = "wanted",   tab = "wanted" },
+  boss        = { title = "Boss down",          color = rgb("fff27a"),      icon = "progress",    tab = "raids", hold = 7 },
+  raid        = { title = "Raid",               color = rgb("3d8bff"), icon = "calendar", tab = "raids", hold = 7 },
+  rival       = { title = "Rival guild",        color = rgb("ffa8a0"), icon = "wanted",   tab = "wanted", hold = 7 },
+  event       = { title = "Guild event",        color = rgb("2fd3c3"), icon = "events",   tab = "events", hold = 7 },
+  loot        = { title = "Loot auction",       color = rgb("9be03c"), icon = "dkp",      tab = "dkp" },
   achievement = { title = "Achievement",        color = C.accent,      icon = "trophy",   tab = "achievements", hold = 6 },
   celebrate   = { title = "Guild news",         color = C.good,        icon = "roster",   tab = "roster" },
-  worldbuff   = { title = "World buff",         color = rgb("7fd3ff"), icon = "events",   tab = "worldbuffs", hold = 8 },
+  worldbuff   = { title = "World buff",         color = rgb("ff6bea"), icon = "events",   tab = "worldbuffs", hold = 8 },
 }
-local DEFAULT_KIND = { title = "Guild alert", color = C.accent, icon = "warning", tab = "roster" }
+local DEFAULT_KIND = { title = "Guild alert", color = rgb("9aa3b2"), icon = "warning", tab = "roster" }
 
 local anchor
 local pool, shown = {}, {}

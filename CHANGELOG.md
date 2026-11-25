@@ -39,6 +39,9 @@ New in **Settings > Accessibility**:
 - **Flash the game's taskbar icon** when an alert comes in while the game is in the background.
 - **A key to open Warcrest:** set it in the game's Key Bindings, under AddOns.
 
+### Alert banners
+- **Every kind of alert has its own colour.** Before, several shared Warcrest gold (achievements, bosses, bounties and Top head hunters) and some were near twins (kills and deaths, revenge and rival guilds). Now each of the 15 kinds has a colour clearly apart from all the others. Colour-blind friendly colours (Settings > Accessibility) keep their safe set, and every banner still names its kind in words.
+
 ### Guild roster
 - **Sort by any column:** click Name, Lvl, Rank or Where to sort, and again to turn the order around. Where sorts online members by zone, then offline members by how recently they were on.
 - **Show** only members with Warcrest, without it, at level 60, or officers.
