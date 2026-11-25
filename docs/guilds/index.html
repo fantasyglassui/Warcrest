@@ -453,7 +453,8 @@ function search(q) {
   try { index = await data("index.json"); }
   catch (e) { $("#board").innerHTML = '<p class="empty">The guild data is on its way: it updates every hour.</p>'; $("#feed").innerHTML = ""; return; }
   const people = index.guilds.reduce((n, g) => n + g.members, 0);
-  $("#summary").textContent = `${num(index.guilds.length)} guilds · ${num(people)} members · updated ${ago(index.updated)}`;
+  const n = index.guilds.length;
+  $("#summary").textContent = `${num(n)} guild${n === 1 ? "" : "s"} · ${num(people)} members · updated ${ago(index.updated)}`;
   $("#tabs").innerHTML = BOARDS.map(b => `<button role="tab" data-id="${b.id}">${esc(b.label)}</button>`).join("");
   $("#tabs").addEventListener("click", e => { const b = e.target.closest("button"); if (b) drawBoard(b.dataset.id); });
   drawBoard(location.hash.slice(1));
