@@ -1,0 +1,23 @@
+name: Add a guild to warcrest-addon.com
+description: Put a WoW Forever guild on the guild boards at warcrest-addon.com/guilds.
+title: "Add guild: "
+labels: [add-guild]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Any WoW Forever guild can be added. Within the hour, the site checks the guild on Blizzard's armory, adds it, and closes this request with a reply.
+  - type: input
+    id: guild
+    attributes:
+      label: Guild name
+      description: Exactly as it shows in the game.
+      placeholder: The Imperium
+    validations:
+      required: true
+  - type: checkboxes
+    id: warcrest
+    attributes:
+      label: Warcrest
+      options:
+        - label: We use Warcrest

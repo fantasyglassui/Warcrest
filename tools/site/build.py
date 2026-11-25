@@ -21,6 +21,7 @@ from html.parser import HTMLParser
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import changelog  # noqa: E402
+import guilds  # noqa: E402
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 DOCS = os.path.join(ROOT, "docs")
@@ -354,8 +355,10 @@ def main():
                 for m in sorted(missing):
                     print("   ", json.dumps(m, ensure_ascii=False))
     changelog_pages(pages)
+    guilds.build(DOCS, pages["en"], re.search(r"## Version: (\S+)", read(os.path.join(ROOT, "Warcrest.toc"))).group(1))
     urls = [SITE] + [SITE + c + "/" for c, *_ in LANGS[1:]]
     urls += [SITE + "changelog/"] + [SITE + c + "/changelog/" for c, *_ in LANGS[1:]]
+    urls += [SITE + "guilds/"]
     write(os.path.join(DOCS, "sitemap.xml"), '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
           + "".join("  <url><loc>%s</loc></url>\n" % u for u in urls) + "</urlset>\n")
     write(os.path.join(DOCS, "robots.txt"), "User-agent: *\nAllow: /\nSitemap: %ssitemap.xml\n" % SITE)

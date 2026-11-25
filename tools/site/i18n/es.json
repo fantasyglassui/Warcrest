@@ -210,5 +210,6 @@
  "The welcome window asks two things: which ranks run Warcrest, and whether your guild uses DKP. Save it, and every member gets the same settings.": "La ventana de bienvenida pregunta dos cosas: qué rangos llevan Warcrest y si tu hermandad usa DKP. Guárdalo y todos los miembros reciben los mismos ajustes.",
  "Warcrest is free and shares everything between the guildmates who have it: raid sign-ups, DKP and loot, PvP kills, polls and achievements. There's no website to log in to and nothing to host. The more of your guild installs it, the more it does.": "Warcrest es gratis y lo comparte todo entre los miembros que lo tienen: apuntes a bandas, DKP y botín, muertes JcJ, encuestas y logros. Sin web en la que entrar ni nada que alojar. Cuantos más de tu hermandad lo instalen, más hace.",
  "Warcrest's main window, moving through Home, PvP kills, Raids, Loot, Profiles and Crafters.": "La ventana principal de Warcrest: Inicio, muertes JcJ, Bandas, Botín, Perfiles y Artesanos.",
- "[Guild] Our guild uses Warcrest for raids, DKP and more. Get it free on CurseForge or at warcrest-addon.com": "[Hermandad] Nuestra hermandad usa Warcrest para bandas, DKP y más. Gratis en CurseForge o en warcrest-addon.com"
+ "[Guild] Our guild uses Warcrest for raids, DKP and more. Get it free on CurseForge or at warcrest-addon.com": "[Hermandad] Nuestra hermandad usa Warcrest para bandas, DKP y más. Gratis en CurseForge o en warcrest-addon.com",
+ "Guilds": "Hermandades"
 }

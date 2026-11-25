@@ -77,7 +77,8 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .brand:hover { text-decoration: none; }
 .brand svg { width: 28px; height: 28px; flex: none; }
 .top nav { display: flex; gap: 22px; margin-left: auto; font-size: .92rem; }
-.top nav a { color: var(--muted); }
+.top nav a { color: var(--muted); white-space: nowrap; }
+@media (max-width: 1240px) { .top nav { gap: 14px; font-size: .86rem; } }
 .top nav a:hover { color: var(--text); text-decoration: none; }
 .btn { display: inline-flex; align-items: center; gap: 8px; height: 42px; padding: 0 18px; border-radius: 2px; font-weight: 600; font-size: .95rem; border: 1px solid var(--edge); color: var(--text); background: #151a23; white-space: nowrap; }
 .btn:hover { text-decoration: none; background: #1c2230; }
@@ -270,6 +271,7 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 18px 40px; justify-content: 
       <a href="#features">Features</a>
       <a href="#news">What's new</a>
       <a href="/changelog/">Changelog</a>
+      <a href="/guilds/">Guilds</a>
       <a href="#achievements">Achievements</a>
       <a href="#install">Install</a>
       <a href="#commands">Commands</a>

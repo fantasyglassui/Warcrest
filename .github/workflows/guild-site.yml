@@ -1,0 +1,74 @@
+name: Guild site
+
+# warcrest-addon.com: the site in docs/, plus the guild boards' data from
+# Blizzard's API (tools/guilds/update.py), refreshed every hour. The data
+# between runs is kept on the guild-data branch (one commit, replaced each time).
+on:
+  schedule:
+    - cron: "23 * * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["docs/**", "tools/site/**", "tools/guilds/**", ".github/workflows/guild-site.yml"]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+  issues: write
+
+concurrency:
+  group: guild-site
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get the saved guild data
+        run: |
+          mkdir -p state
+          if git fetch -q origin guild-data; then git archive FETCH_HEAD | tar -x -C state; fi
+          ls -la state
+
+      - name: Ask Blizzard about the guilds
+        if: github.event_name != 'push'
+        env:
+          BLIZZARD_CLIENT_ID: ${{ secrets.BLIZZARD_CLIENT_ID }}
+          BLIZZARD_CLIENT_SECRET: ${{ secrets.BLIZZARD_CLIENT_SECRET }}
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: python3 tools/guilds/update.py --state state --out state/public
+
+      - name: Save the guild data
+        if: github.event_name != 'push'
+        run: |
+          cd state
+          git init -q -b guild-data
+          git config user.name "Warcrest bot"
+          git config user.email "fantasyglassui@gmail.com"
+          git add -A
+          git commit -q -m "Guild data"
+          git push -q -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" guild-data
+
+      - name: Put the site together
+        run: |
+          cp -r docs _site
+          mkdir -p _site/guilds/data
+          if [ -d state/public ]; then cp -r state/public/. _site/guilds/data/; fi
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
