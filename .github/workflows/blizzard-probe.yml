@@ -4,6 +4,9 @@ name: Blizzard API check
 # Prints only status codes and small public samples, never the keys or token.
 on:
   workflow_dispatch: # run by hand from the Actions tab
+  push:
+    branches: [main]
+    paths: [".github/workflows/blizzard-probe.yml"]
 
 jobs:
   probe:
@@ -26,13 +29,12 @@ jobs:
           call() {
             code=$(curl $CURL_OPTS -s -o /tmp/out.json -w '%{http_code}' -H "Authorization: Bearer $TOKEN" "https://us.api.blizzard.com$1")
             echo "== $code  $1"
-            head -c 600 /tmp/out.json | tr -d '\n'; echo
+            head -c 1500 /tmp/out.json | tr -d '\n'; echo
           }
-          for ns in profile-forever-us dynamic-forever-us; do
-            call "/data/wow/guild/the-imperium?namespace=$ns&locale=en_US"
-            call "/data/wow/guild/the-imperium/roster?namespace=$ns&locale=en_US"
-            call "/data/wow/guild/pvp/the-imperium?namespace=$ns&locale=en_US"
-            call "/data/wow/guild/1/the-imperium?namespace=$ns&locale=en_US"
+          C=/profile/wow/character/sathryus-wraithblade
+          P="namespace=profile-forever-us&locale=en_US"
+          for sub in "" /encounters /encounters/dungeons /encounters/raids /equipment /achievements /statistics /reputations /professions /pvp-summary /character-media /titles; do
+            call "$C$sub?$P"
           done
-          call "/data/wow/guild/the-imperium/achievements?namespace=profile-forever-us&locale=en_US"
-          call "/data/wow/guild/the-imperium/activity?namespace=profile-forever-us&locale=en_US"
+          call "/data/wow/guild/the-imperium/achievements?$P"
+          call "/data/wow/guild/the-imperium/activity?$P"
