@@ -1,5 +1,16 @@
 # Changelog
 
+## 4.5.0
+### New: guild rep
+Standing with the guild, earned **only by playing together**. Nobody can give it out or take it away, and it never goes down.
+- **How it's earned:** 10 for every 10 minutes grouped with a guildmate (counted only when both of you have Warcrest and both report the same group), 100 for a raid night, 25 for a guild boss kill, 50 for a guild event, 5 for helping a guildmate with a kill, 15 for a revenge kill, and 25 for a crafting order you finish for a guildmate. Up to **1,000 a day**.
+- **Ranks:** Neutral, Friendly at 3,000, Honored at 9,000, Revered at 21,000 and Exalted at 42,000.
+- **Where it shows:** your rep, today's progress and a bar to the next rank on **Home**; a sortable **Rep** column on the **Roster**; and every **player card**. Reaching a new rank shows a banner with its own colour and sound (Settings > Sounds), and is posted in guild chat when you have achievements posted there.
+- Everything except grouped time is counted from what the guild already shares (raid nights, boss kills, events, kills, crafting orders), so everyone's addon shows the same numbers, including rep earned before this update. Grouped time is new: Warcrest notes it every 30 minutes and when the group ends. Nothing goes in chat.
+
+### Titles
+- The secret achievement **The Blades** now gives the title **the Blades**. Like the achievement, it stays hidden from everyone else's title list.
+
 ## 4.4.0
 ### Guilds on warcrest-addon.com
 - **New: WoW: Forever guild boards** at [warcrest-addon.com/guilds](https://warcrest-addon.com/guilds/), from Blizzard's armory and updated every hour: race to 60, raid progress, gear, most active, quests, monsters slain, PvP and the biggest guilds, with a page for every guild and player, search, and the latest firsts (members reaching 60, each guild's first boss kills).

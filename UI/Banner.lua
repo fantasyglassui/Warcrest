@@ -42,6 +42,7 @@ ns.BANNER_KINDS = {
   achievement = { title = "Achievement",        color = C.accent,      icon = "trophy",   tab = "achievements", hold = 6 },
   celebrate   = { title = "Guild news",         color = rgb("7fe0ff"),        icon = "roster",   tab = "roster" },
   worldbuff   = { title = "World buff",         color = rgb("ff6bea"), icon = "events",   tab = "worldbuffs", hold = 8 },
+  rep         = { title = "Guild rep",          color = rgb("98b050"), icon = "trophy",   tab = "home", hold = 7 },
 }
 local DEFAULT_KIND = { title = "Guild alert", color = rgb("9aa3b2"), icon = "warning", tab = "roster" }
 

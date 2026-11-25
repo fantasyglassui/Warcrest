@@ -12,7 +12,7 @@ The user's rules: rep is earned **only by playing**, officers can't award or rem
 | A raid night attended | +100 |
 | A guild boss kill | +25 |
 | A guild event attended | +50 |
-| A kill on an enemy player with a guildmate's assist | +5 |
+| Helping a guildmate with a kill on an enemy player (the assist) | +5 |
 | A revenge kill for a guildmate | +15 |
 | A crafting order finished for a guildmate (goes to the crafter) | +25 |
 
@@ -32,8 +32,8 @@ The user's rules: rep is earned **only by playing**, officers can't award or rem
 - **Counted from records the guild already shares.** Everything except grouped time comes from records every client already has: raid nights, boss kills, events, kills and assists, revenge, and crafting orders.
   - Every client works rep out the same way, so everyone sees the same numbers.
   - Nothing new can be faked.
-- **One new record: grouped time.** When you leave a group or log out, Warcrest adds `GT { mins, with }` to the shared record: how many minutes you were grouped and which guildmates were in the group.
-  - Those minutes count only when a guildmate's own GT record names you for the same time. The overlap is what counts.
+- **One new record: grouped time.** Every 30 minutes while grouped, and when the group ends, Warcrest adds `GR { from, mins, names }` (GT was already taken) to the shared record: how many minutes you were grouped and which guildmates were in the group.
+  - Those minutes count only when a guildmate's own GR record names you for the same time. The overlap is what counts.
   - That way a member alone can't earn rep for grouped time.
   - Nothing goes in chat.
 - **Only goes up.** Each client keeps every member's highest rep seen. Some records age out, such as crafting orders after 30 days and old kills. When they do, the rep shown is the higher of the kept value and the newly worked-out one.
@@ -43,7 +43,7 @@ The user's rules: rep is earned **only by playing**, officers can't award or rem
 ## Where it shows
 - **Player card:** the rank and a bar to the next rank.
 - **Roster:** a "Rep" column you can sort.
-- **Home:** a "Your guild rep" card showing today's rep, so you can see how close you are to the daily cap.
+- **Home:** a "Guild rep" block at the bottom of the Your DKP card: rank, total, a bar to the next rank, and today's rep against the 1,000 cap. (Built call: the Home grid is full at 3 x 2, and a fourth bottom card made the poll and news cards too narrow.)
 - **Banner:** a banner when you reach a new rank, in a colour of its own, so a guildmate's rank-up can also be announced to guild chat (using the existing guild-chat toggle).
 - **Translations:** all text in German, French and Spanish.
 

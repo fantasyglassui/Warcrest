@@ -31,6 +31,7 @@ local SHARED = {
   "crafters", "myCrafts", "craftNames", "enemyGuilds", "achievements", "goalsDone", "bounties", "celebrated",
   "addonUsers", "postedAch", "bossChecks", "championMonth", "trialsNoted", "recapWeek", "ordersSeen",
   "eventReminded", "worldBuffs", "cooldowns", "firstSeen", "bladesAt", "ilvlSharedAt", "mapPins",
+  "repPeak", "repRank", "repSession",
 }
 
 -- Runs before every other part of the addon sets up its data.

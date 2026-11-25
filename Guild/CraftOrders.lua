@@ -70,6 +70,21 @@ end
 
 function ns.CraftOrder(id) return build().byId[id] end
 
+-- Orders finished for a guildmate (not for yourself), still in the record:
+-- crafter key -> sorted list of the times they were marked done.
+function ns.CraftOrdersDone()
+  local out = {}
+  for _, o in pairs(build().byId) do
+    if o.status == "done" and ns.Key(o.crafter) ~= ns.Key(o.by) then
+      local k = ns.Key(o.crafter)
+      out[k] = out[k] or {}
+      table.insert(out[k], o.changed)
+    end
+  end
+  for _, list in pairs(out) do table.sort(list) end
+  return out
+end
+
 -- Your orders: the ones for you to make and the ones you asked for, newest first.
 function ns.MyCraftOrders()
   local me = ns.Key(UnitName("player"))

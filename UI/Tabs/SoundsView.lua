@@ -18,7 +18,7 @@ local TABLE_W = 460
 local SIDE_X = TABLE_W + 14
 local SIDE_W = W - SIDE_X
 local INNER = SIDE_W - 30
-local ROW = 30
+local ROW = 26 -- 16 alert kinds fit in the box
 local SOUND_X, SOUND_W = 196, 196
 
 local GROUP_NAMES = { None = "", Warcrest = "Warcrest", Yours = "Yours", SharedMedia = "Other add-on", Game = "Game" }

@@ -11,6 +11,10 @@ local UI = ns.UI
 
 -- Newest first. Players see every entry newer than the version they last used.
 local CHANGES = {
+  { version = "4.5.0", date = "Nov 25, 2026", items = {
+    "Guild rep: standing with the guild, earned only by playing together (grouping, raid nights, boss kills, events, helping with kills, crafting orders). Up to 1,000 a day, it never goes down, and nobody can give it out. On Home, the Roster and player cards.",
+    "The secret achievement The Blades now gives the title \"the Blades\".",
+  } },
   { version = "4.4.0", date = "Nov 25, 2026", items = {
     "WoW: Forever guild boards at warcrest-addon.com/guilds: race to 60, raid progress, gear, activity and more, updated every hour from Blizzard's armory.",
     "Officers: Put us on the website (Guild > Who has Warcrest) gives a link that adds the guild to the boards with the Warcrest badge.",

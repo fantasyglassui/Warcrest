@@ -26,7 +26,7 @@ local OFFICER_KINDS = { EV = true, EX = true, DK = true, RS = true, RE = true, K
 -- be passed along by an officer), so nobody can make one in someone else's name.
 local DIRECT_ONLY = { AL = true, WL = true, TI = true, BK = true, AE = true, AW = true, AB = true,
   GE = true, GX = true, GS = true, GT = true, PF = true, AN = true,
-  PO = true, PV = true, PC = true, CO = true, CU = true, BP = true }
+  PO = true, PV = true, PC = true, CO = true, CU = true, BP = true, GR = true }
 -- Fields of each kind, in message order.
 local FIELDS = {
   EV = { "title", "start", "notes" },          -- a scheduled raid
@@ -76,10 +76,11 @@ local FIELDS = {
   BX = { "ref" },                              -- a bounty withdrawn
   BC = { "ref", "killer", "when" },            -- a bounty claimed: who killed the target, and when
   WL = { "item", "name", "prio" },             -- a wishlist item: item ID, name, "need", "want" or "off" (removed)
+  GR = { "from", "mins", "names" },            -- time grouped with guildmates: when it started, minutes, who
 }
 local NUMERIC = { start = true, amount = true, onTime = true, hourly = true, decay = true, boss = true,
   parts = true, size = true, when = true, group = true, mins = true, ilvl = true, level = true, part = true,
-  choice = true, lasts = true, secs = true }
+  choice = true, lasts = true, secs = true, from = true }
 local CLAIM_WINDOW = 30
 
 local counter = 0

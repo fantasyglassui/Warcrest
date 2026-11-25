@@ -100,7 +100,7 @@ end
 -- reverse) and show only some members. Remembered per character.
 ------------------------------------------------------------------------
 local MAX_LEVEL = 60
-ns.ROSTER_SORTS = { "rank", "name", "level", "where" }
+ns.ROSTER_SORTS = { "rank", "name", "level", "rep", "where" }
 ns.ROSTER_SHOWS = { "all", "warcrest", "nowarcrest", "max", "officers" }
 
 local function view()
@@ -119,7 +119,7 @@ end
 -- Click a heading: sort by it, or turn the order around if it already is.
 function ns.SortRoster(key)
   local v = view()
-  if v.sort == key then v.desc = not v.desc else v.sort, v.desc = key, key == "level" end
+  if v.sort == key then v.desc = not v.desc else v.sort, v.desc = key, key == "level" or key == "rep" end
   ns.RefreshPanel()
 end
 
@@ -157,6 +157,10 @@ local ORDER = {
   rank = function(a, b) if a.rankIndex ~= b.rankIndex then return a.rankIndex < b.rankIndex end end,
   name = function(a, b) if a.name ~= b.name then return a.name < b.name end end,
   level = function(a, b) if a.level ~= b.level then return a.level < b.level end end,
+  rep = function(a, b)
+    local x, y = ns.Rep(a.name), ns.Rep(b.name)
+    if x ~= y then return x < y end
+  end,
   where = whereOrder,
 }
 
@@ -273,18 +277,21 @@ local function BuildTable(page)
 
   local card = Card(page, 0, -36, LEFT_W, 390)
   P.card = card
-  local heads = { { "name", "NAME", 12 }, { "level", "LVL", 166 }, { "rank", "RANK", 202 }, { "where", "WHERE", 318 } }
+  local heads = { { "name", "NAME", 12 }, { "level", "LVL", 166 }, { "rank", "RANK", 202 }, { "rep", "REP", 298 },
+    { "where", "WHERE", 358 } }
   P.heads = {}
   for _, h in ipairs(heads) do
     local b = CreateFrame("Button", nil, card)
     b:SetPoint("TOPLEFT", h[3] - 4, -3)
-    b:SetSize(h[1] == "level" and 34 or 70, 20)
+    b:SetSize((h[1] == "level" or h[1] == "rep") and 52 or 70, 20)
     b.label = UI.Label(b, h[2], "Label")
     b.label:SetPoint("LEFT", 4, 0)
     b.arrow = UI.Icon(b, "chevron", 8, C.accent)
     b.arrow:SetPoint("LEFT", b.label, "RIGHT", 3, 0)
     b:SetScript("OnClick", function() ns.SortRoster(h[1]) end)
-    UI.Tooltip(b, h[2], "Sort by this column. Click again to turn the order around.")
+    UI.Tooltip(b, h[1] == "rep" and "Guild rep" or h[2], h[1] == "rep"
+      and "Standing with the guild, earned by playing together: grouping, raid nights, boss kills, events, helping with kills and crafting orders. Click to sort by it."
+      or "Sort by this column. Click again to turn the order around.")
     P.heads[h[1]] = b
   end
   local rule = card:CreateTexture(nil, "BORDER")
@@ -311,10 +318,14 @@ local function BuildTable(page)
       row.level:SetPoint("LEFT", 166, 0)
       row.rank = UI.Label(row, "", "Small")
       row.rank:SetPoint("LEFT", 202, 0)
-      row.rank:SetWidth(108)
+      row.rank:SetWidth(90)
       row.rank:SetWordWrap(false)
+      row.rep = UI.Label(row, "", "Small")
+      row.rep:SetPoint("LEFT", 298, 0)
+      row.rep:SetWidth(56)
+      row.rep:SetWordWrap(false)
       row.where = UI.Label(row, "", "MutedSmall")
-      row.where:SetPoint("LEFT", 318, 0)
+      row.where:SetPoint("LEFT", 358, 0)
       row.where:SetPoint("RIGHT", -8, 0)
       row.where:SetWordWrap(false)
       local line = row:CreateTexture(nil, "BORDER")
@@ -339,6 +350,9 @@ local function BuildTable(page)
       row.level:SetAlpha(dim)
       row.rank:SetText(m.rankName)
       row.rank:SetAlpha(dim)
+      local _, _, _, repName = ns.Rep(m.name)
+      row.rep:SetText(ns.T(repName))
+      row.rep:SetAlpha(dim)
       if m.online then
         row.where:SetText(m.zone ~= "" and m.zone or "Online")
       else

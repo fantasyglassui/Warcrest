@@ -2,7 +2,7 @@
   Warcrest
   Home: what's happening in the guild, on one page. A greeting, your next
   Getting started step, then cards: the next raid (and your job in it), your
-  DKP, the open poll, PvP this week and the guild's news. Each card opens its
+  DKP and guild rep, the open poll, PvP this week and the guild's news. Each card opens its
   section.
 ]]
 
@@ -107,6 +107,23 @@ local function BuildDKP(page)
   c.big:SetPoint("TOPLEFT", 16, -34)
   c.big:SetTextColor(C.accent[1], C.accent[2], C.accent[3])
   Lines(c, 3, -66, "Small")
+  -- Your guild rep, at the bottom of the card.
+  c.repLabel = UI.Label(c, ns.Upper(ns.T("Guild rep")), "Label")
+  c.repLabel:SetPoint("BOTTOMLEFT", 16, 46)
+  c.repToday = UI.Label(c, "", "MutedSmall")
+  c.repToday:SetPoint("BOTTOMRIGHT", -16, 46)
+  c.repText = UI.Label(c, "", "Small")
+  c.repText:SetPoint("BOTTOMLEFT", 16, 26)
+  c.repText:SetWordWrap(false)
+  c.repBar = CreateFrame("Frame", nil, c)
+  c.repBar:SetPoint("BOTTOMLEFT", 16, 14)
+  c.repBar:SetHeight(4)
+  UI.Fill(c.repBar, C.sidebar)
+  c.repFill = c.repBar:CreateTexture(nil, "ARTWORK")
+  c.repFill:SetPoint("TOPLEFT")
+  c.repFill:SetPoint("BOTTOMLEFT")
+  local rc = ns.BANNER_KINDS.rep.color
+  c.repFill:SetColorTexture(rc[1], rc[2], rc[3], 1)
   P.dkp = c
 end
 
@@ -201,6 +218,9 @@ local function Layout(w, h)
     b.text:SetWidth(cw - 90)
   end
   P.pvp.wanted:SetWidth(cw - 32)
+  P.dkp.repText:SetWidth(cw - 32)
+  P.dkp.repBar:SetWidth(cw - 32)
+  P.dkp.repFill:SetWidth(math.max(1, (cw - 32) * (P.repShare or 0)))
   for _, r in ipairs(P.pvp.rows) do r.name:SetWidth(cw - 80) end
 end
 
@@ -354,6 +374,16 @@ local function RefreshRaid()
   end
 end
 
+local function RefreshRep()
+  local c = P.dkp
+  local total, today, _, rankName, floor, nextAt = ns.Rep(me())
+  c.repText:SetText(UI.Code("text") .. ns.T(rankName) .. "|r  " .. ns.Number(total)
+    .. (nextAt and (UI.Code("muted") .. " / " .. ns.Number(nextAt) .. "|r") or ""))
+  c.repToday:SetText(ns.TF("%s of %s today", ns.Number(today), ns.Number(ns.REP_DAILY_CAP)))
+  local share = nextAt and (total - floor) / (nextAt - floor) or 1
+  P.repShare = math.min(1, math.max(0, share)) -- the bar is sized in Layout
+end
+
 local function RefreshDKP()
   local c = P.dkp
   if ns.UsesDKP() then
@@ -468,6 +498,7 @@ local function Refresh()
   RefreshStrip()
   RefreshRaid()
   RefreshDKP()
+  RefreshRep()
   RefreshPoll()
   RefreshPvP()
   RefreshNews()

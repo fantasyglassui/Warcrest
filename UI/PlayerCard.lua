@@ -11,8 +11,9 @@ local Ambiguate = ns.Ambiguate
 local UI = ns.UI
 local C = UI.C
 
-local WIDTH, HEIGHT = 420, 550
-local DOWN = 64 -- room for the profile under the name
+local WIDTH, HEIGHT = 420, 580
+local REP_H = 30 -- the guild rep line and its bar
+local DOWN = 64 + REP_H -- room for the rep and the profile under the name
 local card -- the window
 local shownName
 
@@ -56,11 +57,26 @@ local function Build()
   f.status:SetWidth(inner - 130)
   f.status:SetWordWrap(false)
 
+  -- Their guild rep: the rank, the total and a bar to the next rank.
+  f.rep = UI.Label(f, "", "Small")
+  f.rep:SetPoint("TOPLEFT", 16, -102)
+  f.rep:SetWidth(inner)
+  f.rep:SetWordWrap(false)
+  f.repBar = CreateFrame("Frame", nil, f)
+  f.repBar:SetPoint("TOPLEFT", 16, -120)
+  f.repBar:SetSize(inner, 4)
+  UI.Fill(f.repBar, C.sidebar)
+  f.repFill = f.repBar:CreateTexture(nil, "ARTWORK")
+  f.repFill:SetPoint("TOPLEFT")
+  f.repFill:SetPoint("BOTTOMLEFT")
+  local rc = ns.BANNER_KINDS and ns.BANNER_KINDS.rep and ns.BANNER_KINDS.rep.color or C.accent
+  f.repFill:SetColorTexture(rc[1], rc[2], rc[3], 1)
+
   -- What they've told the guild about themselves.
   f.profile = {}
   for i = 1, 3 do
     local fs = UI.Label(f, "", "Small")
-    fs:SetPoint("TOPLEFT", 16, -104 - (i - 1) * 18)
+    fs:SetPoint("TOPLEFT", 16, -104 - REP_H - (i - 1) * 18)
     fs:SetWidth(inner)
     fs:SetWordWrap(false)
     f.profile[i] = fs
@@ -159,6 +175,15 @@ local function fill(p)
   elseif #p.alts > 0 then
     f.status:SetText(f.status:GetText() .. "  ·  alts: " .. table.concat(p.alts, ", "))
   end
+
+  -- Their guild rep.
+  local total, today, _, rankName, floor, nextAt = ns.Rep(p.name)
+  local repText = ns.TF("Guild rep: %s", UI.Code("text") .. ns.T(rankName) .. "|r") .. "  ·  " .. ns.Number(total)
+  if nextAt then repText = repText .. UI.Code("muted") .. " / " .. ns.Number(nextAt) .. "|r" end
+  if today > 0 then repText = repText .. "  ·  " .. ns.TF("%s today", ns.Number(today)) end
+  f.rep:SetText(repText)
+  local share = nextAt and (total - floor) / (nextAt - floor) or 1
+  f.repFill:SetWidth(math.max(1, (WIDTH - 32) * math.min(1, math.max(0, share))))
 
   -- Their profile.
   local me = ns.IsMe(p.name)

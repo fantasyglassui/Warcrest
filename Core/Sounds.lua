@@ -109,6 +109,7 @@ ns.SOUND_KINDS = {
   { key = "achievement", label = "Achievement",           default = "wc:AchievementChime" },
   { key = "celebrate",   label = "Guild news",            default = "wc:LevelUp" },
   { key = "worldbuff",   label = "World buffs and bosses", default = "wc:WarHorn" },
+  { key = "rep",         label = "Guild rep",             default = "wc:LevelUp" },
 }
 local DEFAULTS = {}
 for _, k in ipairs(ns.SOUND_KINDS) do DEFAULTS[k.key] = k.default end

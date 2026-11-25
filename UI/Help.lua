@@ -77,6 +77,7 @@ local TOPICS = {
     T("Achievements shows what you've earned and your progress on the rest, for PvP, raids, bosses and loot. They come from the guild's shared history, so they count what you did before you installed Warcrest."),
     TF("Some achievements come with a %s. Click the Title button at the top right of Achievements to see every title and pick one you've earned. It shows after your name on your player card.", B(T("title"))),
     T("The Guild view shows what's been earned lately, the guild's goals and who has the most. Officers set goals for the week or month there, like killing 50 enemy players."),
+    P("Guild rep:", "Standing with the guild, earned only by playing together: 10 for every 10 minutes grouped with a guildmate who has Warcrest, 100 for a raid night, 25 for a guild boss kill, 50 for a guild event, 5 for helping with a kill, 15 for a revenge kill and 25 for a crafting order you finish for a guildmate. Up to 1,000 a day. Nobody can give it out or take it away, and it never goes down. Friendly at 3,000, Honored at 9,000, Revered at 21,000 and Exalted at 42,000. It shows on Home, the Roster and player cards."),
   }) end },
   { "Polls and orders", function() return join({
     P("Polls:", "Events > Polls. Ask the guild a question with a few answers, and everyone with Warcrest votes. Officers can always start one; they can let members start them too (Settings > Alerts)."),

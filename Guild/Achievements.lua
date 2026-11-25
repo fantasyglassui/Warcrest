@@ -776,6 +776,11 @@ local function statTimes(name, stat)
   return {}
 end
 
+-- One member's stat as a sorted list of times (Guild/Rep.lua counts from these).
+function ns.StatTimes(name, stat) return statTimes(name, stat) end
+-- Goes up when the kill or death log changes.
+function ns.HistoryVersion() return historyVersion end
+
 ------------------------------------------------------------------------
 -- Earned achievements
 ------------------------------------------------------------------------
