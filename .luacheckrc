@@ -22,7 +22,7 @@ read_globals = {
   -- 4.3.0
   "GetRealmName", "GetSpellCooldown", "C_Container", "GetItemCooldown", "IsPlayerSpell", "GetItemCount",
   "C_UnitAuras", "UnitGUID", "UnitIsDead", "C_PvP", "IsActiveBattlefieldArena", "GetMaxBattlefieldID",
-  "GetBattlefieldStatus", "C_TTSSettings", "C_VoiceChat", "FlashClientIcon",
+  "GetBattlefieldStatus", "C_TTSSettings", "C_VoiceChat", "FlashClientIcon", "debugstack",
   -- Professions (the crafters directory) and chat
   "GetTradeSkillLine", "GetNumTradeSkills", "GetTradeSkillInfo", "GetTradeSkillItemLink",
   "GetCraftDisplaySkillLine", "GetNumCrafts", "GetCraftInfo", "GetCraftItemLink", "GetSpellInfo",

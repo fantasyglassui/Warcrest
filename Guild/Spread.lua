@@ -37,16 +37,19 @@ local function isActive(m)
 end
 
 -- How many active members have Warcrest, how many are active, and the whole roster.
+-- (Asked by several cards on every refresh: counted straight from the roster,
+-- without building the Who has Warcrest rows.)
 function ns.WarcrestCount()
-  local have, active = 0, 0
-  local rows = ns.AddonUserRows()
-  for _, r in ipairs(rows) do
-    if isActive(r.m) then
+  local have, active, all = 0, 0, 0
+  local users = ns.db.addonUsers or {}
+  for _, m in ipairs(ns.GetRoster()) do
+    all = all + 1
+    if isActive(m) then
       active = active + 1
-      if r.status ~= "no" then have = have + 1 end
+      if ns.versions[m.full] or users[ns.Key(m.name)] then have = have + 1 end
     end
   end
-  return have, active, #rows
+  return have, active, all
 end
 
 function ns.InviteText()

@@ -106,3 +106,14 @@ function ns.Date(fmt, t)
 end
 
 ns.OnLoad(ns.ApplyLocale)
+
+-- A whole number with thousands separators in the player's language: 1,500 / 1.500 / 1 500.
+local THOUSANDS = { deDE = ".", esES = ".", esMX = ".", frFR = " " }
+function ns.Number(n)
+  n = math.floor(tonumber(n) or 0)
+  local s = tostring(math.abs(n))
+  local sep = THOUSANDS[ns.LocaleCode and ns.LocaleCode() or GetLocale()] or ","
+  s = s:reverse():gsub("(%d%d%d)", "%1" .. sep):reverse():gsub("^%" .. sep, "")
+  return (n < 0 and "-" or "") .. s
+end
+

@@ -227,7 +227,7 @@ local function fillTile(t, a, e)
     t.fill:Hide()
   else
     local n = math.min(e and e.progress or 0, a.goal)
-    t.status:SetText(a.goal > 1 and (UI.Code("muted") .. n .. " / " .. a.goal .. "|r" .. titleTag)
+    t.status:SetText(a.goal > 1 and (UI.Code("muted") .. ns.Number(n) .. " / " .. ns.Number(a.goal) .. "|r" .. titleTag)
       or (UI.Code("faint") .. ns.T("Not yet") .. "|r" .. titleTag))
     t.track:SetShown(a.goal > 1)
     t.fill:SetShown(a.goal > 1 and n > 0)

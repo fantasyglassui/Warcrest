@@ -11,6 +11,10 @@ local UI = ns.UI
 
 -- Newest first. Players see every entry newer than the version they last used.
 local CHANGES = {
+  { version = "4.3.1", date = "Nov 25, 2026", items = {
+    "Much less memory and lag in big guilds: achievements are worked out far less often and more cheaply, and pages make much less garbage when they redraw.",
+    "Achievement progress shows thousands separators, and Who has Warcrest says \"Has it\" when a version isn't known yet.",
+  } },
   { version = "4.3.0", date = "Nov 25, 2026", items = {
     "A fresh start: everything shared with the guild (kills, raids, DKP, loot, events, profiles, titles, achievements) is reset once for everyone. Your own settings and the guild's settings are kept.",
     "World buffs and world bosses (Events > World buffs): the guild hears when the Onyxia, Nefarian or Rend head or the Heart of Hakkar drops, and when a world boss is seen.",

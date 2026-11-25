@@ -87,8 +87,17 @@ function ns.InBattleground()
 end
 
 -- A logged or reported kill from a battleground or arena.
+local bgZone = {} -- zone -> true/false, so each zone's name is looked at once
 function ns.IsBattlegroundKill(k)
-  return k.kind == "kill_bg" or (k.zone and BG_ZONES[tostring(k.zone):lower()]) or false
+  if k.kind == "kill_bg" then return true end
+  local z = k.zone
+  if not z then return false end
+  local bg = bgZone[z]
+  if bg == nil then
+    bg = BG_ZONES[tostring(z):lower()] and true or false
+    bgZone[z] = bg
+  end
+  return bg
 end
 
 local function alive()
@@ -691,11 +700,19 @@ local function hash(str)
 end
 
 -- A kill's identity plus its killers, so differing killer lists also count as a difference.
+-- Kept per kill (and worked out again when its time or killers change): the
+-- log is fingerprinted every time a guildmate logs in.
+local fpCache = setmetatable({}, { __mode = "k" })
 local function fingerprintOf(k)
+  local c = fpCache[k]
+  local n = #k.killers
+  if c and c[1] == k.t and c[2] == n and c[3] == k.victim then return c[4] end
   local names = {}
-  for i, n in ipairs(k.killers) do names[i] = n end
+  for i, name in ipairs(k.killers) do names[i] = name end
   table.sort(names)
-  return hash(key(k.victim) .. ":" .. k.t .. ":" .. table.concat(names, ","))
+  local fp = hash(key(k.victim) .. ":" .. k.t .. ":" .. table.concat(names, ","))
+  fpCache[k] = { k.t, n, k.victim, fp }
+  return fp
 end
 
 -- day -> { count, sum } and the whole log's count and sum.
@@ -705,10 +722,11 @@ local function digest()
     local d = dayOf(k.t)
     local e = days[d] or { 0, 0 }
     e[1] = e[1] + 1
-    e[2] = (e[2] + fingerprintOf(k)) % 2147483647
+    local fp = fingerprintOf(k)
+    e[2] = (e[2] + fp) % 2147483647
     days[d] = e
     total = total + 1
-    sum = (sum + fingerprintOf(k)) % 2147483647
+    sum = (sum + fp) % 2147483647
   end
   return days, total, sum
 end

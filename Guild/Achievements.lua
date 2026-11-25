@@ -866,45 +866,63 @@ local function guildRecorded()
   return aeCache
 end
 
+local pool = {} -- key -> the member's result tables, reused each time they're worked out again
+-- Nothing earned and no progress: not stored (in a big guild that's most of
+-- them); reading one gives this shared entry. Don't change it.
+local NONE = { progress = 0 }
+local NONE_MT = { __index = function() return NONE end }
 local function compute(name)
   local k = ns.Key(name)
-  -- What's been earned before: kept on this computer, and recorded with the guild.
-  local saved = {}
-  for id, t in pairs(guildRecorded()[k] or {}) do saved[id] = t end
-  for id, t in pairs(ns.db.achievements[k] or {}) do saved[id] = saved[id] or t end
-  local out, count = {}, 0
+  -- What's been earned before: recorded with the guild, and kept on this computer.
+  local recorded = guildRecorded()[k]
+  local kept = ns.db.achievements[k]
+  local function saved(id) return (recorded and recorded[id]) or (kept and kept[id]) end
+  -- (The same tables as last time, filled in again: a big guild makes a lot of these.)
+  local out = pool[k]
+  if not out then out = setmetatable({}, NONE_MT); pool[k] = out end
+  local function set(id, t, progress)
+    if t == nil and progress == 0 then out[id] = nil return end
+    local e = rawget(out, id)
+    if not e then e = {}; out[id] = e end
+    e.t, e.progress = t, progress
+  end
+  local count = 0
+  local byStat = {} -- each stat once: many achievements are tiers of the same one
   for _, a in ipairs(LIST) do
     if a.stat ~= "others" then
-      local times = statTimes(name, a.stat)
-      local got = times[a.goal]
+      local times = byStat[a.stat]
+      if not times then times = statTimes(name, a.stat); byStat[a.stat] = times end
+      local got = times[a.goal] or saved(a.id)
       if got then
-        out[a.id] = { t = got, progress = a.goal }
-      elseif saved[a.id] then
-        out[a.id] = { t = saved[a.id], progress = a.goal }
+        set(a.id, got, a.goal)
+        count = count + 1
       else
-        out[a.id] = { progress = #times }
+        set(a.id, nil, #times)
       end
-      if out[a.id].t then count = count + 1 end
     end
   end
   -- Decorated and Guild Hero: earned once enough of the others are.
   local times = {}
-  for _, e in pairs(out) do if e.t then times[#times + 1] = e.t end end
+  for _, a in ipairs(LIST) do
+    local e = a.stat ~= "others" and rawget(out, a.id)
+    if e and e.t then times[#times + 1] = e.t end
+  end
   table.sort(times)
   for _, a in ipairs(LIST) do
     if a.stat == "others" then
       if count >= a.goal then
-        out[a.id] = { t = saved[a.id] or times[a.goal], progress = a.goal }
+        set(a.id, saved(a.id) or times[a.goal], a.goal)
       else
-        out[a.id] = { progress = count }
+        set(a.id, nil, count)
       end
     end
   end
   -- Remember what's earned, so it stays even if history goes.
   for id, e in pairs(out) do
-    if e.t then
-      ns.db.achievements[k] = ns.db.achievements[k] or {}
-      ns.db.achievements[k][id] = ns.db.achievements[k][id] or e.t
+    if e.t and not (kept and kept[id]) then
+      kept = kept or {}
+      ns.db.achievements[k] = kept
+      kept[id] = e.t
     end
   end
   earnedCache[k] = out
@@ -912,6 +930,8 @@ local function compute(name)
 end
 
 -- A member's achievements: id -> { t = when earned (0 if unknown) or nil, progress = n }.
+-- (Only the ones earned or under way are stored; looking up any other gives
+-- { progress = 0 }. Read-only.)
 function ns.MemberAchievements(name)
   local stamp = freshness()
   if stamp ~= cacheStamp then earnedCache, index, cacheStamp = {}, nil, stamp end
@@ -930,7 +950,12 @@ function ns.AchievementCount(name)
 end
 
 -- Recently earned across the guild: { { name, id, t }, ... }, newest first.
+-- (Kept until the history or the roster changes: Home, Achievements and the
+-- goals all ask for it on every refresh. Callers mustn't change it.)
+local feedCache, feedStamp, feedAt
 function ns.GuildAchievements()
+  local stamp = freshness()
+  if feedCache and feedStamp == stamp and GetTime() - feedAt < 60 then return feedCache end
   local out = {}
   for _, m in ipairs(ns.GetRoster()) do
     local short = Ambiguate(m.name, "short")
@@ -944,6 +969,7 @@ function ns.GuildAchievements()
     if a.name ~= b.name then return a.name < b.name end
     return BY_ID[a.id].order < BY_ID[b.id].order
   end)
+  feedCache, feedStamp, feedAt = out, stamp, GetTime()
   return out
 end
 
@@ -1211,10 +1237,21 @@ function ns.RestoreAchievementsLater()
   end)
 end
 
+-- A look over the whole guild costs more the bigger the guild, and the
+-- history changes many times a second while it syncs: look a moment after
+-- things settle, and in a big guild at most every so often (500 members:
+-- every 25 seconds; a small guild: at once).
+local SETTLE = 1
+local lastCheck = -60
 local function changed()
   if pending then return end
   pending = true
-  C_Timer.After(1, recheck)
+  local gap = math.min(30, #ns.GetRoster() * 0.05)
+  local wait = math.max(SETTLE, lastCheck + gap - GetTime())
+  C_Timer.After(wait, function()
+    lastCheck = GetTime()
+    recheck()
+  end)
 end
 
 local previousHook = ns.OnHistoryChanged

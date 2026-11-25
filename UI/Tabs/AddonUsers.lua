@@ -144,7 +144,7 @@ local function Build(page)
       row.cols[2]:SetAlpha(dim)
       row.cols[3]:SetText(m.online and (UI.Code("good") .. "Online|r") or (UI.Code("faint") .. "Offline|r"))
       if r.status == "yes" then
-        row.cols[4]:SetText(UI.Code("good") .. "v" .. (r.version or "?") .. "|r")
+        row.cols[4]:SetText(UI.Code("good") .. (r.version and ("v" .. r.version) or ns.T("Has it")) .. "|r")
       elseif r.status == "old" then
         row.cols[4]:SetText(UI.Code("bad") .. "v" .. r.version .. " · update|r")
       else

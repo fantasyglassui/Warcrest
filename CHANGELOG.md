@@ -1,5 +1,16 @@
 # Changelog
 
+## 4.3.1
+### Memory and speed
+In a big guild Warcrest's memory could climb past 100 MB. This release brings it well down:
+- **Achievements are worked out far less often and far more cheaply.** Every synced entry used to make Warcrest go over every member's 315 achievements again, about once a second while the guild's history synced. Now it waits for things to settle (in a 500-member guild, at most every 25 seconds), works out each kind of count once per member instead of once per tier, reuses what it made last time, and only keeps achievements that are earned or under way. In a test guild of 500 members with months of history, the garbage this made fell from about 113 MB a minute to about 5 MB, and the memory kept from about 45 MB to about 22 MB.
+- **Pages make much less garbage when they redraw:** Home about 7 times less, Achievements > Guild about 12 times less, and most other pages about 7 times less. The guild's achievement list, the "who has Warcrest" count, alts and the kill log's fingerprints are no longer rebuilt on every redraw.
+
+### Polish
+- Achievement progress shows thousands separators (1 / 1,000), in the player's language.
+- Guild > Who has Warcrest shows "Has it" instead of "v?" for a guildmate whose version isn't known yet.
+- When the game blocks something Warcrest tried ("Interface action failed"), it's now kept for `/warcrest report` with where it came from, so it can be tracked down.
+
 ## 4.3.0
 ### A fresh start
 - **Everything shared is reset.** The first time each member loads 4.3.0, Warcrest clears what it shares with the guild: kills, deaths, streaks, Wanted, guild wars, bounties, raids, sign-ups, DKP and loot, events and polls, profiles, titles, achievements, crafters and orders, and the Officer log. Anything from before the reset that arrives from members still on an older version is refused, so it can't come back.

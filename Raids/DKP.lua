@@ -32,9 +32,10 @@ ns.OnLedgerChanged(function() catchUp() end)
 -- also link or unlink directly.
 local links, pending
 local mains = {} -- name -> main, kept until the links change (ns.MainOf)
+local altsCache = {} -- main key -> its alts, kept until the links change (ns.AltsOf)
 
 local function loadLinks()
-  links, pending, mains = {}, {}, {}
+  links, pending, mains, altsCache = {}, {}, {}, {}
   for _, e in ipairs(ns.LedgerEntries("AL")) do
     local alt, main, author = ns.Key(e.alt), ns.Key(e.main), ns.Key(e.a)
     if alt ~= "" and alt ~= main then
@@ -67,9 +68,12 @@ function ns.MainOf(name)
   return current
 end
 
+-- (A shared list: don't change it.)
 function ns.AltsOf(main)
   if not links then loadLinks() end
-  local out, k = {}, ns.Key(main)
+  local k = ns.Key(main)
+  if altsCache[k] then return altsCache[k] end
+  local out = {}
   for alt, m in pairs(links) do
     if ns.Key(m) == k then
       local r = ns.Member(alt)
@@ -78,6 +82,7 @@ function ns.AltsOf(main)
     end
   end
   table.sort(out)
+  altsCache[k] = out
   return out
 end
 

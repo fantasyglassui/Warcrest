@@ -677,16 +677,23 @@ ns.OnEvent("PLAYER_REGEN_ENABLED", function() C_Timer.After(1, flushHeld) end)
 ns.OnEvent("ZONE_CHANGED_NEW_AREA", function() C_Timer.After(2, flushHeld) end)
 ns.OnEvent("PLAYER_ENTERING_WORLD", function() C_Timer.After(3, flushHeld) end)
 
-ns.OnEvent("ADDON_ACTION_BLOCKED", function(who, func)
-  if who == ADDON_NAME then
-    ns.Say(ns.TF("The game blocked %s for addons. Use the regular Guild window for that action.", tostring(func)))
+-- The game stopped something Warcrest tried (an "interface action failed").
+-- Say what, and keep it for /warcrest report, with where it came from.
+local function blocked(kind, who, func)
+  if who ~= ADDON_NAME then return end
+  ns.Say(ns.TF("The game blocked %s for addons. Use the regular Guild window for that action.", tostring(func)))
+  local where = debugstack and debugstack(3, 4, 0) or ""
+  local text = (kind .. ": " .. tostring(func) .. " " .. where:gsub("\n", " | ")):sub(1, 300)
+  local last = ns.recentErrors[#ns.recentErrors]
+  if last and last.text == text then
+    last.n, last.t = last.n + 1, time()
+  else
+    ns.recentErrors[#ns.recentErrors + 1] = { text = text, n = 1, t = time() }
+    if #ns.recentErrors > 10 then table.remove(ns.recentErrors, 1) end
   end
-end)
-ns.OnEvent("ADDON_ACTION_FORBIDDEN", function(who, func)
-  if who == ADDON_NAME then
-    ns.Say(ns.TF("The game blocked %s for addons. Use the regular Guild window for that action.", tostring(func)))
-  end
-end)
+end
+ns.OnEvent("ADDON_ACTION_BLOCKED", function(who, func) blocked("blocked", who, func) end)
+ns.OnEvent("ADDON_ACTION_FORBIDDEN", function(who, func) blocked("forbidden", who, func) end)
 
 ------------------------------------------------------------------------
 -- Slash commands
