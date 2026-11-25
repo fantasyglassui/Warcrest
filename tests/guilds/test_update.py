@@ -52,7 +52,7 @@ def test_a_guild_is_summarized_and_firsts_are_dated_from_when_seen():
     s = update.update_guild(api, state, "the-imperium", 1000)
     assert s["name"] == "THE IMPERIUM" and s["ruleset"] == "PvP" and s["members"] == 5
     assert s["tracked"] == 3 and s["at60"] == 1
-    assert s["bosses"] > 0 and s["gear"] == 50.0
+    assert s["bosses"] > 0 and s["gear"] == 50.0  # every slot is the same test item (level 50)
     assert state["firsts"]["level60"]["bambo-dreadborne"]["t"] is None  # already 60 the first time: no date
     # Next run, Luna reaches 60: dated.
     api = FakeAPI(level={"bambo-dreadborne": 60, "luna-miko": 60})

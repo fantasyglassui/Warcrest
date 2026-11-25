@@ -132,10 +132,11 @@ def read_equipment(api, cache, doc):
         if (it.get("slot") or {}).get("type", "") in ("SHIRT", "TABARD"):
             continue
         lvl = item_level(api, cache, (it.get("item") or {}).get("id"))
-        if lvl:
+        if lvl and lvl > 1:
             w = 2 if (it.get("inventory_type") or {}).get("type") == "TWOHWEAPON" else 1
             total, slots = total + lvl * w, slots + w
-    return round(total / slots, 1) if slots else None
+    # (Some items aren't on the API yet: with fewer than 8 known, it would mislead.)
+    return round(total / slots, 1) if slots >= 8 else None
 
 
 # ---------------------------------------------------------------------------
@@ -268,8 +269,10 @@ def form_field(body, label):
 def handle_requests(api, state):
     issues = github("GET", "/issues?labels=add-guild&state=open&per_page=50") or []
     for issue in issues:
-        name = form_field(issue.get("body"), "Guild name") or re.sub(r"^\s*Add guild:\s*", "", issue.get("title", ""), flags=re.I)
-        warcrest = "uses warcrest" in form_field(issue.get("body"), "Warcrest").lower() or "[x]" in form_field(issue.get("body"), "Warcrest").lower()
+        title = issue.get("title", "")
+        name = form_field(issue.get("body"), "Guild name") or re.sub(r"^\s*Add guild( \(Warcrest\))?:\s*", "", title, flags=re.I)
+        # From the add-on's button the title says "(Warcrest)"; on the form, the box is ticked.
+        warcrest = "[x]" in form_field(issue.get("body"), "Warcrest").lower() or "(warcrest)" in title.lower()
         slug = slugify(name)
         g = api.fetch("/data/wow/guild/%s?%s" % (slug, PROFILE)) if slug else None
         if g:

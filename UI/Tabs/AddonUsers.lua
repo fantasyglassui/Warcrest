@@ -28,6 +28,7 @@ local query = ""
 
 local function Refresh()
   if P.invite then P.invite:SetShown(ns.CanInvite()) end
+  if P.website then P.website:SetShown(ns.CanInvite()) end
   local all, newest = rows()
   local q = query:lower()
   local shown, counts = {}, { yes = 0, old = 0, no = 0, onlineWith = 0, online = 0 }
@@ -107,6 +108,11 @@ local function Build(page)
   P.invite:SetPoint("TOPRIGHT", -1, -86)
   UI.Tooltip(P.invite, "Invite the guild", "Post a short invitation to get Warcrest in guild chat. Nothing is sent until you click Post.")
   P.invite:SetScript("OnClick", function() ns.ShowInvite() end)
+  P.website = UI.Button(page, "Put us on the website", 170)
+  P.website:SetHeight(26)
+  P.website:SetPoint("RIGHT", P.invite, "LEFT", -8, 0)
+  UI.Tooltip(P.website, "Put us on the website", "A link to add the guild to the guild boards at warcrest-addon.com/guilds, with the Warcrest badge.")
+  P.website:SetScript("OnClick", function() ns.ShowWebsiteLink() end)
 
   local card = UI.Box(page, 0, -120, 740, 290)
   P.card = card

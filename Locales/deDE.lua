@@ -2670,4 +2670,8 @@ ns.LOCALES.deDE = {
   ["Warcrest 4.3.0 starts fresh: kills, raids, DKP, loot, events, profiles, titles and achievements have been cleared for the whole guild. Your own settings are kept."] = "Warcrest 4.3.0 beginnt neu: Kills, Schlachtzüge, DKP, Beute, Veranstaltungen, Profile, Titel und Erfolge wurden für die ganze Gilde gelöscht. Deine eigenen Einstellungen bleiben.",
   ["Much less memory and lag in big guilds: achievements are worked out far less often and more cheaply, and pages make much less garbage when they redraw."] = "Viel weniger Speicher und Ruckeln in großen Gilden: Erfolge werden viel seltener und günstiger berechnet, und Seiten erzeugen beim Neuzeichnen viel weniger Datenmüll.",
   ["Achievement progress shows thousands separators, and Who has Warcrest says \"Has it\" when a version isn't known yet."] = "Der Erfolgsfortschritt zeigt Tausendertrennzeichen, und Wer Warcrest hat zeigt \"Hat es\", wenn die Version noch unbekannt ist.",
+  ["Put us on the website"] = "Auf die Website",
+  ["A link to add the guild to the guild boards at warcrest-addon.com/guilds, with the Warcrest badge."] = "Ein Link, um die Gilde mit dem Warcrest-Abzeichen auf die Gildenranglisten von warcrest-addon.com/guilds zu setzen.",
+  ["Put the guild on the website"] = "Gilde auf die Website setzen",
+  ["Copy this link (click it, then Ctrl+C) and open it in your browser. Within the hour the guild shows on warcrest-addon.com/guilds with the Warcrest badge."] = "Kopiere diesen Link (anklicken, dann Strg+C) und öffne ihn im Browser. Innerhalb einer Stunde erscheint die Gilde auf warcrest-addon.com/guilds mit dem Warcrest-Abzeichen.",
 }

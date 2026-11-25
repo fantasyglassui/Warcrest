@@ -287,3 +287,14 @@ def test_empty_hint_only_when_few_have_it():
     rd = Renderer(c)
     texts = "\n".join(str(fs["_GetText"] or "") for fs in walk_text(rd, c.lua.eval("WarcrestPanel")))
     assert "1 of 6 members have Warcrest" in texts
+
+
+def test_officers_get_a_link_to_put_the_guild_on_the_website():
+    guild = Guild(M)
+    off = guild["Off"]
+    link = off.ns.WebsiteLink()
+    assert link.startswith("https://github.com/fantasyglassui/Warcrest/issues/new?template=add-guild.yml")
+    assert "(Warcrest)" in link and "guild=The+Imperium" in link
+    off.ns.ShowWebsiteLink()
+    off.ns.OpenPanel("addon")
+    assert not off.errors()

@@ -108,3 +108,30 @@ function ns.ShowShare(text)
   if share.box.SetFocus then share.box:SetFocus() end
   return share
 end
+
+-- Officers: put the guild on warcrest-addon.com/guilds. Add-ons can't go online,
+-- so this gives a link to a short form, filled in, to open in a browser.
+local site
+function ns.WebsiteLink()
+  local guild = ns.GuildName() or ""
+  local q = guild:gsub("[^%w%-%._~ ]", function(c) return ("%%%02X"):format(c:byte()) end):gsub(" ", "+")
+  return "https://github.com/fantasyglassui/Warcrest/issues/new?template=add-guild.yml&title=Add+guild+(Warcrest):+"
+    .. q .. "&guild=" .. q
+end
+
+function ns.ShowWebsiteLink()
+  if not site then
+    site = UI.Window("WarcrestWebsite", 460, 150, ns.T("Put the guild on the website"))
+    local hint = UI.Label(site, "Copy this link (click it, then Ctrl+C) and open it in your browser. "
+      .. "Within the hour the guild shows on warcrest-addon.com/guilds with the Warcrest badge.", "MutedSmall")
+    hint:SetPoint("TOPLEFT", 16, -42)
+    hint:SetWidth(428)
+    site.box = UI.CopyBox(site, 428, "")
+    site.box:SetPoint("TOPLEFT", 16, -92)
+  end
+  site.box:SetCopyText(ns.WebsiteLink())
+  site:Show()
+  if site.box.SetFocus then site.box:SetFocus() end
+  return site
+end
+
