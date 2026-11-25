@@ -492,3 +492,33 @@ function ChatFrame_OpenChat(text) table.insert(openedChat, text) end
 questsDone = {}
 C_QuestLog = C_QuestLog or {}
 C_QuestLog.IsQuestFlaggedCompleted = function(id) return questsDone[id] == true end
+
+-- Units' GUIDs (units[u].npc makes a creature) and buffs.
+function UnitGUID(u)
+  if u == "player" then return "Player-1-" .. tostring(PLAYER) end
+  local d = units[u]
+  if not d then return nil end
+  if d.npc then return "Creature-0-1-1-1-" .. d.npc .. "-0000ABCD" end
+  return "Player-1-" .. tostring(d.name)
+end
+function UnitIsDead(u) return units[u] and units[u].dead or false end
+-- auras[unit] = { { spellId = 123, name = "...", expirationTime = GetTime() + 100, duration = 3600 }, ... }
+auras = {}
+C_UnitAuras = {
+  GetPlayerAuraBySpellID = function(id)
+    for _, a in ipairs(auras.player or {}) do if a.spellId == id then return a end end
+  end,
+  GetAuraDataByIndex = function(unit, i) return (auras[unit] or {})[i] end,
+}
+-- Spells you know (knownSpells[id] = true) and their cooldowns (spellCooldowns[id] = { start, duration }).
+knownSpells, spellCooldowns, itemCounts, itemCooldowns = {}, {}, {}, {}
+function IsPlayerSpell(id) return knownSpells[id] == true end
+C_Spell.GetSpellCooldown = function(id)
+  local c = spellCooldowns[id] or { 0, 0 }
+  return { startTime = c[1], duration = c[2], isEnabled = true }
+end
+function GetItemCount(id) return itemCounts[id] or 0 end
+C_Container = { GetItemCooldown = function(id)
+  local c = itemCooldowns[id] or { 0, 0 }
+  return c[1], c[2], 1
+end }

@@ -1,7 +1,8 @@
 --[[
   Warcrest
-  The Officers tab's Inactive view: members who haven't logged in for a
-  while, longest gone first, with their rank, level, last raid and notes,
+  The Officers tab's Inactive view: players who haven't logged in on any of
+  their characters for a while (linked alts count with their main), longest
+  gone first, with their rank, level, last raid and notes,
   to help with promotions and clean-ups. Pick how long counts as inactive.
   (Warcrest only lists them: removing someone is done in the guild window.)
 ]]
@@ -27,15 +28,37 @@ local function ago(d)
   return ns.TP(math.floor(mo / 12), "1 year", "%d years", math.floor(mo / 12))
 end
 
--- Members gone for at least `minDays`, longest gone first.
+-- Players gone for at least `minDays`, longest gone first. Linked alts count
+-- with their main: a player is only away if every one of their characters is,
+-- and their last raid counts every character. One row per player, under the
+-- main's name, with their alts in `alts`.
 function ns.InactiveMembers(minDays)
-  local out = {}
+  local players = {} -- main key -> { main member or first character seen, chars = { member, ... } }
   for _, m in ipairs(ns.GetRoster()) do
-    if not m.online and (m.offlineDays or 0) >= minDays then
-      local last = 0
+    local main = ns.MainOf and ns.MainOf(ns.Ambiguate(m.name, "short")) or ns.Ambiguate(m.name, "short")
+    local k = ns.Key(main)
+    local p = players[k]
+    if not p then p = { mainName = main, chars = {} }; players[k] = p end
+    p.chars[#p.chars + 1] = m
+  end
+  local out = {}
+  for _, p in pairs(players) do
+    local away, last, head = math.huge, 0, nil
+    for _, m in ipairs(p.chars) do
+      away = math.min(away, m.online and 0 or (m.offlineDays or 0))
       for _, t in ipairs(ns.RaidNightsAttended and ns.RaidNightsAttended(m.name) or {}) do last = math.max(last, t) end
-      out[#out + 1] = { name = ns.Ambiguate(m.name, "short"), classFile = m.classFile, rank = m.rankName, rankIndex = m.rankIndex,
-        level = m.level, days = m.offlineDays, lastRaid = last > 0 and last or nil, note = m.publicNote ~= "" and m.publicNote or m.officerNote }
+      if ns.Key(m.name) == ns.Key(p.mainName) then head = m end
+    end
+    head = head or p.chars[1]
+    if away >= minDays then
+      local alts = {}
+      for _, m in ipairs(p.chars) do
+        if m ~= head then alts[#alts + 1] = ns.Ambiguate(m.name, "short") end
+      end
+      table.sort(alts)
+      out[#out + 1] = { name = ns.Ambiguate(head.name, "short"), classFile = head.classFile, rank = head.rankName,
+        rankIndex = head.rankIndex, level = head.level, days = away, lastRaid = last > 0 and last or nil,
+        note = head.publicNote ~= "" and head.publicNote or head.officerNote, alts = alts }
     end
   end
   table.sort(out, function(a, b)
@@ -75,13 +98,14 @@ function M.Build(page)
       UI.Tooltip(row, function() return row.item.name end, function()
         local it = row.item
         local lines = { ns.TF("Last online %s ago.", ago(it.days)) }
+        if #it.alts > 0 then lines[#lines + 1] = ns.TF("Alts: %s", table.concat(it.alts, ", ")) end
         if it.note and it.note ~= "" then lines[#lines + 1] = ns.TF("Note: %s", it.note) end
         lines[#lines + 1] = ns.T("Click for their player card.")
         return table.concat(lines, "\n")
       end)
     end,
     function(row, it)
-      row.name:SetText(it.name)
+      row.name:SetText(#it.alts > 0 and (it.name .. UI.Code("muted") .. " +" .. #it.alts .. "|r") or it.name)
       row.name:SetTextColor(UI.ClassColor(it.classFile))
       row.rank:SetText(it.rank)
       row.level:SetText(it.level)
@@ -106,8 +130,9 @@ function M.Build(page)
   M.ranks:SetPoint("TOPLEFT", 14, -140)
   M.ranks:SetWidth(INNER)
   M.ranks:SetSpacing(3)
-  local tip = UI.Label(side, "Members who haven't logged in for the time picked, longest gone first. "
-    .. "Click one for their player card. To remove or demote someone, use the game's guild window.", "MutedSmall")
+  local tip = UI.Label(side, "Players who haven't logged in on any of their characters for the time picked, longest gone first. "
+    .. "Linked alts are listed with their main (+1, +2). Click one for their player card. To remove or demote someone, "
+    .. "use the game's guild window.", "MutedSmall")
   tip:SetPoint("BOTTOMLEFT", 14, 14)
   tip:SetWidth(INNER)
   tip:SetSpacing(2)

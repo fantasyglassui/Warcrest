@@ -30,6 +30,10 @@ Warcrest started life as **The Imperium**, the guild addon of <The Imperium>, an
 - **Raid assignments.** Officers write who does what on each boss and post it to raid chat; everyone sees their own job, and is reminded of it when the boss is pulled.
 - **Wipe tracking.** Every boss pull is recorded, kill or wipe, with the best kill time for each boss.
 - **Guild polls.** Ask the guild a question; everyone with Warcrest votes.
+- **World buffs and world bosses.** The guild hears when a world buff drops or a world boss is seen (Events > World buffs).
+- **Groups.** Post what you're doing and how many you need; guildmates ask to join and you invite them (Guild > Groups).
+- **Profession cooldowns.** Who has a transmute, Mooncloth, Cured Rugged Hide or a Salt Shaker ready (Guild > Crafters > Cooldowns).
+- **Raid check.** Every raid member's flask, elixirs, food and world buffs before the pull (Raids > Raid check).
 - **Crafting orders.** Order from a guild crafter in Guild > Crafters; they accept, decline or mark it done.
 - **German, French and Spanish.** Follows your game's language, or pick one in Settings.
 - **Achievements and titles.** 315 achievements for kills, streaks, revenge, bounties, raids, bosses, loot and guild life, with 78 titles to show after your name, in chat and in alerts.

@@ -592,6 +592,11 @@ local function Build(page)
     { "progress", "Progress" } }, function(v) view = v; ns.RefreshPanel() end)
   P.view:SetPoint("RIGHT")
   TAB.view = P.view
+  local check = UI.Button(page.headerBar, "Raid check", 104)
+  check:SetHeight(26)
+  check:SetPoint("RIGHT", P.view, "LEFT", -8, 0)
+  check:SetScript("OnClick", function() ns.ShowRaidCheck() end)
+  UI.Tooltip(check, "Raid check", "Each raid member's flask, elixirs, food and world buffs, the least prepared first. Outside combat only.")
   UI.Tooltip(P.view, "Switch view", "Raid: the selected raid's sign-ups. Plan: its groups and bench. Group: everyone in your raid group right now. "
     .. "Progress: the bosses the guild has killed in each raid. (The calendar is in Events > Calendar.)")
 

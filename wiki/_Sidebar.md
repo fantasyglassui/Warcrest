@@ -9,6 +9,7 @@
 - [PvP Kills and the Wanted List](PvP-Kills-and-the-Wanted-List)
 - [Achievements and Titles](Achievements-and-Titles)
 - [Guild Wars, Goals and Crafters](Guild-Wars-Goals-and-Crafters)
+- [World Buffs, Groups and the Raid Check](World-Buffs-Groups-and-Raid-Check)
 
 **Officers**
 - [Officer Raid Night Guide](Officer-Raid-Night-Guide)

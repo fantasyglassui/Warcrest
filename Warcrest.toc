@@ -68,6 +68,10 @@ Guild\Crafters.lua
 Guild\CraftOrders.lua
 Guild\Attunements.lua
 Guild\Polls.lua
+Guild\WorldBuffs.lua
+Guild\Groups.lua
+Guild\Cooldowns.lua
+Raids\RaidCheck.lua
 
 # 6. Interface: the theme, shared widgets and the guild panel
 UI\Theme.lua
@@ -101,6 +105,8 @@ UI\Tabs\Recruit.lua
 UI\Tabs\Profiles.lua
 UI\Tabs\Crafters.lua
 UI\Tabs\AddonUsers.lua
+UI\Tabs\WorldBuffs.lua
+UI\Tabs\Groups.lua
 UI\Tabs\SoundsView.lua
 UI\Tabs\Settings.lua
 
@@ -113,6 +119,7 @@ UI\Council.lua
 UI\PlayerCard.lua
 UI\Attunements.lua
 UI\Assignments.lua
+UI\RaidCheck.lua
 UI\ChatTitles.lua
 UI\Updates.lua
 UI\Welcome.lua

@@ -12,7 +12,7 @@ local UI = ns.UI
 local W = UI.PAGE_W
 local win -- the page
 local query, prof = "", nil
-local view = "recipes" -- "recipes" or "orders"
+local view = "recipes" -- "recipes", "orders" or "cooldowns"
 local picked           -- the recipe row picked: { id, name, crafters }
 local orderTo          -- the crafter to order it from
 
@@ -50,7 +50,7 @@ local function Build(page)
   win.prof:SetHeight(26)
   win.prof:SetPoint("LEFT", win.search, "RIGHT", 8, 0)
   UI.Tooltip(win.prof, "Profession", "Click to show one profession's recipes.")
-  win.view = UI.Segmented(page.headerBar, { { "recipes", "Recipes" }, { "orders", "Orders" } }, function(v)
+  win.view = UI.Segmented(page.headerBar, { { "recipes", "Recipes" }, { "orders", "Orders" }, { "cooldowns", "Cooldowns" } }, function(v)
     view = v
     ns.RefreshPanel()
   end)
@@ -203,11 +203,52 @@ local function Build(page)
     end, true)
   win.orders.frame:SetPoint("TOPLEFT", ob, "TOPLEFT", 0, oy - 1)
 
+  -- Cooldowns: transmutes, Mooncloth and the like, and when each is ready.
+  local cb = CreateFrame("Frame", nil, page)
+  win.cooldownsBox = cb
+  cb:SetPoint("TOPLEFT", 1, 0)
+  cb:SetSize(W - 2, 364)
+  UI.Card(cb, 1)
+  local cy = UI.TableHeads(cb, { { "CRAFTER", 12 }, { "COOLDOWN", 240 }, { "READY", 460 } })
+  win.cooldowns = UI.List(cb, W - 4, 364 + cy - 2, 26,
+    function(row)
+      row.name = UI.Label(row, "", "Subheading")
+      row.name:SetPoint("LEFT", 12, 0)
+      row.name:SetWidth(220)
+      row.name:SetWordWrap(false)
+      row.what = UI.Label(row, "", "Small")
+      row.what:SetPoint("LEFT", 240, 0)
+      row.ready = UI.Label(row, "", "Small")
+      row.ready:SetPoint("LEFT", 460, 0)
+      UI.RowLine(row)
+    end,
+    function(row, c)
+      local m = ns.Member(c.name)
+      local r, g, b = UI.ClassColor(m and m.classFile)
+      row.name:SetText(ns.Ambiguate(c.name, "short"))
+      row.name:SetTextColor(r, g, b)
+      row.name:SetAlpha((m == nil or m.online) and 1 or 0.5)
+      row.what:SetText(ns.T(c.label))
+      local left = c.readyAt - time()
+      if left <= 0 then
+        row.ready:SetText(UI.Code("good") .. ns.T("Ready") .. "|r")
+      elseif left < 3600 then
+        row.ready:SetText(ns.TF("in %d min", math.ceil(left / 60)))
+      elseif left < 86400 then
+        row.ready:SetText(ns.TF("in %d h", math.ceil(left / 3600)))
+      else
+        row.ready:SetText(ns.Date("%a %H:%M", c.readyAt))
+      end
+    end, true)
+  win.cooldowns.frame:SetPoint("TOPLEFT", cb, "TOPLEFT", 0, cy - 1)
+
   -- A bigger window: the lists get the room, the order line stays under them.
   UI.Grow(page, box, 1, 1)
   UI.Grow(page, win.rows, 1, 1)
   UI.Grow(page, ob, 1, 1)
   UI.Grow(page, win.orders, 1, 1)
+  UI.Grow(page, cb, 1, 1)
+  UI.Grow(page, win.cooldowns, 1, 1)
   UI.Follow(page, o, 0, 1)
   UI.Follow(page, win.hint, 0, 1)
 end
@@ -232,6 +273,7 @@ local function Refresh()
   local waiting = ns.OrdersWaiting()
   win.recipeBox:SetShown(view == "recipes")
   win.ordersBox:SetShown(view == "orders")
+  win.cooldownsBox:SetShown(view == "cooldowns")
   win.search:SetShown(view == "recipes")
   win.prof:SetShown(view == "recipes")
   win.hint:SetText(ns.T(view == "orders" and (waiting > 0 and "Orders waiting for you: accept or decline them." or "Your orders, and the orders for you to make.")
@@ -239,6 +281,14 @@ local function Refresh()
   if view == "orders" then
     win.order:Hide()
     refreshOrders()
+    return
+  end
+  if view == "cooldowns" then
+    win.order:Hide()
+    win.hint:SetShown(true)
+    win.hint:SetText(ns.T("Transmutes, Mooncloth, Cured Rugged Hide and the Salt Shaker, from guildmates with Warcrest."))
+    win.cooldowns:SetEmptyText(ns.T("Nobody's cooldowns yet. They show up when guildmates with one of these log in."))
+    win.cooldowns:SetItems(ns.GuildCooldowns())
     return
   end
   -- The profession list grows as lists arrive.
@@ -292,7 +342,7 @@ local function Subtitle()
   return ns.TF("%d crafters · %d recipes", people, recipes)
 end
 
--- Opens Guild > Crafters; which: "recipes" or "orders".
+-- Opens Guild > Crafters; which: "recipes", "orders" or "cooldowns".
 function ns.ShowCrafters(search, which)
   if which then view = which end
   ns.OpenPanel("crafters", which)

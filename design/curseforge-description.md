@@ -40,6 +40,8 @@ New members see a short picture tour when they first open it, and officers get o
 - Whoever planned it (or an officer) can **invite everyone going** in one click and **take attendance** from their group.
 - Events show on the calendar alongside raids, each kind in its own colour.
 - **Guild polls:** ask the guild a question with a few answers, and everyone with Warcrest votes. Officers can let members start polls too.
+- **World buffs and world bosses:** the guild hears when the Onyxia, Nefarian or Rend head or the Heart of Hakkar drops, and when Azuregos, Kazzak or an Emerald Dragon is seen.
+- **Groups:** post what you're doing and how many you need; guildmates ask to join with a click and you invite them with a click.
 
 ## Loot
 - **DKP:** earned for being on time, for every hour of a raid night and for every boss kill. You spend it in **live loot auctions**, with open or hidden bids.
@@ -85,6 +87,8 @@ Every kind of alert has its own sound, and you can change any of them in **Setti
 - **315 achievements** across PvP, hunts, raids, loot and social life, with **78 titles** you can show after your name. Everything you've already done counts. They're kept with the guild, so they're never lost with one computer's saved data.
 - **Guild goals:** officers set targets for the week or month (enemy players killed, bosses, raid nights, events and more). Everyone sees the progress, and the guild hears when one is reached.
 - **Crafters** (in the Guild section): search what the guild can make, see who's online to make it, and send them a **crafting order** (say if you're bringing the materials). They accept, decline or mark it done, and you hear about it. Recipes are shared just by opening your profession windows.
+- **Profession cooldowns:** who has a transmute, Mooncloth, Cured Rugged Hide or a Salt Shaker, and when each is ready.
+- **Raid check:** every raid member's flask, elixirs, food and world buffs before the pull, even members without Warcrest.
 - **Member profiles:** your main spec and role, the days and times you play, your birthday and a short note. **Your item level is added automatically** from your gear.
 - **Guild profiles** (in the Guild section): everyone's spec, role, item level and play times in one list, sortable for a quick gear check.
 - **Birthdays and anniversaries** are celebrated with the guild.

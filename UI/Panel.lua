@@ -67,10 +67,11 @@ local SECTIONS = {
   { group = "Guild" },
   { id = "guild", title = "Guild", icon = "roster", badge = onlineBadge, items = {
     { tab = "roster", label = "Roster" }, { tab = "profiles", label = "Profiles" },
-    { tab = "crafters", label = "Crafters" }, { tab = "addon", label = "Who has Warcrest" } } },
+    { tab = "crafters", label = "Crafters" }, { tab = "groups", label = "Groups" },
+    { tab = "addon", label = "Who has Warcrest" } } },
   { id = "events", title = "Events", icon = "events", badge = pollBadge, items = {
     { tab = "events", view = "events", label = "Events" }, { tab = "events", view = "polls", label = "Polls" },
-    { tab = "calendar", label = "Calendar" } } },
+    { tab = "calendar", label = "Calendar" }, { tab = "worldbuffs", label = "World buffs" } } },
   { group = "Raids & loot" },
   { id = "raids", title = "Raids", icon = "raids", badge = raidBadge, items = { { tab = "raids" } } },
   { id = "loot", title = "Loot", icon = "dkp", items = {

@@ -40,6 +40,7 @@ ns.BANNER_KINDS = {
   loot        = { title = "Loot auction",       color = rgb("ffd200"), icon = "dkp",      tab = "dkp" },
   achievement = { title = "Achievement",        color = C.accent,      icon = "trophy",   tab = "achievements", hold = 6 },
   celebrate   = { title = "Guild news",         color = C.good,        icon = "roster",   tab = "roster" },
+  worldbuff   = { title = "World buff",         color = rgb("7fd3ff"), icon = "events",   tab = "worldbuffs", hold = 8 },
 }
 local DEFAULT_KIND = { title = "Guild alert", color = C.accent, icon = "warning", tab = "roster" }
 

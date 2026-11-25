@@ -12,6 +12,11 @@ local UI = ns.UI
 -- Newest first. Players see every entry newer than the version they last used.
 local CHANGES = {
   { version = "4.3.0", date = "Nov 25, 2026", items = {
+    "World buffs and world bosses (Events > World buffs): the guild hears when the Onyxia, Nefarian or Rend head or the Heart of Hakkar drops, and when a world boss is seen.",
+    "Groups (Guild > Groups): post what you're doing and how many you need; guildmates ask to join with a click, and you invite them with a click.",
+    "Profession cooldowns (Guild > Crafters > Cooldowns): who has a transmute, Mooncloth, Cured Rugged Hide or a Salt Shaker, and when each is ready.",
+    "Raid check (on Raids): every raid member's flask, elixirs, food and world buffs before the pull, even without Warcrest.",
+    "Officers > Inactive groups alts with their main, so nobody shows as away while they play an alt.",
     "Battleground and arena kills no longer count anywhere (kills, streaks, achievements, guild wars), and old ones are cleared out.",
     "Profiles and titles now reach guildmates who were offline when they changed, even when no officer is online.",
     "Less memory and less lag: Warcrest makes far less garbage while you play, and redraws its window at most a few times a second when a lot happens at once.",

@@ -1,6 +1,13 @@
 # Changelog
 
 ## 4.3.0
+### New: guild helpers
+- **World buffs and world bosses** (**Events > World buffs**). When a guildmate with Warcrest gets Rallying Cry of the Dragonslayer (the Onyxia or Nefarian head), Warchief's Blessing (Rend's head) or Spirit of Zandalar (the Heart of Hakkar) just as it drops, the guild hears where and when, and the view shows each buff's last drop and how long it lasts. Sightings of Azuregos, Lord Kazzak and the Emerald Dragons are shared the same way, with whether they were up or dead. It goes by the buff itself, so it works in every language. **Alert me** turns the banners off just for you, and the alert has its own sound in Settings > Sounds. Guildmates who log in later catch up on the day's drops and sightings.
+- **Groups** (**Guild > Groups**): post what you're doing and how many you need, with the roles. Guildmates click **Ask to join** (as Tank, Healer or Damage), you see who asked and click **Invite**. Nothing goes in chat, and nothing is sent without a click. Posts end after an hour, when you close them, or when you log off.
+- **Profession cooldowns** (**Guild > Crafters > Cooldowns**): who has a transmute, Mooncloth, Cured Rugged Hide or a Salt Shaker, and when each is ready. Each member's addon reads their own from the game and shares it when it changes.
+- **Raid check** (the button at the top of **Raids**): each raid member's flask, elixirs, food and world buffs, the least prepared first. It reads the buffs straight from the game, so members without Warcrest show too. The game hides buffs during combat, so it works outside it.
+- **Inactive, with alts** (**Officers > Officer log > Inactive**): linked alts are grouped with their main, so a player only shows as away when none of their characters has been online, and their last raid counts every character. Alts show as +1, +2 next to the name, and in the tooltip.
+
 ### Fixes
 - **Battleground and arena kills no longer count anywhere.** Kills in battlegrounds and arenas are no longer reported or accepted from guildmates, and kills already in the log from one are cleared out when you log in. They don't count toward kills, streaks, achievements, guild wars or the Wanted list. The battleground filter in PvP > Kills is gone, and so are the three battleground achievements.
 - **Profiles are shared again.** A profile or title changed while a guildmate was offline now reaches them when they log in, even if no officer is online: each member sends their own latest profile and title to whoever logs in. Officers also fill in gaps when they have the same number of entries but different ones.
