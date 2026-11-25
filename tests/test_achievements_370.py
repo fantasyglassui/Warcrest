@@ -29,7 +29,7 @@ def test_there_are_over_a_hundred_new_ones_with_unique_ids():
     guild = Guild(MEMBERS)
     ns = guild["Alice"].ns
     ids = [ns.ACHIEVEMENTS[i].id for i in range(1, len(ns.ACHIEVEMENTS) + 1)]
-    assert len(ids) == len(set(ids)) == 315
+    assert len(ids) == len(set(ids)) == 316
     cats = {ns.ACHIEVEMENTS[i].cat for i in range(1, len(ids) + 1)}
     assert cats == {"pvp", "hunt", "raid", "loot", "social"}
 

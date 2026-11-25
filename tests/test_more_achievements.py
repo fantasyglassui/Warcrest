@@ -94,5 +94,5 @@ def test_new_tabs_show_without_errors():
     guild, me = demo_guild()
     for view in ("pvp", "hunt", "raid", "loot", "social", "guild"):
         me.ns.OpenPanel("achievements", view)
-    assert len(me.ns.ACHIEVEMENTS) == 315
+    assert len(me.ns.ACHIEVEMENTS) == 316
     assert not me.errors()

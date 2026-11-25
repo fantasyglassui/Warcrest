@@ -355,6 +355,8 @@ local LIST = {
   { id = "recruit5", cat = "social", name = "Talent Scout", desc = "Add 8 recruits who go on to join the guild.", stat = "recruits", goal = 8, title = "the Recruiter" },
   { id = "recruits15", cat = "social", name = "Growing the Ranks", desc = "Add 15 recruits who go on to join the guild.", stat = "recruits", goal = 15 },
   { id = "recruits25", cat = "social", name = "Guild Builder", desc = "Add 25 recruits who go on to join the guild.", stat = "recruits", goal = 25 },
+  -- Secret: hidden from everyone until it's earned.
+  { id = "blades", cat = "social", name = "The Blades", desc = "A secret achievement, earned by logging in as Sathryus.", stat = "blades", goal = 1, secret = true },
   { id = "decorated", cat = "social", name = "Decorated", desc = "Earn 15 other achievements.", stat = "others", goal = 15, title = "the Decorated" },
   { id = "hero", cat = "social", name = "Guild Hero", desc = "Earn 40 other achievements.", stat = "others", goal = 40, title = "the Hero" },
   { id = "meta50", cat = "social", name = "Overachiever", desc = "Earn 75 other achievements.", stat = "others", goal = 75, title = "the Overachiever" },
@@ -365,6 +367,9 @@ local LIST = {
   { id = "meta300", cat = "social", name = "Beyond Legend", desc = "Earn 300 other achievements.", stat = "others", goal = 300, title = "the Exalted" },
 }
 ns.ACHIEVEMENTS = LIST
+-- How many there are to earn, as shown to players (secret ones don't count until earned).
+ns.ACHIEVEMENT_TOTAL = 0
+for _, a in ipairs(LIST) do if not a.secret then ns.ACHIEVEMENT_TOTAL = ns.ACHIEVEMENT_TOTAL + 1 end end
 local BY_ID = {}
 for i, a in ipairs(LIST) do a.order = i; BY_ID[a.id] = a end
 function ns.Achievement(id) return BY_ID[id] end
@@ -658,6 +663,12 @@ local function statTimes(name, stat)
   local k = ns.Key(name)
   if ix[stat] then return ix[stat][k] or {} end
   if stat == "raids" then return ns.RaidNightsAttended(name) end
+  if stat == "blades" then
+    -- The Blades: Sathryus earns it by logging in (Sathryus Wraithblade's own
+    -- characters). Guildmates see it once it's recorded with the guild.
+    local at = ns.IsMe(name) and ns.db.bladesAt
+    return at and { at } or {}
+  end
   if stat == "bosses" then return ns.BossKillTimes(name) end
   if stat == "bossFirsts" then return ns.BossKillTimes(name, true) end
   if stat:find("^streak") then
@@ -780,7 +791,12 @@ local function freshness()
     .. ":" .. (ns.CraftersVersion and ns.CraftersVersion() or 0)
 end
 
-ns.OnLoad(function() ns.db.achievements = ns.db.achievements or {} end)
+ns.OnLoad(function()
+  ns.db.achievements = ns.db.achievements or {}
+  -- The Blades (secret): logging in as Sathryus or Wraithblade earns it.
+  local me = (UnitName("player") or ""):lower()
+  if (me == "sathryus" or me == "wraithblade") and not ns.db.bladesAt then ns.db.bladesAt = time() end
+end)
 
 -- Achievements members have recorded with the guild (AE entries): key -> { id -> when }.
 -- They're kept by everyone's addon, so they come back after a reinstall, on a

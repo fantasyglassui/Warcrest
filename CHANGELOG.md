@@ -15,6 +15,7 @@
 - **157 new achievements**, mostly higher tiers for kills, assists, revenge, raids, bosses, loot, events and more, with new titles at the top: the Deathbringer, the Unbreakable, the Midnight Blade, the Scourge, the Rivalbane, the Retributor, the Undying, the Unwavering, the Titan, the Gilded, the Heart of the Guild and the Exalted.
 - **A bit harder:** tiered achievements now need roughly half as much again (for example 1,500 killing blows for Thousand Cuts, 150 raid nights for Centurion's tier). Achievements you've already earned stay earned, titles included.
 - **No more look-alike titles, and clearer names:** the Legendary is now the Deathless, the Godlike the Untouchable, and the Legend the Feared. Titles that matched the game's PvP ranks (the Warlord, the Commander, the Centurion, the Champion) and other near-duplicates have new names too: the Bloodsworn, the Shotcaller, the Veteran, the Crowned, the Sworn Blade, the Roamer, the Dreaded, the Kingslayer, the Wrathful, the Guardian, the Tracker, the Nemesis Bane, the Ever-Present, the Unfailing, the Usurper, the Unyielding, the Worldbreaker, the Blessed and the Grandmaster. If you showed one of these, you now show its new name.
+- **A secret achievement**, hidden until it's earned. Its owner knows who they are.
 - Achievement names that clashed are renamed: Warlord is Bloodsworn, Legend is Feared, and Headhunter (recruits) is Talent Scout.
 
 ### Accessibility

@@ -46,7 +46,7 @@ local function titleRows()
   local rows = { { id = "", title = ns.T("No title"), earned = true } }
   local earned, locked = {}, {}
   for _, a in ipairs(ns.ACHIEVEMENTS) do
-    if a.title then
+    if a.title and not a.secret then
       local row = { id = a.id, title = a.title, achievement = a, earned = ns.HasAchievement(me, a.id) }
       if row.earned then earned[#earned + 1] = row else locked[#locked + 1] = row end
     end
@@ -243,7 +243,8 @@ local function RefreshTiles(cat)
   local mine = ns.MemberAchievements(name)
   local shown = {}
   for _, a in ipairs(ns.ACHIEVEMENTS) do
-    if a.cat == cat then shown[#shown + 1] = a end
+    -- Secret ones only show once this member has earned them.
+    if a.cat == cat and (not a.secret or (mine[a.id] and mine[a.id].t)) then shown[#shown + 1] = a end
   end
   -- Sixteen to a page.
   local pages = math.max(1, math.ceil(#shown / MAX_TILES))
@@ -265,9 +266,9 @@ local function RefreshTiles(cat)
   local m = ns.Member(name)
   P.who:SetText(ns.TitledName(name))
   P.who:SetTextColor(UI.ClassColor(m and m.classFile))
-  local count, total = ns.AchievementCount(name), #ns.ACHIEVEMENTS
+  local count, total = ns.AchievementCount(name), ns.ACHIEVEMENT_TOTAL
   P.summary:SetText(ns.TF("%s of %d earned", UI.Code("accent") .. count .. "|r", total))
-  P.bar:SetWidth(math.max(1, P.barW * count / total))
+  P.bar:SetWidth(math.max(1, P.barW * math.min(count, total) / total))
   P.back:SetShown(not isMe())
   P.picker:SetShown(isMe())
   if isMe() then refreshTitleButton(P.picker) end
@@ -608,7 +609,7 @@ local function Subtitle()
   local name = who()
   -- Your count is shown under your name already.
   if isMe() then return ns.T("Earn achievements and titles; click any name to see someone's record.") end
-  return ns.TF("%s: %d of %d earned", Ambiguate(name, "short"), ns.AchievementCount(name), #ns.ACHIEVEMENTS)
+  return ns.TF("%s: %d of %d earned", Ambiguate(name, "short"), ns.AchievementCount(name), ns.ACHIEVEMENT_TOTAL)
 end
 
 TAB = { id = "achievements", title = "Achievements", build = Build, refresh = Refresh, subtitle = Subtitle }
