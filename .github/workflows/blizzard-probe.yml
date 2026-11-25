@@ -3,10 +3,7 @@ name: Blizzard API check
 # Checks the Blizzard API keys work and what answers for WoW: Forever.
 # Prints only status codes and small public samples, never the keys or token.
 on:
-  workflow_dispatch:
-  push:
-    branches: [main]
-    paths: [".github/workflows/blizzard-probe.yml"]
+  workflow_dispatch: # run by hand from the Actions tab
 
 jobs:
   probe:
@@ -18,6 +15,7 @@ jobs:
           CSECRET: ${{ secrets.BLIZZARD_CLIENT_SECRET }}
         run: |
           set -u
+          CURL_OPTS="--http1.1 --retry 2 --max-time 30"
           [ -n "$CID" ] && echo "Client ID is set (${#CID} characters)" || { echo "Client ID is missing"; exit 1; }
           [ -n "$CSECRET" ] && echo "Client secret is set (${#CSECRET} characters)" || { echo "Client secret is missing"; exit 1; }
           RESP=$(curl -s -u "$CID:$CSECRET" -d grant_type=client_credentials https://oauth.battle.net/token)
@@ -26,7 +24,7 @@ jobs:
           echo "::add-mask::$TOKEN"
           echo "Sign-in OK"
           call() {
-            code=$(curl -s -o /tmp/out.json -w '%{http_code}' -H "Authorization: Bearer $TOKEN" "https://us.api.blizzard.com$1")
+            code=$(curl $CURL_OPTS -s -o /tmp/out.json -w '%{http_code}' -H "Authorization: Bearer $TOKEN" "https://us.api.blizzard.com$1")
             echo "== $code  $1"
             head -c 600 /tmp/out.json | tr -d '\n'; echo
           }
