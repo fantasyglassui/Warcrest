@@ -66,3 +66,26 @@ def test_the_surname_counts_as_on_wow_forever():
         c.login()
     guild.run(30)
     assert "blades" in earned(guild["Sathryus"], "Sathryus")
+
+
+def chooser_ids(client):
+    client.ns.OpenPanel("achievements")
+    client.ns.ShowTitleChooser()
+    rows = client.lua.eval("WarcrestTitles").list
+    return {r.id: r for r in rows["items"].values()}
+
+
+def test_it_gives_a_title_only_sathryus_can_pick():
+    guild = Guild(MEMBERS, setup=WRAITHBLADE)
+    for c in guild.clients.values():
+        c.login()
+    guild.run(60)
+    sath, bob = guild["Sathryus"], guild["Bob"]
+    assert "blades" not in chooser_ids(bob)            # hidden from everyone else
+    rows = chooser_ids(sath)
+    assert rows["blades"].earned
+    sath.ns.SetTitle("blades")
+    assert sath.ns.TitleOf("Sathryus")[0] == "the Blades"
+    guild.run(2)
+    assert bob.ns.TitleOf("Sathryus")[0] == "the Blades"
+    assert not sath.errors() and not bob.errors()

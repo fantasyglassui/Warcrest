@@ -2676,4 +2676,5 @@ ns.LOCALES.esES = {
   ["Copy this link (click it, then Ctrl+C) and open it in your browser. Within the hour the guild shows on warcrest-addon.com/guilds with the Warcrest badge."] = "Copia este enlace (haz clic y luego Ctrl+C) y ábrelo en el navegador. En menos de una hora la hermandad aparece en warcrest-addon.com/guilds con la insignia de Warcrest.",
   ["WoW: Forever guild boards at warcrest-addon.com/guilds: race to 60, raid progress, gear, activity and more, updated every hour from Blizzard's armory."] = "Clasificaciones de hermandades de WoW: Forever en warcrest-addon.com/guilds: carrera al 60, progreso de banda, equipo, actividad y más, actualizadas cada hora desde la Armería de Blizzard.",
   ["Officers: Put us on the website (Guild > Who has Warcrest) gives a link that adds the guild to the boards with the Warcrest badge."] = "Oficiales: En la web (Hermandad > Quién tiene Warcrest) da un enlace que añade la hermandad a las clasificaciones con la insignia de Warcrest.",
+  ["the Blades"] = "las Hojas",
 }

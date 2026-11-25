@@ -2676,4 +2676,5 @@ ns.LOCALES.deDE = {
   ["Copy this link (click it, then Ctrl+C) and open it in your browser. Within the hour the guild shows on warcrest-addon.com/guilds with the Warcrest badge."] = "Kopiere diesen Link (anklicken, dann Strg+C) und öffne ihn im Browser. Innerhalb einer Stunde erscheint die Gilde auf warcrest-addon.com/guilds mit dem Warcrest-Abzeichen.",
   ["WoW: Forever guild boards at warcrest-addon.com/guilds: race to 60, raid progress, gear, activity and more, updated every hour from Blizzard's armory."] = "WoW: Forever-Gildenranglisten auf warcrest-addon.com/guilds: Wettlauf auf 60, Schlachtzugfortschritt, Ausrüstung, Aktivität und mehr, stündlich aus Blizzards Arsenal aktualisiert.",
   ["Officers: Put us on the website (Guild > Who has Warcrest) gives a link that adds the guild to the boards with the Warcrest badge."] = "Offiziere: Auf die Website (Gilde > Wer Warcrest hat) gibt einen Link, der die Gilde mit dem Warcrest-Abzeichen in die Ranglisten aufnimmt.",
+  ["the Blades"] = "die Klingen",
 }

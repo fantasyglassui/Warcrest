@@ -356,7 +356,7 @@ local LIST = {
   { id = "recruits15", cat = "social", name = "Growing the Ranks", desc = "Add 15 recruits who go on to join the guild.", stat = "recruits", goal = 15 },
   { id = "recruits25", cat = "social", name = "Guild Builder", desc = "Add 25 recruits who go on to join the guild.", stat = "recruits", goal = 25 },
   -- Secret: hidden from everyone until it's earned.
-  { id = "blades", cat = "social", name = "The Blades", desc = "A secret achievement, earned by logging in as Sathryus Wraithblade.", stat = "blades", goal = 1, secret = true },
+  { id = "blades", cat = "social", name = "The Blades", desc = "A secret achievement, earned by logging in as Sathryus Wraithblade.", stat = "blades", goal = 1, secret = true, title = "the Blades" },
   { id = "decorated", cat = "social", name = "Decorated", desc = "Earn 15 other achievements.", stat = "others", goal = 15, title = "the Decorated" },
   { id = "hero", cat = "social", name = "Guild Hero", desc = "Earn 40 other achievements.", stat = "others", goal = 40, title = "the Hero" },
   { id = "meta50", cat = "social", name = "Overachiever", desc = "Earn 75 other achievements.", stat = "others", goal = 75, title = "the Overachiever" },

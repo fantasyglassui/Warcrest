@@ -46,8 +46,9 @@ local function titleRows()
   local rows = { { id = "", title = ns.T("No title"), earned = true } }
   local earned, locked = {}, {}
   for _, a in ipairs(ns.ACHIEVEMENTS) do
-    if a.title and not a.secret then
-      local row = { id = a.id, title = a.title, achievement = a, earned = ns.HasAchievement(me, a.id) }
+    local has = a.title and ns.HasAchievement(me, a.id)
+    if a.title and (has or not a.secret) then -- secret titles show only once earned
+      local row = { id = a.id, title = a.title, achievement = a, earned = has }
       if row.earned then earned[#earned + 1] = row else locked[#locked + 1] = row end
     end
   end
