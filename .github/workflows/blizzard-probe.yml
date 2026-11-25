@@ -1,12 +1,16 @@
 name: Blizzard API check
 
-# Checks the Blizzard API keys work and what answers for WoW: Forever.
-# Prints only status codes and small public samples, never the keys or token.
+# Checks the Blizzard API keys work and what answers for WoW: Forever. The
+# answers (public game data only, never the keys or token) are saved to the
+# probe-output branch so they can be read.
 on:
   workflow_dispatch: # run by hand from the Actions tab
   push:
     branches: [main]
     paths: [".github/workflows/blizzard-probe.yml"]
+
+permissions:
+  contents: write
 
 jobs:
   probe:
@@ -18,23 +22,34 @@ jobs:
           CSECRET: ${{ secrets.BLIZZARD_CLIENT_SECRET }}
         run: |
           set -u
-          CURL_OPTS="--http1.1 --retry 2 --max-time 30"
-          [ -n "$CID" ] && echo "Client ID is set (${#CID} characters)" || { echo "Client ID is missing"; exit 1; }
-          [ -n "$CSECRET" ] && echo "Client secret is set (${#CSECRET} characters)" || { echo "Client secret is missing"; exit 1; }
-          RESP=$(curl -s -u "$CID:$CSECRET" -d grant_type=client_credentials https://oauth.battle.net/token)
+          RESP=$(curl -s --http1.1 -u "$CID:$CSECRET" -d grant_type=client_credentials https://oauth.battle.net/token)
           TOKEN=$(echo "$RESP" | jq -r '.access_token // empty')
-          if [ -z "$TOKEN" ]; then echo "Sign-in FAILED: $(echo "$RESP" | jq -c 'del(.access_token)')"; exit 1; fi
+          [ -n "$TOKEN" ] || { echo "Sign-in failed"; exit 1; }
           echo "::add-mask::$TOKEN"
-          echo "Sign-in OK"
+          mkdir -p out
+          n=0
           call() {
-            code=$(curl $CURL_OPTS -s -o /tmp/out.json -w '%{http_code}' -H "Authorization: Bearer $TOKEN" "https://us.api.blizzard.com$1")
-            echo "== $code  $1"
-            head -c 1500 /tmp/out.json | tr -d '\n'; echo
+            n=$((n + 1))
+            code=$(curl --http1.1 --retry 2 --max-time 30 -s -o "out/$n.json" -w '%{http_code}' \
+              -H "Authorization: Bearer $TOKEN" "https://us.api.blizzard.com$1" || echo 000)
+            echo "$code $1" >> out/index.txt
           }
-          C=/profile/wow/character/sathryus-wraithblade
           P="namespace=profile-forever-us&locale=en_US"
-          for sub in "" /encounters /encounters/dungeons /encounters/raids /equipment /achievements /statistics /reputations /professions /pvp-summary /character-media /titles; do
+          C=/profile/wow/character/sathryus-wraithblade
+          for sub in "" /encounters /encounters/dungeons /encounters/raids /equipment /achievements /statistics /reputations /professions /pvp-summary /character-media /titles /status; do
             call "$C$sub?$P"
           done
+          call "/data/wow/guild/the-imperium?$P"
+          call "/data/wow/guild/the-imperium/roster?$P"
           call "/data/wow/guild/the-imperium/achievements?$P"
           call "/data/wow/guild/the-imperium/activity?$P"
+          call "/data/wow/achievement/index?namespace=static-forever-us&locale=en_US"
+          call "/data/wow/journal-encounter/index?namespace=static-forever-us&locale=en_US"
+          cat out/index.txt
+      - name: Save the answers
+        run: |
+          cd out
+          git init -q -b probe-output
+          git config user.name "Warcrest bot"; git config user.email "fantasyglassui@gmail.com"
+          git add -A && git commit -q -m "Blizzard API answers"
+          git push -q -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" probe-output
