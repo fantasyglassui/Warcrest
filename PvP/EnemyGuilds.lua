@@ -24,19 +24,27 @@ local SIGHTING_WINDOW = 90      -- seconds they count as "together"
 local SIGHTING_QUIET = 10 * 60  -- seconds before the same guild alerts again
 local NAME_MAX = 40
 
-ns.OnLoad(function()
-  ns.db.enemyGuilds = ns.db.enemyGuilds or {} -- key -> { g = guild, t = when seen }
+local names = 0 -- how many are in the directory
+
+-- Drop names not seen for 90 days, and keep only the most recently seen MAX_NAMES.
+local function trim()
   local cutoff, n = time() - KEEP_DAYS * 86400, 0
   for k, e in pairs(ns.db.enemyGuilds) do
     if type(e) ~= "table" or (e.t or 0) < cutoff then ns.db.enemyGuilds[k] = nil else n = n + 1 end
   end
-  -- Too many: keep the most recently seen.
   if n > MAX_NAMES then
     local list = {}
     for k, e in pairs(ns.db.enemyGuilds) do list[#list + 1] = { k, e.t } end
     table.sort(list, function(a, b) return a[2] > b[2] end)
     for i = MAX_NAMES + 1, #list do ns.db.enemyGuilds[list[i][1]] = nil end
+    n = MAX_NAMES
   end
+  names = n
+end
+
+ns.OnLoad(function()
+  ns.db.enemyGuilds = ns.db.enemyGuilds or {} -- key -> { g = guild, t = when seen }
+  trim()
 end)
 
 ------------------------------------------------------------------------
@@ -55,8 +63,20 @@ function ns.NoteEnemyGuild(name, guild, t)
   local e = ns.db.enemyGuilds[k]
   if e and e.t >= t and e.g == guild then return end
   if e and e.t > t then return end
-  if not e or e.g ~= guild then version = version + 1 end
-  ns.db.enemyGuilds[k] = { g = guild, t = t }
+  if e and e.g == guild then
+    -- Seen again in the same guild: just move the time (at most once a minute),
+    -- rather than make a new entry every second they're in sight.
+    if t - e.t >= 60 then e.t = t end
+    return
+  end
+  if e then
+    e.g, e.t = guild, t
+  else
+    ns.db.enemyGuilds[k] = { g = guild, t = t }
+    names = names + 1
+    if names > MAX_NAMES * 1.25 then trim() end
+  end
+  version = version + 1
 end
 
 -- The guild an enemy player is in, or nil if nobody has seen one.
@@ -152,10 +172,8 @@ local seen = {}       -- guild -> { key -> GetTime() }
 local alerted = {}    -- guild -> GetTime() of the last alert
 
 local function scan()
-  local units = { "target", "focus", "mouseover" }
-  for _, u in ipairs(ns.NameplateUnits and ns.NameplateUnits() or {}) do units[#units + 1] = u end
   local now = GetTime()
-  for _, unit in ipairs(units) do
+  for _, unit in ipairs(ns.NearbyUnits(true)) do
     local name, isPlayer = ns.UnitInfo(unit)
     if name and isPlayer then
       local ok, guild = pcall(GetGuildInfo, unit)

@@ -101,3 +101,41 @@ def test_item_level_waits_for_the_game_to_load_your_gear():
     assert bob.ns.MyItemLevel() == 60
     bob.run('itemLevels["item5"] = nil')          # one item not loaded yet
     assert bob.ns.MyItemLevel() == 0             # unknown, rather than too low
+
+
+def test_a_profile_reaches_someone_who_was_offline_without_an_officer():
+    # No officer online: the profile still gets to a guildmate who logs in later.
+    guild = Guild([("Alice", 1), ("Bob", 3, "PRIEST"), ("Cara", 3)])
+    guild.set_online("Alice", False)
+    guild.set_online("Cara", False)
+    bob, cara = guild["Bob"], guild["Cara"]
+    gear(bob, 60)
+    profile(bob)
+    guild.run(5)
+    assert cara.ns.MemberProfile("Bob") is None      # Cara was offline
+    guild.set_online("Cara", True)
+    cara.login()
+    guild.run(120)
+    p = cara.ns.MemberProfile("Bob")
+    assert p is not None and p.spec == "Holy"
+    profiles = cara.ns.MemberProfiles()
+    assert [profiles[i].name for i in range(1, len(profiles) + 1)] == ["Bob"]
+
+
+def test_an_officer_with_fewer_entries_still_fills_the_gaps():
+    # Cara has many entries of her own; Alice (officer) has fewer, but some Cara lacks.
+    guild = Guild([("Alice", 1), ("Bob", 3, "PRIEST"), ("Cara", 3)])
+    guild.set_online("Cara", False)
+    bob, cara = guild["Bob"], guild["Cara"]
+    gear(bob, 60)
+    profile(bob)
+    guild.run(5)
+    guild.set_online("Bob", False)
+    for i in range(30):   # Cara's own record is bigger than Alice's
+        cara.ns.db.ledger["Cara:%d:x" % i] = cara.lua.eval('{ id = "Cara:%d:x", t = %d, a = "Cara", k = "GS", ref = "x", status = "going" }'
+                                                          % (i, int(guild.clock) - 100))
+    cara.ns.ReindexLedger()
+    guild.set_online("Cara", True)
+    cara.login()
+    guild.run(120)
+    assert cara.ns.MemberProfile("Bob") is not None

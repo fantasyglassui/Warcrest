@@ -163,6 +163,7 @@ function ns.ShowBanner(kind, text, title)
     anchor:SetClampedToScreen(true)
     placeAnchor()
   end
+  anchor:SetScale(ns.BannerScale())
   local k = ns.BANNER_KINDS[kind] or DEFAULT_KIND
   local b = table.remove(pool) or makeBanner()
   b.kind = k
@@ -200,6 +201,8 @@ function ns.ShowBanner(kind, text, title)
   end
   layout()
   if not ticker then ticker = C_Timer.NewTicker(0.02, tick) end
+  ns.SpeakAlert(ns.T(title or k.title), text)
+  ns.FlashForAlert()
   return b
 end
 

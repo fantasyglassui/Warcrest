@@ -95,20 +95,109 @@ local function UpdateDetail()
   UI.SetEnabled(d.remove, p.remove and not isMe and m.rankIndex > myRank)
 end
 
+------------------------------------------------------------------------
+-- Organizing the list: sort by any column (click its heading; again to
+-- reverse) and show only some members. Remembered per character.
+------------------------------------------------------------------------
+local MAX_LEVEL = 60
+ns.ROSTER_SORTS = { "rank", "name", "level", "where" }
+ns.ROSTER_SHOWS = { "all", "warcrest", "nowarcrest", "max", "officers" }
+
+local function view()
+  local v = ns.db.rosterView
+  if type(v) ~= "table" then v = {}; ns.db.rosterView = v end
+  local ok = false
+  for _, k in ipairs(ns.ROSTER_SORTS) do if v.sort == k then ok = true end end
+  if not ok then v.sort, v.desc = "rank", false end
+  ok = false
+  for _, k in ipairs(ns.ROSTER_SHOWS) do if v.show == k then ok = true end end
+  if not ok then v.show = "all" end
+  v.desc = v.desc == true
+  return v
+end
+
+-- Click a heading: sort by it, or turn the order around if it already is.
+function ns.SortRoster(key)
+  local v = view()
+  if v.sort == key then v.desc = not v.desc else v.sort, v.desc = key, key == "level" end
+  ns.RefreshPanel()
+end
+
+function ns.ShowRoster(which)
+  view().show = which
+  ns.RefreshPanel()
+end
+
+local function wanted(m, show)
+  if show == "warcrest" then return ns.versions[m.full] ~= nil end
+  if show == "nowarcrest" then return ns.versions[m.full] == nil end
+  if show == "max" then return (m.level or 0) >= MAX_LEVEL end
+  if show == "officers" then return ns.IsOfficerRank(m.rankIndex) end
+  return true
+end
+
+local function matches(m, q)
+  if q == "" then return true end
+  for _, s in ipairs({ m.name, m.rankName, m.className, m.zone, m.publicNote }) do
+    if s and s:lower():find(q, 1, true) then return true end
+  end
+end
+
+-- Where: online first (by zone), then offline, the most recently seen first.
+local function whereOrder(a, b)
+  if a.online ~= b.online then return a.online and true or false end
+  if a.online then
+    if a.zone ~= b.zone then return a.zone < b.zone end
+    return nil
+  end
+  if (a.offlineDays or 0) ~= (b.offlineDays or 0) then return (a.offlineDays or 0) < (b.offlineDays or 0) end
+end
+
+local ORDER = {
+  rank = function(a, b) if a.rankIndex ~= b.rankIndex then return a.rankIndex < b.rankIndex end end,
+  name = function(a, b) if a.name ~= b.name then return a.name < b.name end end,
+  level = function(a, b) if a.level ~= b.level then return a.level < b.level end end,
+  where = whereOrder,
+}
+
+-- The members to list, in order: the roster filtered by the search box, the
+-- "Show" choice and Show offline, sorted by the chosen column.
+function ns.RosterRows(roster, q, showOffline)
+  local v = view()
+  local shown = {}
+  for _, m in ipairs(roster) do
+    if (showOffline or m.online) and wanted(m, v.show) and matches(m, q) then shown[#shown + 1] = m end
+  end
+  local by, desc = ORDER[v.sort], v.desc
+  table.sort(shown, function(a, b)
+    local r = by(a, b)
+    if r == nil then r = by(b, a); if r ~= nil then r = not r end end
+    if r ~= nil then
+      if desc then return not r end
+      return r
+    end
+    if a.rankIndex ~= b.rankIndex then return a.rankIndex < b.rankIndex end
+    return a.name < b.name
+  end)
+  return shown
+end
+
 local function Refresh()
   local roster = ns.GetRoster()
   local showOffline = P.offline:GetChecked()
   local q = filterText:lower()
-  local shown = {}
-
-  for _, m in ipairs(roster) do
-    local match = q == "" or m.name:lower():find(q, 1, true) or m.rankName:lower():find(q, 1, true)
-    if (showOffline or m.online) and match then shown[#shown + 1] = m end
+  local v = view()
+  local shown = ns.RosterRows(roster, q, showOffline)
+  for key, h in pairs(P.heads) do
+    local on = v.sort == key
+    local c = on and UI.C.accent or UI.C.faint
+    h.label:SetTextColor(c[1], c[2], c[3])
+    h.arrow:SetShown(on)
+    if h.arrow.SetRotation then h.arrow:SetRotation(v.desc and 0 or math.pi) end
   end
-  table.sort(shown, function(a, b)
-    if a.rankIndex ~= b.rankIndex then return a.rankIndex < b.rankIndex end
-    return a.name < b.name
-  end)
+  P.show.index = 1
+  for i, o in ipairs(P.show.options) do if o[1] == v.show then P.show.index = i; P.show:SetText(o[2]) end end
+  P.show.value = v.show
 
   if selected then
     local fresh
@@ -118,7 +207,7 @@ local function Refresh()
     selected = fresh
   end
 
-  P.list:SetEmptyText(q ~= "" and "Nobody matches your search." or "The guild roster is still loading.")
+  P.list:SetEmptyText((q ~= "" or v.show ~= "all") and "Nobody matches your search." or "The guild roster is still loading.")
   P.list:SetItems(shown)
 
   local online, with, outdated = ns.VersionSummary(roster)
@@ -159,26 +248,45 @@ local function Card(parent, x, y, w, h)
 end
 
 local function BuildTable(page)
-  local search = UI.EditBox(page, 260, 40)
+  local search = UI.EditBox(page, 150, 40)
   search:SetHeight(26)
   search:SetPoint("TOPLEFT", 1, -1)
   search:SetTextInsets(28, 8, 0, 0)
   local glass = UI.Icon(search, "search", 13, C.faint)
   glass:SetPoint("LEFT", 9, 0)
-  search.hint = UI.Label(search, "Search name or rank", "MutedSmall")
+  search.hint = UI.Label(search, "Search", "MutedSmall")
   search.hint:SetPoint("LEFT", 28, 0)
   search:SetScript("OnTextChanged", function(self)
     filterText = self:GetText() or ""
     self.hint:SetShown(filterText == "")
     ns.RefreshPanel()
   end)
-  P.offline = UI.Check(page, "Show offline", 270, 0)
+  UI.Tooltip(search, "Search", "Finds members by name, rank, class, zone or public note.")
+  P.offline = UI.Check(page, "Show offline", 158, 0)
   P.offline:SetScript("OnClick", ns.RefreshPanel)
+  P.show = UI.Cycle(page, 150, { { "all", "Everyone" }, { "warcrest", "With Warcrest" }, { "nowarcrest", "Without Warcrest" },
+    { "max", "Level 60" }, { "officers", "Officers" } }, ns.ShowRoster)
+  P.show:SetHeight(26)
+  P.show:SetPoint("TOPLEFT", LEFT_W - 150, -1)
+  UI.Tooltip(P.show, "Show", "Show everyone, or only members with or without Warcrest, at level 60, or officers. "
+    .. "Click a column's heading to sort by it; click it again to turn the order around.")
 
   local card = Card(page, 0, -36, LEFT_W, 390)
   P.card = card
-  local heads = { { "NAME", 12 }, { "LVL", 166 }, { "RANK", 202 }, { "WHERE", 318 } }
-  for _, h in ipairs(heads) do UI.Label(card, h[1], "Label"):SetPoint("TOPLEFT", h[2], -9) end
+  local heads = { { "name", "NAME", 12 }, { "level", "LVL", 166 }, { "rank", "RANK", 202 }, { "where", "WHERE", 318 } }
+  P.heads = {}
+  for _, h in ipairs(heads) do
+    local b = CreateFrame("Button", nil, card)
+    b:SetPoint("TOPLEFT", h[3] - 4, -3)
+    b:SetSize(h[1] == "level" and 34 or 70, 20)
+    b.label = UI.Label(b, h[2], "Label")
+    b.label:SetPoint("LEFT", 4, 0)
+    b.arrow = UI.Icon(b, "chevron", 8, C.accent)
+    b.arrow:SetPoint("LEFT", b.label, "RIGHT", 3, 0)
+    b:SetScript("OnClick", function() ns.SortRoster(h[1]) end)
+    UI.Tooltip(b, h[2], "Sort by this column. Click again to turn the order around.")
+    P.heads[h[1]] = b
+  end
   local rule = card:CreateTexture(nil, "BORDER")
   rule:SetPoint("TOPLEFT", 0, -26)
   rule:SetPoint("TOPRIGHT", 0, -26)

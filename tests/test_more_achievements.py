@@ -36,7 +36,7 @@ def test_double_kill_night_owl_and_globetrotter():
     add_kills(guild, [("Alice", "Grim", "Duskwood", day), ("Alice", "Vex", "Duskwood", day + 8),      # double kill
                       ("Bob", "Grim", "Duskwood", day), ("Bob", "Vex", "Duskwood", day + 30),          # too slow
                       ("Cara", "Skarn", "Westfall", local_time(2, 2, now))]                            # 2:30 in the morning
-             + [("Dan", "Foe%d" % i, "Zone%d" % i, day + i * 600) for i in range(10)])                 # 10 zones
+             + [("Dan", "Foe%d" % i, "Zone%d" % i, day + i * 600) for i in range(15)])                 # 15 zones
     cara = guild["Cara"]
     assert "double" in earned(cara, "Alice") and "double" not in earned(cara, "Bob")
     assert "night" in earned(cara, "Cara") and "night" not in earned(cara, "Alice")
@@ -94,5 +94,5 @@ def test_new_tabs_show_without_errors():
     guild, me = demo_guild()
     for view in ("pvp", "hunt", "raid", "loot", "social", "guild"):
         me.ns.OpenPanel("achievements", view)
-    assert len(me.ns.ACHIEVEMENTS) == 161
+    assert len(me.ns.ACHIEVEMENTS) == 315
     assert not me.errors()

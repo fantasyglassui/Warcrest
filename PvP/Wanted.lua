@@ -163,9 +163,7 @@ end
 local function scan()
   if not (ns.db and ns.UnitInfo) then return end
   if #ns.WantedList() == 0 then return end
-  local units = { "target", "focus", "mouseover" }
-  for _, u in ipairs(ns.NameplateUnits()) do units[#units + 1] = u end
-  for _, unit in ipairs(units) do
+  for _, unit in ipairs(ns.NearbyUnits(true)) do
     local name, isPlayer = ns.UnitInfo(unit)
     if name and isPlayer and ns.WantedInfo(name) then report(name) end
   end

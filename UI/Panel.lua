@@ -488,7 +488,26 @@ function ns.ResetPanelSize()
   end
 end
 
+-- Many things ask for a refresh: every roster update, and every entry that
+-- arrives while the guild's history syncs (hundreds in a few seconds). Redrawing
+-- the page for each made a lot of garbage and could lag the game, so requests
+-- made while handling game events and guildmates' messages are drawn at most
+-- every 0.3 s. Clicks and other things the player does draw straight away.
+local REFRESH_GAP = 0.3
+local lastRefresh, refreshQueued = -1, false
+local refreshNow
+
 function ns.RefreshPanel()
+  local now = GetTime()
+  if (ns.busy or 0) == 0 or now - lastRefresh >= REFRESH_GAP then return refreshNow() end
+  if refreshQueued then return end
+  refreshQueued = true
+  C_Timer.After(REFRESH_GAP - (now - lastRefresh), refreshNow)
+end
+
+function refreshNow()
+  refreshQueued = false
+  lastRefresh = GetTime()
   if ns.RefreshPlayerCard then ns.RefreshPlayerCard() end
   if not (panel and panel:IsShown()) then return end
   UpdateTabVisibility()

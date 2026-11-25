@@ -58,7 +58,8 @@ ns.OnLoad(function()
 
   -- Track falls, to spot deaths from falling.
   C_Timer.NewTicker(0.1, function()
-    local ok, falling = pcall(function() return IsFalling and IsFalling() end)
+    if not IsFalling then return end
+    local ok, falling = pcall(IsFalling)
     falling = ok and ns.Usable(falling)
     if falling then
       if not fall.active then
@@ -80,23 +81,32 @@ local attacker = { name = nil, isPlayer = false, time = 0 }
 
 -- Name and player-ness of a hostile unit. Uses reaction rather than
 -- "can I attack it", because nothing is attackable once you're dead.
+-- (These run several times a second for every unit around you, so they're
+-- plain functions called through pcall: no new closures or tables each time.)
+local function hostileInfo(unit)
+  if not UnitExists(unit) then return end
+  local hostile = UnitCanAttack("player", unit)
+  if not hostile then
+    local reaction = UnitReaction("player", unit)
+    hostile = reaction ~= nil and reaction <= 4
+  end
+  if hostile then return GetUnitName(unit, true), UnitIsPlayer(unit) end
+end
+
 local function unitInfo(unit)
-  local ok, name, isPlayer = pcall(function()
-    if not UnitExists(unit) then return end
-    local hostile = UnitCanAttack("player", unit)
-    if not hostile then
-      local reaction = UnitReaction("player", unit)
-      hostile = reaction ~= nil and reaction <= 4
-    end
-    if hostile then return GetUnitName(unit, true), UnitIsPlayer(unit) end
-  end)
+  local ok, name, isPlayer = pcall(hostileInfo, unit)
   if ok then return ns.Usable(name), ns.Usable(isPlayer) end
 end
 
+local TARGET_OF = {} -- unit -> unit .. "target", made once
+local function targetsMe(unit)
+  local tot = TARGET_OF[unit]
+  if not tot then tot = unit .. "target"; TARGET_OF[unit] = tot end
+  return UnitExists(unit) and not UnitIsDeadOrGhost(unit) and UnitIsUnit(tot, "player")
+end
+
 local function isTargetingMe(unit)
-  local ok, res = pcall(function()
-    return UnitExists(unit) and not UnitIsDeadOrGhost(unit) and UnitIsUnit(unit .. "target", "player")
-  end)
+  local ok, res = pcall(targetsMe, unit)
   return ok and ns.Usable(res) and true or false
 end
 
@@ -105,15 +115,32 @@ local function note(unit)
   if name and isPlayer then lastHostile.name, lastHostile.time = name, GetTime() end
 end
 
+-- The units around you: target, focus, (mouseover,) and every nameplate.
+-- One shared list, refreshed at most every 0.2 seconds; read it straight away
+-- and don't keep or change it.
+local plates, platesAt = {}, -1
 local function nameplateUnits()
-  local units = {}
+  local now = GetTime()
+  if now - platesAt < 0.2 then return plates end
+  platesAt = now
+  wipe(plates)
   if C_NamePlate and C_NamePlate.GetNamePlates then
     for _, plate in ipairs(C_NamePlate.GetNamePlates()) do
       local unit = plate.namePlateUnitToken or (plate.UnitFrame and plate.UnitFrame.unit)
-      if unit then units[#units + 1] = unit end
+      if unit then plates[#plates + 1] = unit end
     end
   end
-  return units
+  return plates
+end
+
+local nearby, nearbyMouse = {}, {}
+function ns.NearbyUnits(withMouseover)
+  local list = withMouseover and nearbyMouse or nearby
+  wipe(list)
+  list[1], list[2] = "target", "focus"
+  if withMouseover then list[3] = "mouseover" end
+  for _, u in ipairs(nameplateUnits()) do list[#list + 1] = u end
+  return list
 end
 
 -- While you're in combat, remember which enemy is attacking you.
@@ -121,10 +148,8 @@ end
 local function scanAttackers()
   local ok, fighting = pcall(UnitAffectingCombat, "player")
   if not (ok and ns.Usable(fighting)) then return end
-  local units = { "target", "focus" }
-  for _, u in ipairs(nameplateUnits()) do units[#units + 1] = u end
   local found, foundPlayer
-  for _, unit in ipairs(units) do
+  for _, unit in ipairs(ns.NearbyUnits()) do
     if isTargetingMe(unit) then
       local name, isPlayer = unitInfo(unit)
       if name and (not found or (isPlayer and not foundPlayer)) then

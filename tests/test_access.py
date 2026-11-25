@@ -76,3 +76,58 @@ def test_the_settings_view():
     tab = bob.lua.eval('function(UI) for _, t in ipairs(UI.tabs) do if t.id == "settings" then return t end end end')(bob.ns.UI)
     assert tab.view.value == "access"
     assert not bob.errors()
+
+
+def font_of(c, key):
+    return c.lua.eval('function(UI, k) local w = UI.Fonts[k]; return rawget(w, "_layout") and rawget(w, "_layout").path end')(c.ns.UI, key)
+
+
+def test_bigger_text_and_other_fonts():
+    _, bob = one()
+    bob.ns.SetAccess("textSize", 130)
+    assert font_size(bob, "Body") == 16
+    bob.ns.SetAccess("font", "plain")
+    assert font_of(bob, "Body") == "Fonts\\ARIALN.TTF"
+    bob.ns.SetAccess("font", "game")
+    assert font_of(bob, "Body") == "Fonts\\FRIZQT__.TTF"
+    bob.ns.SetAccess("font", "warcrest")
+    assert "Inter" in font_of(bob, "Body")
+    bob.ns.SetAccess("outline", True)
+    bob.ns.SetAccess("spacing", True)
+    assert not bob.errors()
+
+
+def test_alerts_read_aloud_only_when_turned_on():
+    guild, bob = one()
+    spoken = bob.lua.eval('{}')
+    bob.lua.eval('function(s) C_VoiceChat = { SpeakText = function(voice, text, rate, volume) s[#s + 1] = text end } end')(spoken)
+    bob.ns.ShowBanner("kill", "|cffff0000Lyra|r killed |Hplayer:Ganker|hGanker|h")
+    assert len(spoken) == 0
+    bob.ns.SetAccess("speak", True)
+    bob.ns.ShowBanner("kill", "|cffff0000Lyra|r killed |Hplayer:Ganker|hGanker|h")
+    assert len(spoken) == 1
+    assert spoken[1].endswith("Lyra killed Ganker") and "|" not in spoken[1]
+    assert not bob.errors()
+
+
+def test_bigger_banners():
+    _, bob = one()
+    bob.ns.SetAccess("bannerSize", 150)
+    bob.ns.ShowBanner("kill", "Lyra killed Ganker")
+    assert bob.ns.BannerScale() == 1.5
+    flashes = bob.lua.eval('{ n = 0 }')
+    bob.lua.eval('function(f) FlashClientIcon = function() f.n = f.n + 1 end end')(flashes)
+    bob.ns.ShowBanner("kill", "Lyra killed Ganker")
+    assert flashes.n == 0
+    bob.ns.SetAccess("flash", True)
+    bob.ns.ShowBanner("kill", "Lyra killed Ganker")
+    assert flashes.n == 1
+    assert not bob.errors()
+
+
+def test_a_key_binding_opens_the_window():
+    import os
+    xml = open(os.path.join(os.path.dirname(__file__), "..", "Bindings.xml")).read()
+    assert 'name="WARCREST_TOGGLE"' in xml and "Warcrest_OnAddonCompartmentClick()" in xml
+    _, bob = one()
+    assert bob.lua.eval("BINDING_NAME_WARCREST_TOGGLE")

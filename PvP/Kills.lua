@@ -45,6 +45,52 @@ local KILL_COLOR = "|cff40ff40"
 
 local function key(name) return ns.Key(name) end
 
+------------------------------------------------------------------------
+-- Battlegrounds and arenas don't count
+------------------------------------------------------------------------
+-- Only world PvP counts. Kills in battlegrounds and arenas are never sent,
+-- and ones older versions sent (or logged as world kills) are dropped.
+local BG_ZONES = {}
+for _, z in ipairs({
+  -- Battlegrounds
+  "Warsong Gulch", "Arathi Basin", "Alterac Valley", "Eye of the Storm", "Strand of the Ancients",
+  "Isle of Conquest", "Twin Peaks", "The Battle for Gilneas", "Battle for Gilneas", "Silvershard Mines",
+  "Temple of Kotmogu", "Deepwind Gorge", "Seething Shore", "Deephaul Ravine", "Ashran",
+  -- Arenas
+  "Nagrand Arena", "Blade's Edge Arena", "Ruins of Lordaeron", "Dalaran Arena", "Dalaran Sewers",
+  "The Ring of Valor", "Ring of Valor", "Tol'viron Arena", "The Tiger's Peak", "Tiger's Peak",
+  "Black Rook Hold Arena", "Ashamane's Fall", "Mugambala", "Hook Point", "Empyrean Domain",
+  "Maldraxxus Coliseum", "Enigma Crucible", "Nokhudon Proving Grounds", "Cage of Carnage",
+  -- German, French, Spanish names of the classic battlegrounds
+  "Kriegshymnenschlucht", "Arathibecken", "Alteractal", "Auge des Sturms",
+  "Goulet des Chanteguerres", "Bassin Arathi", "Vallée d'Alterac", "L'Œil du cyclone", "Œil du cyclone",
+  "Garganta Grito de Guerra", "Cuenca de Arathi", "Valle de Alterac", "Ojo de la Tormenta",
+}) do BG_ZONES[z:lower()] = true end
+
+-- Are you in a battleground or arena right now?
+function ns.InBattleground()
+  local ok, _, instanceType = pcall(IsInInstance)
+  if ok and (instanceType == "pvp" or instanceType == "arena") then return true end
+  for _, f in ipairs({ C_PvP and C_PvP.IsBattleground, C_PvP and C_PvP.IsArena, IsActiveBattlefieldArena }) do
+    local ok2, yes = pcall(f)
+    if ok2 and ns.Usable(yes) then return true end
+  end
+  if GetMaxBattlefieldID and GetBattlefieldStatus then
+    local okMax, max = pcall(GetMaxBattlefieldID)
+    for i = 1, (okMax and tonumber(max)) or 0 do
+      local okS, status = pcall(GetBattlefieldStatus, i)
+      if okS and status == "active" then return true end
+    end
+  end
+  local zone = (GetRealZoneText and GetRealZoneText()) or ""
+  return BG_ZONES[zone:lower()] or false
+end
+
+-- A logged or reported kill from a battleground or arena.
+function ns.IsBattlegroundKill(k)
+  return k.kind == "kill_bg" or (k.zone and BG_ZONES[tostring(k.zone):lower()]) or false
+end
+
 local function alive()
   local ok, dead = pcall(UnitIsDeadOrGhost, "player")
   return ok and not ns.Usable(dead)
@@ -67,8 +113,8 @@ local function report(e)
   if reported[k] and GetTime() - reported[k] < SAME_KILL then return end
   reported[k] = GetTime()
 
-  local _, instanceType = IsInInstance()
-  local kind = (instanceType == "pvp" or instanceType == "arena") and "kill_bg" or "kill_world"
+  if ns.InBattleground() then return end -- only world PvP counts
+  local kind = "kill_world"
   -- (Kills are always recorded, even with their alerts turned off: they count
   -- for the leaderboard, streaks and achievements. The alert settings only
   -- decide what's shown.)
@@ -105,8 +151,13 @@ local function markAttack(unit)
   if name and isPlayer then
     local ok, level = pcall(UnitLevel, unit)
     level = ok and tonumber(ns.Usable(level)) or nil
-    local old = engaged[key(name)]
-    engaged[key(name)] = { name = name, time = GetTime(), level = level or (old and old.level) }
+    local k = key(name)
+    local old = engaged[k]
+    if old then
+      old.name, old.time, old.level = name, GetTime(), level or old.level
+    else
+      engaged[k] = { name = name, time = GetTime(), level = level }
+    end
   end
 end
 
@@ -131,24 +182,37 @@ ns.OnEvent("UNIT_SPELLCAST_SUCCEEDED", function(unit, _, spellID)
   if isHarmful(spellID) then markAttack("target") end
 end)
 
+local function petInCombat() return UnitExists("pet") and UnitAffectingCombat("pet") end
+local function reallyDead(unit)
+  if UnitIsFeignDeath and UnitIsFeignDeath(unit) then return false end
+  return UnitIsDeadOrGhost(unit)
+end
+
+-- Forget enemies you last hit long ago (they got away), so the list doesn't grow.
+local function forgetOld()
+  local now = GetTime()
+  for k, e in pairs(engaged) do
+    if now - e.time > ENGAGE_WINDOW then engaged[k] = nil end
+  end
+  for k, t in pairs(reported) do
+    if now - t > SAME_KILL then reported[k] = nil end
+  end
+end
+
 -- 1. Keep track of enemy players you're attacking, and notice when they die.
 local function scan()
   if not alive() then return end
   if autoAttacking or autoShooting then markAttack("target") end
-  local okPet, petFighting = pcall(function() return UnitExists("pet") and UnitAffectingCombat("pet") end)
+  local okPet, petFighting = pcall(petInCombat)
   if okPet and ns.Usable(petFighting) then markAttack("pettarget") end
+  -- Nobody to watch for: skip the scan (most of the time, outside PvP).
+  if next(engaged) == nil then return end
 
-  local units = { "target", "focus" }
-  for _, u in ipairs(ns.NameplateUnits()) do units[#units + 1] = u end
-
-  for _, unit in ipairs(units) do
+  for _, unit in ipairs(ns.NearbyUnits()) do
     local name, isPlayer = ns.UnitInfo(unit)
     if name and isPlayer then
       local k = key(name)
-      local ok, dead = pcall(function()
-        if UnitIsFeignDeath and UnitIsFeignDeath(unit) then return false end
-        return UnitIsDeadOrGhost(unit)
-      end)
+      local ok, dead = pcall(reallyDead, unit)
       dead = ok and ns.Usable(dead)
       if dead then
         local e = engaged[k]
@@ -161,7 +225,10 @@ local function scan()
   end
 end
 
-ns.OnLoad(function() C_Timer.NewTicker(0.5, scan) end)
+ns.OnLoad(function()
+  C_Timer.NewTicker(0.5, scan)
+  C_Timer.NewTicker(60, forgetOld)
+end)
 
 -- 2. Honorable kill messages name the victim. The whole party gets them, so
 -- they only count for a player you attacked yourself.
@@ -294,7 +361,7 @@ function ns.IsGreyKill(k)
   return grey
 end
 
-function ns.KillHidden(k) return ns.IsGreyKill(k) end
+function ns.KillHidden(k) return ns.IsGreyKill(k) or ns.IsBattlegroundKill(k) end
 
 -- titled: the killer with their title ("Lyra the Avenger killed ..."), for alerts.
 function ns.DescribeKill(k, titled)
@@ -303,7 +370,6 @@ function ns.DescribeKill(k, titled)
   local line = ns.TF("%s killed %s in %s", kb, k.victim, k.zone)
   local assists = ns.Assists(k)
   if #assists > 0 then line = line .. " (assist: " .. joinNames(assists) .. ")" end
-  if k.kind == "kill_bg" then line = line .. " (battleground)" end
   if k.bounty then line = line .. " - Wanted bounty claimed!" end
   return line
 end
@@ -340,6 +406,20 @@ local function tidyKillers(k)
 end
 ns.TidyKillers = tidyKillers
 
+-- Drop battleground and arena kills logged by older versions (on load).
+function ns.DropBattlegroundKills()
+  local log, kept = ns.db.killLog, {}
+  for _, k in ipairs(log) do
+    if not ns.IsBattlegroundKill(k) then kept[#kept + 1] = k end
+  end
+  if #kept == #log then return 0 end
+  local dropped = #log - #kept
+  wipe(log)
+  for i, k in ipairs(kept) do log[i] = k end
+  if ns.OnHistoryChanged then ns.OnHistoryChanged() end
+  return dropped
+end
+
 ns.OnLoad(function()
   ns.db.killLog = ns.db.killLog or {}
   ns.db.fightMap = nil -- the setting of the map of guild fights (3.8, removed)
@@ -349,6 +429,7 @@ ns.OnLoad(function()
       if name:find(ns.REALM_PATTERN) then tidyKillers(k) break end
     end
   end
+  ns.DropBattlegroundKills()
 end)
 
 ------------------------------------------------------------------------
@@ -424,7 +505,7 @@ end
 function ns.MergeKill(k)
   if ns.IsWiped and ns.IsWiped("kills", k.t) then return false end
   if ns.KillRemoved(k) then return false end
-  if ns.IsGreyKill(k) then return false end
+  if ns.IsGreyKill(k) or ns.IsBattlegroundKill(k) then return false end
   local victim = key(k.victim)
   for _, old in ipairs(ns.db.killLog) do
     if key(old.victim) == victim and math.abs(old.t - k.t) <= SAME_KILL_LOGGED then
@@ -437,7 +518,7 @@ function ns.MergeKill(k)
   return true
 end
 
--- filter: "all", "kill_world" or "kill_bg". fromT/toT: a time range, or nil for all time.
+-- filter: "all" or "kill_world". fromT/toT: a time range, or nil for all time.
 function ns.QueryKills(filter, fromT, toT)
   local out = {}
   for _, k in ipairs(ns.db.killLog) do
@@ -648,7 +729,7 @@ end
 local function mergeSynced(k)
   if ns.IsWiped and ns.IsWiped("kills", k.t) then return end
   if ns.KillRemoved(k) then return end
-  if ns.IsGreyKill(k) then return end
+  if ns.IsGreyKill(k) or ns.IsBattlegroundKill(k) then return end
   local victim = key(k.victim)
   local match
   for _, old in ipairs(ns.db.killLog) do

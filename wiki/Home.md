@@ -32,7 +32,7 @@ Warcrest was made for **<The Imperium>** and used to carry its name. It now work
 - A **war board** of enemy guilds, with **rival guilds** marked by officers and alerts when a group of them is spotted.
 - **Attunements** for every raid, **raid assignments** for each boss, and **wipe tracking** with best kill times.
 - **Guild polls** and **crafting orders** from the crafters directory.
-- **Guild goals** for the week or month, **161 achievements** with titles, and a **crafters directory** to find who can make what.
+- **Guild goals** for the week or month, **315 achievements** with titles, and a **crafters directory** to find who can make what.
 - **Bounties** on gankers (officers turn them on), and **alert banners** with a look and sound for each kind of alert.
 - In **English, German, French and Spanish**.
 - **Achievements and titles** earned from kills, streaks, raids and loot, and **player cards** for every guild member.

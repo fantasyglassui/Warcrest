@@ -94,7 +94,8 @@ ns.TYPES = {
   { key = "pvp",          group = "death", label = "World PvP" },
   { key = "environment",  group = "death", label = "Falling, drowning & fatigue" },
   { key = "kill_world",   group = "kill",  label = "World PvP kills" },
-  { key = "kill_bg",      group = "kill",  label = "Battleground & arena kills" },
+  -- Battleground and arena kills don't count since 4.3.0. Kept hidden for older versions.
+  { key = "kill_bg",      group = "kill",  label = "Battleground & arena kills", hidden = true },
   -- Always on since 2.11.1 (grey kills are never logged). Kept so older versions still get it from officers.
   { key = "kill_honor",   group = "kill",  label = "Honor kills only (no grey kills)", filter = true, hidden = true },
   { key = "kill_streak",  group = "streak", label = "Kill streaks" },
@@ -288,7 +289,11 @@ function ns.HandleAddonMessage(prefix, text, channel, sender)
   if (prefix == ns.PREFIX or prefix == ns.PREFIX_BULK) and trusted and sender and text then
     local parts = { strsplit(ns.SEP, text) }
     local handler = handlers[parts[1]]
-    if handler then safely("message " .. tostring(parts[1]), handler, parts, sender, channel) end
+    if handler then
+      ns.busy = (ns.busy or 0) + 1 -- (see ns.RefreshPanel)
+      safely("message " .. tostring(parts[1]), handler, parts, sender, channel)
+      ns.busy = ns.busy - 1
+    end
     if ns.NoteAddonUser and channel ~= "RAID" then ns.NoteAddonUser(sender) end
   end
 end
@@ -357,9 +362,10 @@ local function pump()
   local now = GetTime()
   local elapsed = lastRefill and (now - lastRefill) or 0
   lastRefill = now
-  for _, prefix in ipairs({ ns.PREFIX, ns.PREFIX_BULK }) do
-    tokens[prefix] = math.min(BURST, (tokens[prefix] or BURST) + elapsed * REFILL)
-  end
+  tokens[ns.PREFIX] = math.min(BURST, (tokens[ns.PREFIX] or BURST) + elapsed * REFILL)
+  tokens[ns.PREFIX_BULK] = math.min(BURST, (tokens[ns.PREFIX_BULK] or BURST) + elapsed * REFILL)
+  -- (Nothing waiting, the usual case: done. This runs ten times a second.)
+  if not (queues[1][1] or queues[2][1] or queues[3][1]) then return end
   for level = 1, 3 do
     local q = queues[level]
     local i = 1
@@ -554,7 +560,11 @@ frame:SetScript("OnEvent", function(_, event, ...)
 
   local list = events[event]
   if list then
+    -- While game events and guildmates' messages are handled, window redraws
+    -- are bunched together (see ns.RefreshPanel).
+    ns.busy = (ns.busy or 0) + 1
     for _, fn in ipairs(list) do safely(event, fn, ...) end
+    ns.busy = ns.busy - 1
   end
 end)
 
@@ -823,6 +833,11 @@ end
 ------------------------------------------------------------------------
 -- Addon compartment (the addons button by the minimap)
 ------------------------------------------------------------------------
+-- Key Bindings > AddOns > Warcrest (Bindings.xml): a key to open or close the window.
+BINDING_HEADER_WARCREST = "Warcrest"
+BINDING_NAME_WARCREST_TOGGLE = "Open or close Warcrest"
+ns.OnLoad(function() BINDING_NAME_WARCREST_TOGGLE = ns.T("Open or close Warcrest") end)
+
 function Warcrest_OnAddonCompartmentClick()
   if ns.TogglePanel then ns.TogglePanel() end
 end

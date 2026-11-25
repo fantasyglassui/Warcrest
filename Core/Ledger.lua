@@ -297,13 +297,25 @@ ns.OnMessage("X", function(p, sender) receive(p, sender) end)
 ------------------------------------------------------------------------
 local function dayOf(t) return math.floor(t / 86400) end
 
+local shareMineWith
+
+-- A number for an entry's id, so two records with the same number of entries
+-- on a day can still be told apart.
+local function idHash(id)
+  local h = 0
+  for i = 1, #id do h = (h * 31 + id:byte(i)) % 2147483647 end
+  return h
+end
+
+-- day -> count, and day -> the sum of the day's id numbers.
 local function digest()
-  local d = {}
+  local d, sums = {}, {}
   for _, e in pairs(ns.db.ledger) do
     local day = dayOf(e.t)
     d[day] = (d[day] or 0) + 1
+    sums[day] = ((sums[day] or 0) + idHash(e.id)) % 2147483647
   end
-  return d
+  return d, sums
 end
 
 local function stats()
@@ -327,6 +339,30 @@ end)
 
 local claimed = {}
 
+-- Your own profile and title: only you (or an officer) can pass them on, so
+-- without an officer online a guildmate who logged in after you saved them
+-- would never get them. Each guildmate who asks for a catch-up gets your
+-- latest ones straight from you, once per session.
+local OWN_KINDS = { "PF", "TI" }
+local sharedWith = {}
+shareMineWith = function(sender)
+  local who = ns.fullName(sender)
+  if sharedWith[who] then return end
+  sharedWith[who] = true
+  local me = ns.Key(UnitName("player"))
+  local mine = {}
+  for _, kind in ipairs(OWN_KINDS) do
+    local list = ns.LedgerEntries(kind)
+    for i = #list, 1, -1 do
+      if ns.Key(list[i].a) == me then mine[#mine + 1] = list[i] break end
+    end
+  end
+  if #mine == 0 then return end
+  C_Timer.After(2 + math.random() * 20, function()
+    for _, e in ipairs(mine) do ns.QueueTo(sender, unpack(encode(e))) end
+  end)
+end
+
 -- Someone asked: if we have more, send them a summary of entries per day.
 -- Only officers answer (see the note at the top).
 ns.OnMessage("LQ", function(p, sender)
@@ -335,8 +371,11 @@ ns.OnMessage("LQ", function(p, sender)
   local n, newest = stats()
   -- Someone far behind may have lost their saved data: put back any achievements they're missing.
   if theirCount < n / 2 and ns.RestoreAchievementsLater then ns.RestoreAchievementsLater() end
+  shareMineWith(sender)
   if not ns.IsAddonOfficer() then return end
-  if n <= theirCount and newest <= theirNewest then return end
+  -- Answer whenever the records differ: a member with more entries than us
+  -- (their own achievements, say) can still be missing some of ours.
+  if n == theirCount and newest == theirNewest then return end
   local who = ns.fullName(sender)
   local delay = 0.5 + math.random() * 2
   C_Timer.After(delay, function()
@@ -344,8 +383,9 @@ ns.OnMessage("LQ", function(p, sender)
     if c and GetTime() - c < CLAIM_WINDOW then return end
     ns.Send("LS", who)
     local chunk, len = {}, 0
-    for day, count in pairs(digest()) do
-      local item = day .. ":" .. count
+    local counts, sums = digest()
+    for day, count in pairs(counts) do
+      local item = day .. ":" .. count .. ":" .. sums[day]
       if len + #item > 200 then
         ns.QueueTo(sender, "LG", table.concat(chunk, ","))
         chunk, len = {}, 0
@@ -363,11 +403,16 @@ ns.OnMessage("LS", function(p)
 end)
 
 local incoming = {}
+local askedFor = {} -- "day:count:sum" -> true: days already asked for this session
 
 ns.OnMessage("LG", function(p, sender)
   local d = incoming[sender] or {}
   incoming[sender] = d
-  for day, count in (p[2] or ""):gmatch("(%d+):(%d+)") do d[tonumber(day)] = tonumber(count) end
+  -- "day:count:sum" (or "day:count" from versions before 4.3.0)
+  for item in (p[2] or ""):gmatch("[^,]+") do
+    local day, count, sum = item:match("^(%d+):(%d+):?(%d*)$")
+    if day then d[tonumber(day)] = { tonumber(count), tonumber(sum) } end
+  end
 end)
 
 -- Summary complete: ask for the days where they have more than us.
@@ -375,9 +420,19 @@ ns.OnMessage("LGE", function(_, sender)
   local theirs = incoming[sender]
   incoming[sender] = nil
   if not theirs then return end
-  local mine, want = digest(), {}
-  for day, count in pairs(theirs) do
-    if count > (mine[day] or 0) then want[#want + 1] = day end
+  local mine, sums = digest()
+  local want = {}
+  for day, v in pairs(theirs) do
+    local count, sum = v[1], v[2]
+    -- They have more that day, or not the same entries (they may have one we
+    -- lack even with fewer in all).
+    -- (Once per session for the same day and contents: records that can't
+    -- match, like entries from people who've left, aren't asked for again.)
+    local seen = day .. ":" .. count .. ":" .. tostring(sum)
+    if (count > (mine[day] or 0) or (sum and sum ~= sums[day])) and not askedFor[seen] then
+      askedFor[seen] = true
+      want[#want + 1] = day
+    end
   end
   for i = 1, #want, 25 do
     ns.QueueTo(sender, "LR", table.concat(want, ",", i, math.min(i + 24, #want)))

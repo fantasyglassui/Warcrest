@@ -32,7 +32,7 @@ Warcrest started life as **The Imperium**, the guild addon of <The Imperium>, an
 - **Guild polls.** Ask the guild a question; everyone with Warcrest votes.
 - **Crafting orders.** Order from a guild crafter in Guild > Crafters; they accept, decline or mark it done.
 - **German, French and Spanish.** Follows your game's language, or pick one in Settings.
-- **Achievements and titles.** 161 achievements for kills, streaks, revenge, bounties, raids, bosses, loot and guild life, with 67 titles to show after your name, in chat and in alerts.
+- **Achievements and titles.** 315 achievements for kills, streaks, revenge, bounties, raids, bosses, loot and guild life, with 78 titles to show after your name, in chat and in alerts.
 - **Kill streaks and revenge.** The guild hears when someone is on a kill streak (from Killing Spree at 3 to Godlike at 20 and Beyond Godlike at 30), when a big streak is ended, and when a guildmate's killer gets paid back.
 - **Kill log and Top Head Hunters.** Every PvP kill by guild members, with killing blows and assists, and a monthly board of the guild's top PvP killers.
 - **Wanted list.** Enemy players who keep killing guild members. When a guildmate sees one, the whole guild is alerted and the sighting goes on the map.

@@ -57,7 +57,7 @@ local function shownKills()
   elseif period == "week" then
     fromT = time() - 7 * 86400
   end
-  return ns.QueryKills(P.filter and P.filter.value or "all", fromT, toT), period
+  return ns.QueryKills("all", fromT, toT), period
 end
 
 -- The second line under a kill's zone.
@@ -65,7 +65,6 @@ local function detail(k)
   local assists = ns.Assists(k)
   if #assists > 0 then return ns.TF("Assist: %s", table.concat(assists, ", ")) end
   if k.bounty then return "Wanted bounty claimed" end
-  if k.kind == "kill_bg" then return "Battleground" end
   return "World PvP"
 end
 
@@ -474,12 +473,6 @@ local function BuildHeader(bar)
     { "month", "This month" }, { "lastmonth", "Last month" }, { "week", "7 days" }, { "all", "All time" },
   }, ns.RefreshPanel)
   P.period:SetPoint("RIGHT")
-  P.filter = UI.Cycle(bar, 112, {
-    { "all", "All kills" }, { "kill_world", "World PvP" }, { "kill_bg", "Battlegrounds" },
-  }, ns.RefreshPanel)
-  P.filter:SetHeight(26)
-  P.filter:SetPoint("RIGHT", P.period, "LEFT", -8, 0)
-  UI.Tooltip(P.filter, "Which kills", "Click to switch between all kills, world PvP only, and battlegrounds and arenas only.")
 end
 
 local function Build(page)

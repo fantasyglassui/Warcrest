@@ -1,5 +1,38 @@
 # Changelog
 
+## 4.3.0
+### Fixes
+- **Battleground and arena kills no longer count anywhere.** Kills in battlegrounds and arenas are no longer reported or accepted from guildmates, and kills already in the log from one are cleared out when you log in. They don't count toward kills, streaks, achievements, guild wars or the Wanted list. The battleground filter in PvP > Kills is gone, and so are the three battleground achievements.
+- **Profiles are shared again.** A profile or title changed while a guildmate was offline now reaches them when they log in, even if no officer is online: each member sends their own latest profile and title to whoever logs in. Officers also fill in gaps when they have the same number of entries but different ones.
+- **Memory and lag.** In busy places Warcrest's memory could climb to 80 MB and make the game stutter. It now:
+  - redraws its window at most a few times a second, instead of once for every roster update and every synced entry (that alone made about 70 KB of garbage each time);
+  - reuses one list of the units around you instead of making new ones several times a second;
+  - updates an enemy's guild in place, at most once a minute, instead of making a new entry every second they're in sight, and keeps that list capped while you play;
+  - forgets enemies you attacked once they're out of reach, and skips scanning when you're not fighting anyone;
+  - doesn't do anything in the send queue when nothing is waiting.
+
+### Achievements and titles
+- **157 new achievements**, mostly higher tiers for kills, assists, revenge, raids, bosses, loot, events and more, with new titles at the top: the Deathbringer, the Unbreakable, the Midnight Blade, the Scourge, the Rivalbane, the Retributor, the Undying, the Unwavering, the Titan, the Gilded, the Heart of the Guild and the Exalted.
+- **A bit harder:** tiered achievements now need roughly half as much again (for example 1,500 killing blows for Thousand Cuts, 150 raid nights for Centurion's tier). Achievements you've already earned stay earned, titles included.
+- **No more look-alike titles, and clearer names:** the Legendary is now the Deathless, the Godlike the Untouchable, and the Legend the Feared. Titles that matched the game's PvP ranks (the Warlord, the Commander, the Centurion, the Champion) and other near-duplicates have new names too: the Bloodsworn, the Shotcaller, the Veteran, the Crowned, the Sworn Blade, the Roamer, the Dreaded, the Kingslayer, the Wrathful, the Guardian, the Tracker, the Nemesis Bane, the Ever-Present, the Unfailing, the Usurper, the Unyielding, the Worldbreaker, the Blessed and the Grandmaster. If you showed one of these, you now show its new name.
+- Achievement names that clashed are renamed: Warlord is Bloodsworn, Legend is Feared, and Headhunter (recruits) is Talent Scout.
+
+### Accessibility
+New in **Settings > Accessibility**:
+- **Text size up to 130%.**
+- **Font:** Warcrest's own, the game's font, or a plain one some find easier to read.
+- **Thicker letters** (an outline around every letter) and **more space between lines**.
+- **Banner size:** alert banners at 100%, 125% or 150%.
+- **Read alerts aloud** with the game's text to speech, using the voice, speed and volume from the game's own options.
+- **Flash the game's taskbar icon** when an alert comes in while the game is in the background.
+- **A key to open Warcrest:** set it in the game's Key Bindings, under AddOns.
+
+### Guild roster
+- **Sort by any column:** click Name, Lvl, Rank or Where to sort, and again to turn the order around. Where sorts online members by zone, then offline members by how recently they were on.
+- **Show** only members with Warcrest, without it, at level 60, or officers.
+- **Search** finds classes, zones and public notes as well as names and ranks.
+- Your choices are remembered.
+
 ## 4.2.0
 ### Get your guild on Warcrest
 Warcrest gets better the more of your guild has it, so this update makes it easy to bring the rest in, without ever spamming anyone.

@@ -12,10 +12,10 @@ The game doesn't tell addons who landed the killing blow, so the addon works it 
 
 ## Top Head Hunters
 
-The **Kills** tab lists every kill as a table (killer, victim, where and when) with assists or "Battleground" under the zone. On the right, a card shows who's **leading** and by how much, and the **Top Head Hunters** board ranks guild members by killing blows, with a bar for each place. Hover a name on the board to see their assists.
+The **Kills** tab lists every kill as a table (killer, victim, where and when) with assists under the zone. On the right, a card shows who's **leading** and by how much, and the **Top Head Hunters** board ranks guild members by killing blows, with a bar for each place. Hover a name on the board to see their assists.
 
 - Names cut short? Drag the thin borders between the **Killer**, **Victim** and **Where** headings to widen a column, or double-click a border to fit the longest name. Making the window bigger (drag its bottom-right corner) gives the table more room too.
-- Pick the period at the top: **This month**, **Last month**, **7 days** or **All time**. The dropdown beside it shows all kills, world PvP only, or battlegrounds only.
+- Pick the period at the top: **This month**, **Last month**, **7 days** or **All time**. Only world PvP counts: kills in battlegrounds and arenas are left out.
 - The board **starts fresh on the 1st of each month** (realm time).
 - On reset day, the guild hears last month's **top three**, and last month's champion is shown at the bottom of the board.
 

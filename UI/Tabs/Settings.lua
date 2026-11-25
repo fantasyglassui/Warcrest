@@ -113,6 +113,12 @@ local function RefreshAccess()
   local a = ns.Access()
   SyncCycle(P.textSize, a.textSize)
   SyncCycle(P.bannerHold, a.bannerHold)
+  SyncCycle(P.font, a.font)
+  SyncCycle(P.bannerSize, a.bannerSize)
+  P.outline:SetChecked(a.outline)
+  P.spacing:SetChecked(a.spacing)
+  P.speak:SetChecked(a.speak)
+  P.flash:SetChecked(a.flash)
   P.colorblind:SetChecked(a.colorblind)
   P.contrast:SetChecked(a.contrast)
   P.still:SetChecked(a.reduceMotion)
@@ -435,33 +441,45 @@ local function BuildAccess(page)
   local x2 = COL_W + 14
   local inner = COL_W - 30
 
+  local function check(box, key, label, y, tip)
+    local cb = UI.Check(box, label, 10, y)
+    cb:SetScript("OnClick", function(self) ns.SetAccess(key, self:GetChecked() and true or false) end)
+    UI.Tooltip(cb, label, tip)
+    return cb
+  end
+  local function cycle(box, label, width, options, key, y, tip)
+    local l = UI.Label(box, label, "Body")
+    l:SetPoint("TOPLEFT", 14, y - 6)
+    local c = UI.Cycle(box, width, options, function(v) ns.SetAccess(key, v) end)
+    c:SetHeight(24)
+    c:SetPoint("TOPRIGHT", -14, y)
+    UI.Tooltip(c, label, tip)
+    return c
+  end
+
   -- Text
-  local t = UI.Box(f, 0, 0, COL_W, 150, "Text")
-  local sizeLabel = UI.Label(t, "Text size", "Body")
-  sizeLabel:SetPoint("TOPLEFT", 14, -44)
+  local t = UI.Box(f, 0, 0, COL_W, 214, "Text")
   local sizes = {}
   for _, s in ipairs(ns.TEXT_SIZES) do sizes[#sizes + 1] = { s, s .. "%" } end
-  P.textSize = UI.Cycle(t, 110, sizes, function(v) ns.SetAccess("textSize", v) end)
-  P.textSize:SetHeight(24)
-  P.textSize:SetPoint("TOPRIGHT", -14, -38)
-  UI.Tooltip(P.textSize, "Text size", "Makes Warcrest's text bigger, in every window and on alert banners. Click to step through the sizes.")
+  P.textSize = cycle(t, "Text size", 110, sizes, "textSize", -38,
+    "Makes Warcrest's text bigger, in every window and on alert banners. Click to step through the sizes.")
+  P.font = cycle(t, "Font", 150, { { "warcrest", "Warcrest" }, { "game", "Game font" }, { "plain", "Plain" } }, "font", -68,
+    "Warcrest's own font, the game's font, or a plain, simple one that some find easier to read.")
+  P.outline = check(t, "outline", "Thicker letters", -98, "A dark outline around every letter, so text stands out from what's behind it.")
+  P.spacing = check(t, "spacing", "More space between lines", -124, "More room between the lines of longer text, easier to follow for some readers (dyslexia).")
   local thint = UI.Label(t, "Bigger text without bigger windows. To make whole windows bigger, use Size on the General view. Some windows fit best after /reload.", "MutedSmall")
-  thint:SetPoint("TOPLEFT", 14, -76)
+  thint:SetPoint("TOPLEFT", 14, -158)
   thint:SetWidth(inner)
   thint:SetSpacing(2)
 
   -- Colours
-  local c = UI.Box(f, 0, -164, COL_W, 200, "Colours")
-  P.colorblind = UI.Check(c, "Colour-blind friendly colours", 10, -36)
-  P.colorblind:SetScript("OnClick", function(self) ns.SetAccess("colorblind", self:GetChecked() and true or false) end)
-  UI.Tooltip(P.colorblind, "Colour-blind friendly colours", "Alert colours, and the colours for good and bad news (like kills and deaths in chat), "
+  local c = UI.Box(f, 0, -228, COL_W, 222, "Colours")
+  P.colorblind = check(c, "colorblind", "Colour-blind friendly colours", -36, "Alert colours, and the colours for good and bad news (like kills and deaths in chat), "
     .. "that stay apart with red-green or blue-yellow colour blindness. Every alert also says what kind it is in words.")
   local cbhint = UI.Label(c, "Blue for good news, orange for bad, instead of green and red.", "MutedSmall")
   cbhint:SetPoint("TOPLEFT", 40, -60)
   cbhint:SetWidth(inner - 26)
-  P.contrast = UI.Check(c, "High contrast", 10, -90)
-  P.contrast:SetScript("OnClick", function(self) ns.SetAccess("contrast", self:GetChecked() and true or false) end)
-  UI.Tooltip(P.contrast, "High contrast", "Brighter grey text and stronger borders and lines, for low vision or a bright room.")
+  P.contrast = check(c, "contrast", "High contrast", -90, "Brighter grey text and stronger borders and lines, for low vision or a bright room.")
   local hchint = UI.Label(c, "Brighter grey text, stronger borders and lines.", "MutedSmall")
   hchint:SetPoint("TOPLEFT", 40, -114)
   hchint:SetWidth(inner - 26)
@@ -470,20 +488,20 @@ local function BuildAccess(page)
   reload:SetWidth(inner)
 
   -- Alert banners
-  local b = UI.Box(f, x2, 0, COL_W, 200, "Alert banners")
-  local holdLabel = UI.Label(b, "Time on screen", "Body")
-  holdLabel:SetPoint("TOPLEFT", 14, -44)
-  P.bannerHold = UI.Cycle(b, 150, { { "normal", "Normal" }, { "long", "Twice as long" }, { "sticky", "Until dismissed" } },
-    function(v) ns.SetAccess("bannerHold", v) end)
-  P.bannerHold:SetHeight(24)
-  P.bannerHold:SetPoint("TOPRIGHT", -14, -38)
-  UI.Tooltip(P.bannerHold, "Time on screen", "How long alert banners stay. Until dismissed: each stays until you click it "
+  local b = UI.Box(f, x2, 0, COL_W, 266, "Alert banners")
+  P.bannerHold = cycle(b, "Time on screen", 150, { { "normal", "Normal" }, { "long", "Twice as long" }, { "sticky", "Until dismissed" } },
+    "bannerHold", -38, "How long alert banners stay. Until dismissed: each stays until you click it "
     .. "(left-click opens what it's about, right-click closes it). Up to three show at once; a new one replaces the oldest.")
-  P.still = UI.Check(b, "No sliding or fading", 10, -72)
-  P.still:SetScript("OnClick", function(self) ns.SetAccess("reduceMotion", self:GetChecked() and true or false) end)
-  UI.Tooltip(P.still, "No sliding or fading", "Banners appear and disappear at once, without moving.")
+  local bsizes = {}
+  for _, s in ipairs(ns.BANNER_SIZES) do bsizes[#bsizes + 1] = { s, s .. "%" } end
+  P.bannerSize = cycle(b, "Banner size", 110, bsizes, "bannerSize", -68, "Makes alert banners bigger, text and all.")
+  P.still = check(b, "reduceMotion", "No sliding or fading", -98, "Banners appear and disappear at once, without moving.")
+  P.speak = check(b, "speak", "Read alerts aloud", -124, "The game's text to speech reads each alert banner out loud. "
+    .. "The voice, speed and volume are the ones set in the game's options (Accessibility > Text to speech).")
+  P.flash = check(b, "flash", "Flash the game's taskbar icon", -150, "When an alert comes in while the game is in the background, "
+    .. "its icon on the taskbar flashes, so you notice it without sound.")
   local bhint = UI.Label(b, "Hovering over a banner always keeps it on screen.", "MutedSmall")
-  bhint:SetPoint("TOPLEFT", 14, -106)
+  bhint:SetPoint("TOPLEFT", 14, -186)
   bhint:SetWidth(inner)
   local test = UI.Button(b, "Show test alert", inner)
   test:SetHeight(26)
@@ -491,21 +509,16 @@ local function BuildAccess(page)
   test:SetScript("OnClick", ns.TestAlert)
 
   -- More that helps
-  local m = UI.Box(f, x2, -214, COL_W, 236, "Also helps")
+  local m = UI.Box(f, x2, -280, COL_W, 170, "Also helps")
   local tips = UI.Label(m, "Chat only: Alerts > How alerts appear > On screen. Alerts then only go to chat, "
     .. "where they stay to read at your own pace.", "Small")
   tips:SetPoint("TOPLEFT", 14, -38)
   tips:SetWidth(inner)
   tips:SetSpacing(3)
-  local tips2 = UI.Label(m, "Sounds: each kind of alert has its own sound, so you can tell them apart without looking. "
-    .. "Change or turn them off on the Sounds view.", "Small")
+  local tips2 = UI.Label(m, "Keyboard: set a key to open Warcrest in Key Bindings > AddOns. Esc closes it.", "Small")
   tips2:SetPoint("TOPLEFT", tips, "BOTTOMLEFT", 0, -10)
   tips2:SetWidth(inner)
   tips2:SetSpacing(3)
-  local tips3 = UI.Label(m, "Quiet mode (General) holds alerts until you're out of combat or the dungeon.", "Small")
-  tips3:SetPoint("TOPLEFT", tips2, "BOTTOMLEFT", 0, -10)
-  tips3:SetWidth(inner)
-  tips3:SetSpacing(3)
   return f
 end
 
@@ -533,7 +546,7 @@ TAB = { id = "settings", title = "Settings", build = Build, refresh = Refresh,
   subtitle = function()
     if P.view and P.view.value == "general" then return "Quiet mode, the map, the weekly recap and the window" end
     if P.view and P.view.value == "sounds" then return "A sound for each kind of alert, and your own sounds" end
-    if P.view and P.view.value == "access" then return "Text size, colours and how long alerts stay" end
+    if P.view and P.view.value == "access" then return "Text, fonts, colours, and how alerts show and sound" end
     return "Alerts for the whole guild, and just for you"
   end }
 UI.AddTab(TAB)

@@ -29,7 +29,7 @@ def test_there_are_over_a_hundred_new_ones_with_unique_ids():
     guild = Guild(MEMBERS)
     ns = guild["Alice"].ns
     ids = [ns.ACHIEVEMENTS[i].id for i in range(1, len(ns.ACHIEVEMENTS) + 1)]
-    assert len(ids) == len(set(ids)) == 161
+    assert len(ids) == len(set(ids)) == 315
     cats = {ns.ACHIEVEMENTS[i].cat for i in range(1, len(ids) + 1)}
     assert cats == {"pvp", "hunt", "raid", "loot", "social"}
 
@@ -39,16 +39,16 @@ def test_quick_kills_big_days_and_many_victims():
     now = int(guild.clock)
     day = local_time(14, 3, now)
     kills = [("Alice", "Foe%d" % i, "Duskwood", day + i * 9) for i in range(4)]            # 4 in 27 seconds
-    kills += [("Bob", "Foe%d" % i, "Duskwood", day + i * 600) for i in range(12)]          # 12 in one day
+    kills += [("Bob", "Foe%d" % i, "Duskwood", day + i * 600) for i in range(16)]          # 16 in one day
     add_kills(guild, kills)
     cara = guild["Cara"]
     alice, bob = earned(cara, "Alice"), earned(cara, "Bob")
     assert {"double", "triple", "quad", "kill1"} <= alice
     assert "triple" not in bob and "day10" in bob and "victims10" in bob and "day20" not in bob
-    assert cara.ns.MemberAchievements("Bob")["victims50"].progress == 12
+    assert cara.ns.MemberAchievements("Bob")["victims50"].progress == 16
 
 
-def test_battlegrounds_skulls_rivals_and_enemy_guilds():
+def test_skulls_rivals_and_enemy_guilds():
     guild = Guild(MEMBERS)
     alice = guild["Alice"]
     alice.ns.SetRival("Bloodfang", True)
@@ -58,16 +58,16 @@ def test_battlegrounds_skulls_rivals_and_enemy_guilds():
         c.lua.eval("""function(ns, now)
           for i = 1, 10 do
             table.insert(ns.db.killLog, 1, { t = now - 5000 + i * 60, victim = "Orc" .. i, killers = { "Dan" },
-              zone = "Arathi Basin", kind = "kill_bg", level = (i == 1) and -1 or 60,
-              vg = (i <= 5) and ("Guild" .. i) or "Bloodfang" })
+              zone = "Ashenvale", kind = "kill_world", level = (i == 1) and -1 or 60,
+              vg = (i <= 8) and ("Guild" .. i) or "Bloodfang" })
           end
           ns.OnHistoryChanged()
         end""")(c.ns, now)
     guild.run(3)
     got = earned(guild["Cara"], "Dan")
-    assert {"bg1", "skull1", "guilds5"} <= got
+    assert {"skull1", "guilds5"} <= got
     progress = guild["Cara"].ns.MemberAchievements("Dan")
-    assert progress["rival10"].progress == 5 and progress["bg50"].progress == 10
+    assert progress["rival10"].progress == 2
 
 
 def test_deaths_vendettas_and_avenging_guildmates():
@@ -125,7 +125,7 @@ def test_social_profile_title_levels_and_crafting():
 def test_achievements_are_recorded_several_to_an_entry():
     guild = Guild(MEMBERS)
     now = int(guild.clock)
-    add_kills(guild, [("Bob", "Foe%d" % i, "Zone%d" % i, now - 9000 + i * 400) for i in range(12)])
+    add_kills(guild, [("Bob", "Foe%d" % i, "Zone%d" % i, now - 9000 + i * 200) for i in range(20)])
     bob = guild["Bob"]
     bob.ns.RecordMyAchievements()
     guild.run(30)

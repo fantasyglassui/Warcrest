@@ -11,6 +11,15 @@ local UI = ns.UI
 
 -- Newest first. Players see every entry newer than the version they last used.
 local CHANGES = {
+  { version = "4.3.0", date = "Nov 25, 2026", items = {
+    "Battleground and arena kills no longer count anywhere (kills, streaks, achievements, guild wars), and old ones are cleared out.",
+    "Profiles and titles now reach guildmates who were offline when they changed, even when no officer is online.",
+    "Less memory and less lag: Warcrest makes far less garbage while you play, and redraws its window at most a few times a second when a lot happens at once.",
+    "157 new achievements, and the existing ones take a bit more to earn. Ones you've already earned stay earned.",
+    "Clearer titles: no more look-alikes, and some new names (the Legendary is now the Deathless, Godlike's title is the Untouchable).",
+    "More accessibility settings: 130% text, a choice of font, thicker letters, more space between lines, bigger banners, alerts read aloud, a flashing taskbar icon, and a key to open Warcrest.",
+    "Organize the guild roster: sort by any column, and show only members with or without Warcrest, at level 60, or officers. Search also finds classes, zones and notes.",
+  } },
   { version = "4.2.0", date = "Nov 21, 2026", items = {
     "Get your guild on Warcrest: officers have Invite the guild in Guild > Who has Warcrest, which shows the message first and posts it in guild chat only when you click Post. Warcrest never posts anything on its own.",
     "Share Warcrest (on Home, in Help, or /warcrest share): a short message to copy and send to a friend or another guild.",

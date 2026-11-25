@@ -2,7 +2,7 @@
 
 **Guild tools for World of Warcraft: Forever.** Raids, guild events, DKP, loot, PvP alerts, achievements, member profiles and officer tools in one window, shared automatically with every guildmate who has it. Members don't have to set anything up: install it and it starts syncing. Built to stay fast in big guilds with a long history.
 
-**Website:** [warcrest-addon.com](https://warcrest-addon.com/) (also in [Deutsch](https://warcrest-addon.com/de/), [Français](https://warcrest-addon.com/fr/) and [Español](https://warcrest-addon.com/es/)): a tour of every section, what's new, [the full changelog](https://warcrest-addon.com/changelog/), all 161 achievements, and a contact form for bugs and ideas.
+**Website:** [warcrest-addon.com](https://warcrest-addon.com/) (also in [Deutsch](https://warcrest-addon.com/de/), [Français](https://warcrest-addon.com/fr/) and [Español](https://warcrest-addon.com/es/)): a tour of every section, what's new, [the full changelog](https://warcrest-addon.com/changelog/), all 315 achievements, and a contact form for bugs and ideas.
 
 **[Join the Discord](https://discord.gg/qeSMwQWyPR)** for help with setting it up, news about new versions, and other guilds using Warcrest.
 
@@ -82,7 +82,7 @@ Every kind of alert has its own sound, and you can change any of them in **Setti
 - Hear any sound with one click, search by name or kind, and pick which volume channel alerts play on.
 
 ## Achievements, profiles and player cards
-- **161 achievements** across PvP, hunts, raids, loot and social life, with **67 titles** you can show after your name. Everything you've already done counts. They're kept with the guild, so they're never lost with one computer's saved data.
+- **315 achievements** across PvP, hunts, raids, loot and social life, with **78 titles** you can show after your name. Everything you've already done counts. They're kept with the guild, so they're never lost with one computer's saved data.
 - **Guild goals:** officers set targets for the week or month (enemy players killed, bosses, raid nights, events and more). Everyone sees the progress, and the guild hears when one is reached.
 - **Crafters** (in the Guild section): search what the guild can make, see who's online to make it, and send them a **crafting order** (say if you're bringing the materials). They accept, decline or mark it done, and you hear about it. Recipes are shared just by opening your profession windows.
 - **Member profiles:** your main spec and role, the days and times you play, your birthday and a short note. **Your item level is added automatically** from your gear.
