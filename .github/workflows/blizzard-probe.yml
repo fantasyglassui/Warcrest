@@ -30,7 +30,11 @@ jobs:
             echo "== $code  $1"
             head -c 600 /tmp/out.json | tr -d '\n'; echo
           }
-          call "/data/wow/ruleset/index?namespace=dynamic-forever-us&locale=en_US"
-          call "/data/wow/ruleset/1?namespace=dynamic-forever-us&locale=en_US"
-          call "/data/wow/playable-class/index?namespace=static-forever-us&locale=en_US"
-          call "/data/wow/journal-instance/index?namespace=static-forever-us&locale=en_US"
+          for ns in profile-forever-us dynamic-forever-us; do
+            call "/data/wow/guild/the-imperium?namespace=$ns&locale=en_US"
+            call "/data/wow/guild/the-imperium/roster?namespace=$ns&locale=en_US"
+            call "/data/wow/guild/pvp/the-imperium?namespace=$ns&locale=en_US"
+            call "/data/wow/guild/1/the-imperium?namespace=$ns&locale=en_US"
+          done
+          call "/data/wow/guild/the-imperium/achievements?namespace=profile-forever-us&locale=en_US"
+          call "/data/wow/guild/the-imperium/activity?namespace=profile-forever-us&locale=en_US"
