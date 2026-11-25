@@ -6,7 +6,6 @@
 
 local _, ns = ...
 local UI = ns.UI
-local C = UI.C
 
 local W, H = 560, 460
 local win

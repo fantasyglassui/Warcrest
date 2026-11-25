@@ -6,7 +6,6 @@
 
 local _, ns = ...
 local UI = ns.UI
-local C = UI.C
 
 local P = {}
 local LEFT_W = 360

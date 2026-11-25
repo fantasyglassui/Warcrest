@@ -188,10 +188,10 @@ local function scan()
     end
   end
   -- Several of a rival guild together: tell the guild where.
-  for guild, names in pairs(seen) do
+  for guild, members in pairs(seen) do
     local count = 0
-    for k, t in pairs(names) do
-      if now - t <= SIGHTING_WINDOW then count = count + 1 else names[k] = nil end
+    for k, t in pairs(members) do
+      if now - t <= SIGHTING_WINDOW then count = count + 1 else members[k] = nil end
     end
     if count >= SIGHTING_GROUP and (not alerted[guild] or now - alerted[guild] > SIGHTING_QUIET) then
       alerted[guild] = now

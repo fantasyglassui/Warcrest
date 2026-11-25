@@ -52,7 +52,7 @@ local INVITE = { id = "invite", button = "Invite",
   end,
   go = function() if win then win:Hide() end; ns.ShowInvite() end }
 
-local function inviteText(step)
+local function inviteText()
   if ns.CanInvite() then
     return "Invite your guild", "Post a short invitation in guild chat, so everyone gets Warcrest"
   end

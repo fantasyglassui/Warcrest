@@ -96,7 +96,7 @@ end
 function ns.ShouldNudge()
   if not ns.IsAddonOfficer() then return false end
   local have, active = ns.WarcrestCount()
-  if not (have < active / 2) then return false end
+  if have >= active / 2 then return false end
   local dismissed = inviteState().dismissedMissing
   return dismissed == nil or active - have >= dismissed + 5
 end

@@ -7,7 +7,6 @@
 local _, ns = ...
 local Ambiguate = ns.Ambiguate
 local UI = ns.UI
-local C = UI.C
 
 local P = {}
 local LEFT_W = 450

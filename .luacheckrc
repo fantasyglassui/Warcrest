@@ -13,11 +13,16 @@ globals = {
   "Warcrest_OnAddonCompartmentClick", "Warcrest_OnAddonCompartmentEnter",
   "Warcrest_OnAddonCompartmentLeave",
   "WarcrestDeathPinMixin",            -- named by UI/MapPins.xml
+  "BINDING_HEADER_WARCREST", "BINDING_NAME_WARCREST_TOGGLE", -- Bindings.xml
 }
 
 -- The game's own functions and tables the addon uses. A name missing here
 -- is flagged, which catches typos; add new game functions as they're used.
 read_globals = {
+  -- 4.3.0
+  "GetRealmName", "GetSpellCooldown", "C_Container", "GetItemCooldown", "IsPlayerSpell", "GetItemCount",
+  "C_UnitAuras", "UnitGUID", "UnitIsDead", "C_PvP", "IsActiveBattlefieldArena", "GetMaxBattlefieldID",
+  "GetBattlefieldStatus", "C_TTSSettings", "C_VoiceChat", "FlashClientIcon",
   -- Professions (the crafters directory) and chat
   "GetTradeSkillLine", "GetNumTradeSkills", "GetTradeSkillInfo", "GetTradeSkillItemLink",
   "GetCraftDisplaySkillLine", "GetNumCrafts", "GetCraftInfo", "GetCraftItemLink", "GetSpellInfo",
