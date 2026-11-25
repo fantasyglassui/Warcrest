@@ -55,3 +55,14 @@ def test_only_the_full_name_counts():
         c.login()
     guild.run(30)
     assert "blades" not in earned(guild["Sathryus"], "Sathryus")
+
+
+def test_the_surname_counts_as_on_wow_forever():
+    def surname(c):
+        if c.name == "Sathryus":
+            c.run('local real = UnitName; UnitName = function(u) if u == nil or u == "player" then return PLAYER, "Wraithblade" end return real(u) end')
+    guild = Guild(MEMBERS, setup=surname)
+    for c in guild.clients.values():
+        c.login()
+    guild.run(30)
+    assert "blades" in earned(guild["Sathryus"], "Sathryus")

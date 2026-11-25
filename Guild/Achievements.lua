@@ -791,14 +791,18 @@ local function freshness()
     .. ":" .. (ns.CraftersVersion and ns.CraftersVersion() or 0)
 end
 
-local BLADES_OWNER = "sathryus-wraithblade" -- full name: character-realm
+local BLADES_OWNER = "sathryus-wraithblade" -- full name: first name and surname
 
--- Is this character Sathryus Wraithblade? (Realm names are compared without spaces or dashes.)
+-- Is this character Sathryus Wraithblade? On WoW Forever, UnitName gives the
+-- character's surname as its second value (there are no realms in the usual
+-- sense); the realm is checked too, in case a client puts the name there.
 function ns.IsBladesOwner()
-  local name = (UnitName("player") or ""):lower()
+  local name, surname = UnitName("player")
+  name = tostring(name or ""):lower()
+  local function clean(s) return (tostring(s or ""):gsub("[%s%-']", ""):lower()) end
+  if name .. "-" .. clean(surname) == BLADES_OWNER then return true end
   local realm = GetRealmName and GetRealmName() or GetNormalizedRealmName and GetNormalizedRealmName() or ""
-  realm = realm:gsub("[%s%-']", ""):lower()
-  return name .. "-" .. realm == BLADES_OWNER
+  return name .. "-" .. clean(realm) == BLADES_OWNER
 end
 
 ns.OnLoad(function()
