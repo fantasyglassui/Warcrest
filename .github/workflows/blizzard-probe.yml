@@ -1,0 +1,36 @@
+name: Blizzard API check
+
+# Checks the Blizzard API keys work and what answers for WoW: Forever.
+# Prints only status codes and small public samples, never the keys or token.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [".github/workflows/blizzard-probe.yml"]
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sign in and call the API
+        env:
+          CID: ${{ secrets.BLIZZARD_CLIENT_ID }}
+          CSECRET: ${{ secrets.BLIZZARD_CLIENT_SECRET }}
+        run: |
+          set -u
+          [ -n "$CID" ] && echo "Client ID is set (${#CID} characters)" || { echo "Client ID is missing"; exit 1; }
+          [ -n "$CSECRET" ] && echo "Client secret is set (${#CSECRET} characters)" || { echo "Client secret is missing"; exit 1; }
+          RESP=$(curl -s -u "$CID:$CSECRET" -d grant_type=client_credentials https://oauth.battle.net/token)
+          TOKEN=$(echo "$RESP" | jq -r '.access_token // empty')
+          if [ -z "$TOKEN" ]; then echo "Sign-in FAILED: $(echo "$RESP" | jq -c 'del(.access_token)')"; exit 1; fi
+          echo "::add-mask::$TOKEN"
+          echo "Sign-in OK"
+          call() {
+            code=$(curl -s -o /tmp/out.json -w '%{http_code}' -H "Authorization: Bearer $TOKEN" "https://us.api.blizzard.com$1")
+            echo "== $code  $1"
+            head -c 600 /tmp/out.json | tr -d '\n'; echo
+          }
+          call "/data/wow/ruleset/index?namespace=dynamic-forever-us&locale=en_US"
+          call "/data/wow/ruleset/1?namespace=dynamic-forever-us&locale=en_US"
+          call "/data/wow/playable-class/index?namespace=static-forever-us&locale=en_US"
+          call "/data/wow/journal-instance/index?namespace=static-forever-us&locale=en_US"
