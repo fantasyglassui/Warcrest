@@ -541,7 +541,6 @@ ns.LOCALES.esES = {
   ["Weekly decay"] = "Reducción semanal",
   ["Weekly recap"] = "Resumen semanal",
   ["Welcome to Warcrest"] = "Bienvenido a Warcrest",
-  ["Welcome to the release version! Test data from before launch has been cleared, so everything starts fresh."] = "¡Bienvenido a la versión final! Se han borrado los datos de prueba de antes del lanzamiento, así que todo empieza de cero.",
   ["What's new"] = "Novedades",
   ["When a guild member kills a wanted player, their count starts over. They come back if they keep killing guild members."] = "Cuando un miembro mata a un jugador buscado, su cuenta vuelve a cero. Vuelve si sigue matando miembros.",
   ["When someone is wanted"] = "Cuando alguien está buscado",
@@ -2667,4 +2666,6 @@ ns.LOCALES.esES = {
   ["Profession cooldowns (Guild > Crafters > Cooldowns): who has a transmute, Mooncloth, Cured Rugged Hide or a Salt Shaker, and when each is ready."] = "Reutilizaciones de profesión (Hermandad > Artesanos > Reutilizaciones): quién tiene transmutación, tela lunar, pellejo rugoso curado o un salero, y cuándo estará listo cada uno.",
   ["Raid check (on Raids): every raid member's flask, elixirs, food and world buffs before the pull, even without Warcrest."] = "Revisión de banda (en Bandas): frasco, elixires, comida y beneficios mundiales de cada miembro antes del pull, incluso sin Warcrest.",
   ["Officers > Inactive groups alts with their main, so nobody shows as away while they play an alt."] = "Oficiales > Inactivos agrupa a los alters con su principal, así nadie sale como ausente mientras juega un alter.",
+  ["A fresh start: everything shared with the guild (kills, raids, DKP, loot, events, profiles, titles, achievements) is reset once for everyone. Your own settings and the guild's settings are kept."] = "Un nuevo comienzo: todo lo compartido con la hermandad (muertes, bandas, DKP, botín, eventos, perfiles, títulos, logros) se reinicia una vez para todos. Tus ajustes y los de la hermandad se mantienen.",
+  ["Warcrest 4.3.0 starts fresh: kills, raids, DKP, loot, events, profiles, titles and achievements have been cleared for the whole guild. Your own settings are kept."] = "Warcrest 4.3.0 empieza de cero: se han borrado las muertes, bandas, DKP, botín, eventos, perfiles, títulos y logros de toda la hermandad. Tus ajustes se mantienen.",
 }

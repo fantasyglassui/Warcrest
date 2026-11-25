@@ -1,6 +1,10 @@
 # Changelog
 
 ## 4.3.0
+### A fresh start
+- **Everything shared is reset.** The first time each member loads 4.3.0, Warcrest clears what it shares with the guild: kills, deaths, streaks, Wanted, guild wars, bounties, raids, sign-ups, DKP and loot, events and polls, profiles, titles, achievements, crafters and orders, and the Officer log. Anything from before the reset that arrives from members still on an older version is refused, so it can't come back.
+- **Kept:** your own settings (alerts, sounds, accessibility, the window, the minimap button) and the guild's settings set by officers.
+
 ### New: guild helpers
 - **World buffs and world bosses** (**Events > World buffs**). When a guildmate with Warcrest gets Rallying Cry of the Dragonslayer (the Onyxia or Nefarian head), Warchief's Blessing (Rend's head) or Spirit of Zandalar (the Heart of Hakkar) just as it drops, the guild hears where and when, and the view shows each buff's last drop and how long it lasts. Sightings of Azuregos, Lord Kazzak and the Emerald Dragons are shared the same way, with whether they were up or dead. It goes by the buff itself, so it works in every language. **Alert me** turns the banners off just for you, and the alert has its own sound in Settings > Sounds. Guildmates who log in later catch up on the day's drops and sightings.
 - **Groups** (**Guild > Groups**): post what you're doing and how many you need, with the roles. Guildmates click **Ask to join** (as Tank, Healer or Damage), you see who asked and click **Invite**. Nothing goes in chat, and nothing is sent without a click. Posts end after an hour, when you close them, or when you log off.

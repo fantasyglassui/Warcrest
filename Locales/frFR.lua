@@ -541,7 +541,6 @@ ns.LOCALES.frFR = {
   ["Weekly decay"] = "Diminution hebdo",
   ["Weekly recap"] = "Récap hebdo",
   ["Welcome to Warcrest"] = "Bienvenue dans Warcrest",
-  ["Welcome to the release version! Test data from before launch has been cleared, so everything starts fresh."] = "Bienvenue dans la version finale ! Les données de test d'avant le lancement ont été effacées, tout repart de zéro.",
   ["What's new"] = "Nouveautés",
   ["When a guild member kills a wanted player, their count starts over. They come back if they keep killing guild members."] = "Quand un membre tue un joueur recherché, son compteur repart à zéro. Il revient s'il continue à tuer des membres.",
   ["When someone is wanted"] = "Quand quelqu'un est recherché",
@@ -2667,4 +2666,6 @@ ns.LOCALES.frFR = {
   ["Profession cooldowns (Guild > Crafters > Cooldowns): who has a transmute, Mooncloth, Cured Rugged Hide or a Salt Shaker, and when each is ready."] = "Temps de recharge des métiers (Guilde > Artisans > Temps de recharge) : qui a une transmutation, l'étoffe lunaire, la peau robuste traitée ou une salière, et quand chacun est prêt.",
   ["Raid check (on Raids): every raid member's flask, elixirs, food and world buffs before the pull, even without Warcrest."] = "Vérif. du raid (dans Raids) : flacon, élixirs, nourriture et améliorations mondiales de chaque membre avant le pull, même sans Warcrest.",
   ["Officers > Inactive groups alts with their main, so nobody shows as away while they play an alt."] = "Officiers > Inactifs regroupe les rerolls avec leur principal : personne n'apparaît absent en jouant un reroll.",
+  ["A fresh start: everything shared with the guild (kills, raids, DKP, loot, events, profiles, titles, achievements) is reset once for everyone. Your own settings and the guild's settings are kept."] = "Un nouveau départ : tout ce qui est partagé avec la guilde (éliminations, raids, DKP, butin, événements, profils, titres, hauts faits) est remis à zéro une fois pour tous. Vos réglages et ceux de la guilde sont conservés.",
+  ["Warcrest 4.3.0 starts fresh: kills, raids, DKP, loot, events, profiles, titles and achievements have been cleared for the whole guild. Your own settings are kept."] = "Warcrest 4.3.0 repart de zéro : éliminations, raids, DKP, butin, événements, profils, titres et hauts faits ont été effacés pour toute la guilde. Vos réglages sont conservés.",
 }

@@ -541,7 +541,6 @@ ns.LOCALES.deDE = {
   ["Weekly decay"] = "Wöchentlicher Abbau",
   ["Weekly recap"] = "Wochenrückblick",
   ["Welcome to Warcrest"] = "Willkommen bei Warcrest",
-  ["Welcome to the release version! Test data from before launch has been cleared, so everything starts fresh."] = "Willkommen zur Release-Version! Testdaten von vor dem Start wurden gelöscht, alles beginnt frisch.",
   ["What's new"] = "Neuigkeiten",
   ["When a guild member kills a wanted player, their count starts over. They come back if they keep killing guild members."] = "Wenn ein Gildenmitglied einen gesuchten Spieler tötet, beginnt dessen Zählung von vorn. Er kommt zurück, wenn er weiter Gildenmitglieder tötet.",
   ["When someone is wanted"] = "Wenn jemand gesucht wird",
@@ -2667,4 +2666,6 @@ ns.LOCALES.deDE = {
   ["Profession cooldowns (Guild > Crafters > Cooldowns): who has a transmute, Mooncloth, Cured Rugged Hide or a Salt Shaker, and when each is ready."] = "Berufs-Abklingzeiten (Gilde > Handwerker > Abklingzeiten): Wer eine Transmutation, Mondstoff, gegerbten unverwüstlichen Balg oder einen Salzstreuer hat und wann sie bereit sind.",
   ["Raid check (on Raids): every raid member's flask, elixirs, food and world buffs before the pull, even without Warcrest."] = "Schlachtzug-Check (unter Schlachtzüge): Fläschchen, Elixiere, Essen und Welt-Buffs aller Schlachtzugsmitglieder vor dem Pull, auch ohne Warcrest.",
   ["Officers > Inactive groups alts with their main, so nobody shows as away while they play an alt."] = "Offiziere > Inaktiv gruppiert Twinks mit ihrem Main, damit niemand als abwesend gilt, der gerade einen Twink spielt.",
+  ["A fresh start: everything shared with the guild (kills, raids, DKP, loot, events, profiles, titles, achievements) is reset once for everyone. Your own settings and the guild's settings are kept."] = "Ein Neuanfang: Alles, was mit der Gilde geteilt wird (Kills, Schlachtzüge, DKP, Beute, Veranstaltungen, Profile, Titel, Erfolge), wird einmal für alle zurückgesetzt. Deine eigenen Einstellungen und die der Gilde bleiben.",
+  ["Warcrest 4.3.0 starts fresh: kills, raids, DKP, loot, events, profiles, titles and achievements have been cleared for the whole guild. Your own settings are kept."] = "Warcrest 4.3.0 beginnt neu: Kills, Schlachtzüge, DKP, Beute, Veranstaltungen, Profile, Titel und Erfolge wurden für die ganze Gilde gelöscht. Deine eigenen Einstellungen bleiben.",
 }
