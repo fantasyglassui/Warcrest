@@ -1,0 +1,15 @@
+200 /profile/wow/character/sathryus-wraithblade/achievements/statistics?namespace=profile-forever-us&locale=en_US
+200 /profile/wow/character/sathryus-wraithblade/quests?namespace=profile-forever-us&locale=en_US
+200 /profile/wow/character/sathryus-wraithblade/quests/completed?namespace=profile-forever-us&locale=en_US
+200 /profile/wow/character/sathryus-wraithblade/encounters/dungeons?namespace=profile-forever-us&locale=en_US
+200 /profile/wow/character/sathryus-wraithblade/encounters/raids?namespace=profile-forever-us&locale=en_US
+200 /profile/wow/character/sathryus-wraithblade/equipment?namespace=profile-forever-us&locale=en_US
+200 /profile/wow/character/bambo-dreadborne/achievements/statistics?namespace=profile-forever-us&locale=en_US
+200 /profile/wow/character/bambo-dreadborne/quests?namespace=profile-forever-us&locale=en_US
+200 /profile/wow/character/bambo-dreadborne/quests/completed?namespace=profile-forever-us&locale=en_US
+200 /profile/wow/character/bambo-dreadborne/encounters/dungeons?namespace=profile-forever-us&locale=en_US
+200 /profile/wow/character/bambo-dreadborne/encounters/raids?namespace=profile-forever-us&locale=en_US
+200 /profile/wow/character/bambo-dreadborne/equipment?namespace=profile-forever-us&locale=en_US
+200 /data/wow/item/8348?namespace=static-forever-us&locale=en_US
+200 /data/wow/achievement-category/index?namespace=static-forever-us&locale=en_US
+200 /data/wow/guild/the-imperium/activity?namespace=profile-forever-us&locale=en_US
