@@ -27,7 +27,7 @@ end
 -- What each kind of alert looks like: heading, colour, icon, the tab a click opens, how long it stays.
 -- Every kind has its own colour (at least 13 apart in CIE ΔE2000 from every other on the dark banner).
 ns.BANNER_KINDS = {
-  kill        = { title = "Guild kill",         color = rgb("ff4f4f"), icon = "kills",    tab = "kills" },
+  kill        = { title = "Guild kill",         color = rgb("2ee35a"), icon = "kills",    tab = "kills" },
   death       = { title = "Guild member down",  color = rgb("e8467c"), icon = "warning",  tab = "kills" },
   wanted      = { title = "Wanted ganker spotted", color = rgb("b56cff"), icon = "wanted", tab = "wanted", hold = 7 },
   streak      = { title = "Kill streak",        color = rgb("ffa31a"), icon = "kills",    tab = "kills" },
@@ -38,9 +38,9 @@ ns.BANNER_KINDS = {
   raid        = { title = "Raid",               color = rgb("3d8bff"), icon = "calendar", tab = "raids", hold = 7 },
   rival       = { title = "Rival guild",        color = rgb("ffa8a0"), icon = "wanted",   tab = "wanted", hold = 7 },
   event       = { title = "Guild event",        color = rgb("2fd3c3"), icon = "events",   tab = "events", hold = 7 },
-  loot        = { title = "Loot auction",       color = rgb("9be03c"), icon = "dkp",      tab = "dkp" },
+  loot        = { title = "Loot auction",       color = rgb("b5ef3a"), icon = "dkp",      tab = "dkp" },
   achievement = { title = "Achievement",        color = C.accent,      icon = "trophy",   tab = "achievements", hold = 6 },
-  celebrate   = { title = "Guild news",         color = C.good,        icon = "roster",   tab = "roster" },
+  celebrate   = { title = "Guild news",         color = rgb("7fe0ff"),        icon = "roster",   tab = "roster" },
   worldbuff   = { title = "World buff",         color = rgb("ff6bea"), icon = "events",   tab = "worldbuffs", hold = 8 },
 }
 local DEFAULT_KIND = { title = "Guild alert", color = rgb("9aa3b2"), icon = "warning", tab = "roster" }
