@@ -2701,4 +2701,6 @@ ns.LOCALES.esES = {
   ["A sound and a banner colour for each kind of alert, and your own sounds"] = "Un sonido y un color de aviso para cada tipo de alerta, y tus propios sonidos",
   ["Rival guild spotted"] = "Hermandad rival avistada",
   ["Pick your own banner colours in Settings > Sounds: click a colour to change it, right-click to go back to Warcrest's."] = "Elige tus propios colores de aviso en Ajustes > Sonidos: haz clic en un color para cambiarlo y clic derecho para volver al de Warcrest.",
+  ["A possible fix for titles not showing in chat, for those using a chat add-on."] = "Un posible arreglo para los títulos que no aparecen en el chat, para quienes usan un accesorio de chat.",
+  ["/warcrest report now says why a title did or didn't show in chat."] = "/warcrest report ahora dice por qué un título apareció o no en el chat.",
 }

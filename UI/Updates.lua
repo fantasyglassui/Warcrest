@@ -11,6 +11,10 @@ local UI = ns.UI
 
 -- Newest first. Players see every entry newer than the version they last used.
 local CHANGES = {
+  { version = "4.5.2", date = "Nov 25, 2026", items = {
+    "A possible fix for titles not showing in chat, for those using a chat add-on.",
+    "/warcrest report now says why a title did or didn't show in chat.",
+  } },
   { version = "4.5.1", date = "Nov 25, 2026", items = {
     "Pick your own banner colours in Settings > Sounds: click a colour to change it, right-click to go back to Warcrest's.",
   } },

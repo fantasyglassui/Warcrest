@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.5.2
+- **Titles in chat:** a possible fix for titles not showing. Warcrest now hooks chat both the new way and the old way the game supports, because some chat add-ons only pass messages through hooks added the old way. A title is never added twice.
+- **/warcrest report** now says whether titles in chat are on, how many chat lines Warcrest has seen, your title, and why the title did or didn't show on the last chat line.
+
 ## 4.5.1
 - **Pick your own banner colours.** Settings > Sounds now has a colour for each kind of alert: click it to choose a colour with the game's colour picker, or right-click it to go back to Warcrest's. "Use Warcrest's colours again" puts them all back. Your colours win over the colour-blind friendly ones.
 - "Rival guild spotted" is now translated in Settings > Sounds.
