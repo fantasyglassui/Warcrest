@@ -23,21 +23,59 @@ ns.OnLoad(function()
   if ns.db.chatTitles == nil then ns.db.chatTitles = true end
 end)
 
--- The message with the author's title in front, or nil to leave it alone.
+-- What the last chat lines looked like, for /warcrest report: why a title did or didn't show.
+local seen = { lines = 0, apis = {} }
+ns.chatTitleSeen = seen
+
+-- The message with the author's title in front, or nil to leave it alone (and why).
 function ns.TitledChatText(msg, author)
-  if not ns.db or not ns.db.chatTitles then return nil end
-  if type(msg) ~= "string" or type(author) ~= "string" or author == "" then return nil end
-  if issecretvalue and (issecretvalue(msg) or issecretvalue(author)) then return nil end
-  if not ns.Member or not ns.Member(author) then return nil end -- guildmates only
+  if not ns.db or not ns.db.chatTitles then return nil, "titles in chat are off" end
+  if issecretvalue and (issecretvalue(msg) or issecretvalue(author)) then return nil, "the game hid the line" end
+  if type(msg) ~= "string" or type(author) ~= "string" or author == "" then
+    return nil, "no author (" .. type(author) .. ")"
+  end
+  if msg:sub(1, #GOLD + 1) == GOLD .. "(" then return nil, "title already shown" end -- added once only
+  if not ns.Member or not ns.Member(author) then return nil, "not found in the roster" end -- guildmates only
   local title = ns.TitleOf and ns.TitleOf(Ambiguate(author, "short"))
-  if not title then return nil end
-  return GOLD .. "(" .. ns.T(title) .. ")|r " .. msg
+  if not title then return nil, "no title chosen or earned" end
+  return GOLD .. "(" .. ns.T(title) .. ")|r " .. msg, "title shown"
 end
 
-local function filter(_, _, msg, author, ...)
-  local ok, text = pcall(ns.TitledChatText, msg, author)
+local function filter(_, event, msg, author, ...)
+  local ok, text, why = pcall(ns.TitledChatText, msg, author)
+  seen.lines = seen.lines + 1
+  if not (issecretvalue and issecretvalue(author)) then
+    seen.last = { event = event, author = type(author) == "string" and author or type(author),
+      why = ok and why or ("error: " .. tostring(text)), t = time() }
+  end
   if ok and text then return false, text, author, ... end
   return false, msg, author, ...
 end
 
-for _, e in ipairs(EVENTS) do ChatFrameUtil.AddMessageEventFilter(e, filter) end
+-- The game's way of adding a chat filter, and the old one too when both are
+-- there (some chat addons still only run filters added the old way).
+local added = {}
+local function addWith(name, add)
+  if type(add) ~= "function" or added[add] then return end
+  added[add] = true
+  local ok = pcall(function() for _, e in ipairs(EVENTS) do add(e, filter) end end)
+  if ok then seen.apis[#seen.apis + 1] = name end
+end
+addWith("ChatFrameUtil", ChatFrameUtil and ChatFrameUtil.AddMessageEventFilter)
+addWith("ChatFrame_AddMessageEventFilter", _G.ChatFrame_AddMessageEventFilter)
+
+-- For /warcrest report.
+function ns.ChatTitleReport()
+  local me = UnitName("player")
+  local mine = ns.TitleOf and ns.TitleOf(me)
+  local lines = {
+    ("Titles in chat: %s, filter added with %s, %d chat lines seen"):format(ns.db.chatTitles and "on" or "off",
+      #seen.apis > 0 and table.concat(seen.apis, " and ") or "nothing", seen.lines),
+    ("Your title: %s"):format(mine or "none"),
+  }
+  local l = seen.last
+  if l then
+    lines[#lines + 1] = ("Last chat line: %s from \"%s\" (%s)"):format(l.event or "?", l.author or "?", l.why or "?")
+  end
+  return table.concat(lines, "\n")
+end

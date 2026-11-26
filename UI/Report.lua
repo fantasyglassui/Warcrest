@@ -71,6 +71,10 @@ function ns.BugReport()
     if ok and kb then add(("Memory: %.1f MB"):format(kb / 1024)) end
   end
   add("Other addons: " .. otherAddons())
+  if ns.ChatTitleReport then
+    local ok, text = pcall(ns.ChatTitleReport)
+    if ok and text then add(text) end
+  end
   local errors = ns.recentErrors or {}
   if #errors == 0 then
     add("Errors: none since you logged in")

@@ -213,3 +213,20 @@ def test_titles_show_in_chat_on_newer_clients():
     guild.run(3)
     show = guild["Cara"].lua.eval("ShowChat")
     assert show("CHAT_MSG_GUILD", "anyone for STV?", "Bob Realm") == "|cffd4af37(the Bounty Hunter)|r anyone for STV?"
+
+
+def test_the_bug_report_says_why_a_title_did_or_didnt_show_in_chat():
+    guild = titled_bob()
+    cara = guild["Cara"]
+    show = cara.lua.eval("ShowChat")
+    show("CHAT_MSG_GUILD", "hi", "Bob-Realm")
+    report = cara.ns.ChatTitleReport()
+    assert "Titles in chat: on, filter added with" in report
+    assert 'Last chat line: CHAT_MSG_GUILD from "Bob-Realm" (title shown)' in report
+    show("CHAT_MSG_GUILD", "hi", "Stranger-Realm")
+    assert "(not found in the roster)" in cara.ns.ChatTitleReport()
+    show("CHAT_MSG_GUILD", "hi", "Alice-Realm")
+    assert "(no title chosen or earned)" in cara.ns.ChatTitleReport()
+    # Added only once, even if both of the game's filter lists run.
+    once = show("CHAT_MSG_GUILD", "|cffd4af37(the Bounty Hunter)|r hi", "Bob-Realm")
+    assert once.count("Bounty Hunter") == 1
