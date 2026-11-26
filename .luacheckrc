@@ -10,6 +10,7 @@ globals = {
   "WarcrestDB", "WarcrestState", "TheImperiumDB", -- saved variables (TheImperiumDB: the old name, handed over once)
   "SlashCmdList", "SLASH_WARCREST1", "SLASH_WARCREST2", "SLASH_WARCREST3", "SLASH_WARCREST4",
   "StaticPopupDialogs",
+  "ColorPickerFrame",                 -- the game's colour picker (its callbacks are set on it)
   "Warcrest_OnAddonCompartmentClick", "Warcrest_OnAddonCompartmentEnter",
   "Warcrest_OnAddonCompartmentLeave",
   "WarcrestDeathPinMixin",            -- named by UI/MapPins.xml

@@ -545,7 +545,7 @@ end
 TAB = { id = "settings", title = "Settings", build = Build, refresh = Refresh,
   subtitle = function()
     if P.view and P.view.value == "general" then return "Quiet mode, the map, the weekly recap and the window" end
-    if P.view and P.view.value == "sounds" then return "A sound for each kind of alert, and your own sounds" end
+    if P.view and P.view.value == "sounds" then return "A sound and a banner colour for each kind of alert, and your own sounds" end
     if P.view and P.view.value == "access" then return "Text, fonts, colours, and how alerts show and sound" end
     return "Alerts for the whole guild, and just for you"
   end }

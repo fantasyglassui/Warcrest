@@ -11,6 +11,9 @@ local UI = ns.UI
 
 -- Newest first. Players see every entry newer than the version they last used.
 local CHANGES = {
+  { version = "4.5.1", date = "Nov 25, 2026", items = {
+    "Pick your own banner colours in Settings > Sounds: click a colour to change it, right-click to go back to Warcrest's.",
+  } },
   { version = "4.5.0", date = "Nov 25, 2026", items = {
     "Guild rep: standing with the guild, earned only by playing together (grouping, raid nights, boss kills, events, helping with kills, crafting orders). Up to 1,000 a day, it never goes down, and nobody can give it out. On Home, the Roster and player cards.",
     "The secret achievement The Blades now gives the title \"the Blades\".",

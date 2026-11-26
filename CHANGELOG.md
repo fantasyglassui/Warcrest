@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.5.1
+- **Pick your own banner colours.** Settings > Sounds now has a colour for each kind of alert: click it to choose a colour with the game's colour picker, or right-click it to go back to Warcrest's. "Use Warcrest's colours again" puts them all back. Your colours win over the colour-blind friendly ones.
+- "Rival guild spotted" is now translated in Settings > Sounds.
+
 ## 4.5.0
 ### New: guild rep
 Standing with the guild, earned **only by playing together**. Nobody can give it out or take it away, and it never goes down.

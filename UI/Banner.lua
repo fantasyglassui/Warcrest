@@ -46,6 +46,35 @@ ns.BANNER_KINDS = {
 }
 local DEFAULT_KIND = { title = "Guild alert", color = rgb("9aa3b2"), icon = "warning", tab = "roster" }
 
+------------------------------------------------------------------------
+-- Your own banner colours (Settings > Sounds): kind -> "rrggbb"
+------------------------------------------------------------------------
+local function hex(c)
+  return string.format("%02x%02x%02x", math.floor(c[1] * 255 + 0.5), math.floor(c[2] * 255 + 0.5),
+    math.floor(c[3] * 255 + 0.5))
+end
+
+-- The colour a kind of banner shows in: yours, then colour-blind friendly, then Warcrest's.
+function ns.BannerColor(kind)
+  local mine = ns.db and ns.db.bannerColors and ns.db.bannerColors[kind]
+  if type(mine) == "string" and mine:match("^%x%x%x%x%x%x$") then return rgb(mine) end
+  local k = ns.BANNER_KINDS[kind] or DEFAULT_KIND
+  return ns.AccessKindColor(kind) or k.color
+end
+
+-- Whether you've picked your own colour for this kind.
+function ns.HasOwnBannerColor(kind)
+  return ns.db and ns.db.bannerColors and ns.db.bannerColors[kind] ~= nil
+end
+
+function ns.SetBannerColor(kind, r, g, b)
+  if not ns.BANNER_KINDS[kind] then return end
+  ns.db.bannerColors = ns.db.bannerColors or {}
+  if r then ns.db.bannerColors[kind] = hex({ r, g, b }) else ns.db.bannerColors[kind] = nil end
+end
+
+function ns.ResetBannerColors() ns.db.bannerColors = {} end
+
 local anchor
 local pool, shown = {}, {}
 local ticker
@@ -170,7 +199,7 @@ function ns.ShowBanner(kind, text, title)
   local k = ns.BANNER_KINDS[kind] or DEFAULT_KIND
   local b = table.remove(pool) or makeBanner()
   b.kind = k
-  local c = ns.AccessKindColor(kind) or k.color
+  local c = ns.BannerColor(kind)
   b.bar:SetColorTexture(c[1], c[2], c[3], 1)
   b.iconBg:SetColorTexture(c[1], c[2], c[3], 0.14)
   b.icon:SetTexture(UI.IconPath(k.icon))
@@ -211,3 +240,31 @@ end
 
 -- For screenshots and tests: the banners showing now.
 function ns.ShownBanners() return shown end
+
+-- Open the game's colour picker for a kind of banner. onChange runs as the colour changes.
+function ns.PickBannerColor(kind, onChange)
+  if not ColorPickerFrame then return end
+  local old = ns.db.bannerColors and ns.db.bannerColors[kind]
+  local c = ns.BannerColor(kind)
+  local function changed()
+    local r, g, b = ColorPickerFrame:GetColorRGB()
+    ns.SetBannerColor(kind, r, g, b)
+    if onChange then onChange() end
+  end
+  local function cancelled()
+    ns.db.bannerColors = ns.db.bannerColors or {}
+    ns.db.bannerColors[kind] = old
+    if onChange then onChange() end
+  end
+  if ColorPickerFrame.SetupColorPickerAndShow then
+    ColorPickerFrame:SetupColorPickerAndShow({ r = c[1], g = c[2], b = c[3], hasOpacity = false,
+      swatchFunc = changed, cancelFunc = cancelled })
+  else
+    ColorPickerFrame:Hide()
+    ColorPickerFrame.hasOpacity = false
+    ColorPickerFrame.previousValues = { c[1], c[2], c[3] }
+    ColorPickerFrame.func, ColorPickerFrame.cancelFunc = changed, cancelled
+    ColorPickerFrame:SetColorRGB(c[1], c[2], c[3])
+    ShowUIPanel(ColorPickerFrame)
+  end
+end

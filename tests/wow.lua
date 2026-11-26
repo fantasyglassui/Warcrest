@@ -522,3 +522,20 @@ C_Container = { GetItemCooldown = function(id)
   local c = itemCooldowns[id] or { 0, 0 }
   return c[1], c[2], 1
 end }
+
+-- The game's colour picker: tests set a colour with ColorPickerFrame:Pick(r, g, b) or :Cancel().
+ColorPickerFrame = CreateFrame("Frame", "ColorPickerFrame")
+function ColorPickerFrame:SetupColorPickerAndShow(info)
+  self.info = info
+  self.r, self.g, self.b = info.r, info.g, info.b
+  self:Show()
+end
+function ColorPickerFrame:GetColorRGB() return self.r, self.g, self.b end
+function ColorPickerFrame:Pick(r, g, b)
+  self.r, self.g, self.b = r, g, b
+  self.info.swatchFunc()
+end
+function ColorPickerFrame:Cancel()
+  self.info.cancelFunc({ r = self.info.r, g = self.info.g, b = self.info.b })
+  self:Hide()
+end

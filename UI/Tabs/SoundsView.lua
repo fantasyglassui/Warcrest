@@ -19,7 +19,8 @@ local SIDE_X = TABLE_W + 14
 local SIDE_W = W - SIDE_X
 local INNER = SIDE_W - 30
 local ROW = 26 -- 16 alert kinds fit in the box
-local SOUND_X, SOUND_W = 196, 196
+local SOUND_X, SOUND_W = 186, 176
+local COLOUR_X = SOUND_X + SOUND_W + 36 -- after the play button
 
 local GROUP_NAMES = { None = "", Warcrest = "Warcrest", Yours = "Yours", SharedMedia = "Other add-on", Game = "Game" }
 
@@ -127,7 +128,7 @@ end
 local function BuildTable(f)
   local box = UI.Box(f, 0, 0, TABLE_W, H)
   M.table = box
-  local y = UI.TableHeads(box, { { "ALERT", 14 }, { "SOUND", SOUND_X } })
+  local y = UI.TableHeads(box, { { "ALERT", 14 }, { "SOUND", SOUND_X }, { "COLOUR", COLOUR_X - 8 } })
   M.rows = {}
   for i, k in ipairs(ns.SOUND_KINDS) do
     local row = CreateFrame("Frame", nil, box)
@@ -147,6 +148,24 @@ local function BuildTable(f)
     row.play:SetPoint("LEFT", row.pick, "RIGHT", 6, 0)
     row.play:SetScript("OnClick", function() ns.PlaySoundID(ns.AlertSound(k.key)) end)
     UI.Tooltip(row.play, "Play", "Hear this sound.")
+    -- The banner's colour: click to pick, right-click for Warcrest's again.
+    row.colour = CreateFrame("Button", nil, row)
+    row.colour:SetSize(24, 24)
+    row.colour:SetPoint("LEFT", COLOUR_X, 0)
+    row.colour:RegisterForClicks("LeftButtonUp", "RightButtonUp")
+    UI.Fill(row.colour, C.edge)
+    row.swatch = row.colour:CreateTexture(nil, "ARTWORK")
+    row.swatch:SetPoint("TOPLEFT", 2, -2)
+    row.swatch:SetPoint("BOTTOMRIGHT", -2, 2)
+    row.colour:SetScript("OnClick", function(_, button)
+      if button == "RightButton" then
+        ns.SetBannerColor(k.key, nil)
+        M.Refresh()
+      else
+        ns.PickBannerColor(k.key, M.Refresh)
+      end
+    end)
+    UI.Tooltip(row.colour, "Banner colour", "Click to pick this alert's banner colour. Right-click to use Warcrest's colour again.")
     if i < #ns.SOUND_KINDS then UI.RowLine(row) end
     row.kind = k.key
     M.rows[i] = row
@@ -154,7 +173,7 @@ local function BuildTable(f)
 end
 
 local function BuildSettingsCard(f)
-  local c = UI.Box(f, SIDE_X, 0, SIDE_W, 176, "Sound settings")
+  local c = UI.Box(f, SIDE_X, 0, SIDE_W, 210, "Sound settings")
   M.settings = c
   M.on = UI.Check(c, "Play alert sounds", 10, -36)
   M.on:SetScript("OnClick", function(self) ns.db.sound = self:GetChecked() and true or false end)
@@ -181,13 +200,18 @@ local function BuildSettingsCard(f)
     .. "when game effects are turned down.")
   local reset = UI.Button(c, "Use Warcrest's sounds again", INNER)
   reset:SetHeight(26)
-  reset:SetPoint("BOTTOMLEFT", 14, 14)
   reset:SetScript("OnClick", function() ns.ResetAlertSounds(); ns.RefreshPanel() end)
   UI.Tooltip(reset, "Use Warcrest's sounds again", "Puts every alert back to the sound it started with.")
+  reset:SetPoint("BOTTOMLEFT", 14, 48)
+  local colours = UI.Button(c, "Use Warcrest's colours again", INNER)
+  colours:SetHeight(26)
+  colours:SetPoint("BOTTOMLEFT", 14, 14)
+  colours:SetScript("OnClick", function() ns.ResetBannerColors(); ns.RefreshPanel() end)
+  UI.Tooltip(colours, "Use Warcrest's colours again", "Puts every banner back to the colour it started with.")
 end
 
 local function BuildCustomCard(f)
-  local c = UI.Box(f, SIDE_X, -190, SIDE_W, H - 190, "Your own sounds")
+  local c = UI.Box(f, SIDE_X, -224, SIDE_W, H - 224, "Your own sounds")
   M.custom = c
   local how = UI.Label(c, "Make a folder called WarcrestSounds in Interface\\AddOns, put .ogg or .mp3 files in it, "
     .. "and restart the game. Then add each one by its file name.", "MutedSmall")
@@ -209,7 +233,7 @@ local function BuildCustomCard(f)
   end)
   M.file:SetScript("OnEnterPressed", function() add:Click() end)
   UI.Tooltip(add, "Add", "Plays the file to check it's there, then adds it to the sounds you can pick.")
-  M.customList = UI.List(c, INNER + 4, H - 190 - 150, 24,
+  M.customList = UI.List(c, INNER + 4, H - 224 - 150, 24,
     function(row)
       row.name = UI.Label(row, "", "Small")
       row.name:SetPoint("LEFT", 2, 0)
@@ -252,6 +276,8 @@ function M.Refresh()
     local s = ns.SoundByID(ns.AlertSound(row.kind))
     row.pick:SetText(s and s.name or "")
     UI.SetEnabled(row.play, s ~= nil and s.id ~= "none")
+    local c = ns.BannerColor(row.kind)
+    row.swatch:SetColorTexture(c[1], c[2], c[3], 1)
   end
   M.customList:SetItems(ns.db.customSounds)
   refreshPicker()
