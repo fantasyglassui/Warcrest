@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.5.3
+- **Fixed "The game blocked ChatFrame1:Show()" in combat.** Putting titles into chat lines made the game treat the chat window as touched by Warcrest, so it blocked the chat window's own actions during combat. Titles in chat are now **off unless you turn them on** (Achievements > Titles > Show titles in chat), and while they're off Warcrest doesn't touch chat at all. If you turn them on and see the message again, turn them off and type /reload.
+- A blocked action is now explained once per session instead of every time, with advice that fits what was blocked.
+
 ## 4.5.2
 - **Titles in chat:** a possible fix for titles not showing. Warcrest now hooks chat both the new way and the old way the game supports, because some chat add-ons only pass messages through hooks added the old way. A title is never added twice.
 - **/warcrest report** now says whether titles in chat are on, how many chat lines Warcrest has seen, your title, and why the title did or didn't show on the last chat line.

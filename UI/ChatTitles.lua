@@ -5,8 +5,12 @@
   chat window shows their title in gold at the start of the message:
       [Lyra]: (the Avenger) anyone up for Tarren Mill?
   This only changes what your own chat window shows; the message itself is
-  untouched, so players without Warcrest see it as normal. Turn it off on the
-  Achievements tab (Title > Show titles in chat).
+  untouched, so players without Warcrest see it as normal.
+
+  It's off unless you turn it on (Achievements > Titles > Show titles in
+  chat): on WoW: Forever, changing chat lines can make the game block the
+  chat window's own actions in combat ("The game blocked ChatFrame1:Show()").
+  While it's off, Warcrest doesn't touch chat at all.
 ]]
 
 local _, ns = ...
@@ -19,9 +23,6 @@ local EVENTS = {
 }
 local GOLD = "|cffd4af37"
 
-ns.OnLoad(function()
-  if ns.db.chatTitles == nil then ns.db.chatTitles = true end
-end)
 
 -- What the last chat lines looked like, for /warcrest report: why a title did or didn't show.
 local seen = { lines = 0, apis = {} }
@@ -52,17 +53,41 @@ local function filter(_, event, msg, author, ...)
   return false, msg, author, ...
 end
 
--- The game's way of adding a chat filter, and the old one too when both are
--- there (some chat addons still only run filters added the old way).
-local added = {}
-local function addWith(name, add)
-  if type(add) ~= "function" or added[add] then return end
-  added[add] = true
-  local ok = pcall(function() for _, e in ipairs(EVENTS) do add(e, filter) end end)
-  if ok then seen.apis[#seen.apis + 1] = name end
+-- Add the filter with the game's way of doing it (and the old way, when only
+-- that one is there). Only while titles in chat are on.
+local adding = false
+local function addFilter()
+  if adding or #seen.apis > 0 then return end
+  adding = true
+  local add, name = ChatFrameUtil and ChatFrameUtil.AddMessageEventFilter, "ChatFrameUtil"
+  if type(add) ~= "function" then add, name = _G.ChatFrame_AddMessageEventFilter, "ChatFrame_AddMessageEventFilter" end
+  if type(add) == "function" and pcall(function() for _, e in ipairs(EVENTS) do add(e, filter) end end) then
+    seen.apis[1] = name
+  end
+  adding = false
 end
-addWith("ChatFrameUtil", ChatFrameUtil and ChatFrameUtil.AddMessageEventFilter)
-addWith("ChatFrame_AddMessageEventFilter", _G.ChatFrame_AddMessageEventFilter)
+
+local function removeFilter()
+  local remove = ChatFrameUtil and ChatFrameUtil.RemoveMessageEventFilter or _G.ChatFrame_RemoveMessageEventFilter
+  if type(remove) == "function" then pcall(function() for _, e in ipairs(EVENTS) do remove(e, filter) end end) end
+  seen.apis = {}
+end
+
+-- Turn titles in chat on or off. Off needs a /reload to be fully clear of the game's chat.
+function ns.SetChatTitles(on)
+  ns.db.chatTitles = on and true or false
+  if on then addFilter() else removeFilter() end
+end
+
+ns.OnLoad(function()
+  -- Off for everyone once (4.5.3): it was on by default, and it can make the
+  -- game block the chat window's actions in combat.
+  if not ns.db.chatTitlesOptIn then
+    ns.db.chatTitlesOptIn = true
+    ns.db.chatTitles = false
+  end
+  if ns.db.chatTitles then addFilter() end
+end)
 
 -- For /warcrest report.
 function ns.ChatTitleReport()

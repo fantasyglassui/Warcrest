@@ -121,9 +121,14 @@ local function BuildChooser()
     end, true)
   chooser.list.frame:SetPoint("TOPLEFT", box, "TOPLEFT", 4, -3)
   chooser.chat = UI.Check(chooser, "Show titles in chat", 10, -(470 - 46))
-  chooser.chat:SetScript("OnClick", function(self) ns.db.chatTitles = self:GetChecked() and true or false end)
+  chooser.chat:SetScript("OnClick", function(self)
+    local on = self:GetChecked() and true or false
+    ns.SetChatTitles(on)
+    if not on then ns.Say(ns.T("Titles in chat are off. Type /reload to fully stop Warcrest changing chat lines.")) end
+  end)
   UI.Tooltip(chooser.chat, "Titles in chat", "Shows guildmates' titles in gold at the start of their chat messages, in your chat window: "
-    .. "[Lyra]: (the Avenger) hello. Only you see the change; it doesn't alter what they sent.")
+    .. "[Lyra]: (the Avenger) hello. Only you see the change; it doesn't alter what they sent.\n\n"
+    .. "On WoW: Forever this can make the game block the chat window's own actions in combat. If you see \"The game blocked ChatFrame1\", turn this off and type /reload.")
   local done = UI.Button(chooser, "Done", 100, "primary")
   done:SetHeight(28)
   done:SetPoint("BOTTOMRIGHT", -16, 14)

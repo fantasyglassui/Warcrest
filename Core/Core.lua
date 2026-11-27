@@ -679,9 +679,23 @@ ns.OnEvent("PLAYER_ENTERING_WORLD", function() C_Timer.After(3, flushHeld) end)
 
 -- The game stopped something Warcrest tried (an "interface action failed").
 -- Say what, and keep it for /warcrest report, with where it came from.
+local toldAbout = {} -- what's been said once this session
 local function blocked(kind, who, func)
   if who ~= ADDON_NAME then return end
-  ns.Say(ns.TF("The game blocked %s for addons. Use the regular Guild window for that action.", tostring(func)))
+  local f = tostring(func)
+  local about = f:find("ChatFrame") and "chat" or (f:find("Guild") and "guild") or f
+  if not toldAbout[about] then
+    toldAbout[about] = true
+    if about == "chat" then
+      ns.Say(ns.db.chatTitles
+        and ns.T("The game blocked a chat window action in combat because Warcrest changes chat lines for titles. Turn off Show titles in chat (Achievements > Titles) and type /reload.")
+        or ns.T("The game blocked a chat window action in combat. If it keeps happening, type /reload, and send /warcrest report if it comes back."))
+    elseif about == "guild" then
+      ns.Say(ns.TF("The game blocked %s for addons. Use the regular Guild window for that action.", f))
+    else
+      ns.Say(ns.TF("The game blocked %s for addons. If it keeps happening, send /warcrest report.", f))
+    end
+  end
   local where = debugstack and debugstack(3, 4, 0) or ""
   local text = (kind .. ": " .. tostring(func) .. " " .. where:gsub("\n", " | ")):sub(1, 300)
   local last = ns.recentErrors[#ns.recentErrors]

@@ -151,6 +151,8 @@ def titled_bob():
     guild.run(3)
     assert guild["Bob"].ns.SetTitle("bounty")
     guild.run(3)
+    for c in guild.clients.values():
+        c.ns.SetChatTitles(True)
     return guild
 
 
@@ -163,7 +165,7 @@ def test_titles_show_in_chat_for_guildmates():
     assert show("CHAT_MSG_SAY", "hi", "Bob-Realm") == gold + "hi"
     assert show("CHAT_MSG_GUILD", "hello", "Alice-Realm") == "hello"          # no title
     assert show("CHAT_MSG_SAY", "hello", "Stranger-Realm") == "hello"         # not a guildmate
-    cara.ns.db.chatTitles = False
+    cara.ns.SetChatTitles(False)
     assert show("CHAT_MSG_GUILD", "hi", "Bob-Realm") == "hi"                  # turned off
 
 
@@ -211,6 +213,7 @@ def test_titles_show_in_chat_on_newer_clients():
     guild.run(3)
     assert guild["Bob"].ns.SetTitle("bounty")
     guild.run(3)
+    guild["Cara"].ns.SetChatTitles(True)
     show = guild["Cara"].lua.eval("ShowChat")
     assert show("CHAT_MSG_GUILD", "anyone for STV?", "Bob Realm") == "|cffd4af37(the Bounty Hunter)|r anyone for STV?"
 
@@ -230,3 +233,28 @@ def test_the_bug_report_says_why_a_title_did_or_didnt_show_in_chat():
     # Added only once, even if both of the game's filter lists run.
     once = show("CHAT_MSG_GUILD", "|cffd4af37(the Bounty Hunter)|r hi", "Bob-Realm")
     assert once.count("Bounty Hunter") == 1
+
+
+def test_titles_in_chat_are_off_until_you_turn_them_on():
+    guild = titled_bob()
+    dan = Guild(M)["Cara"]          # a fresh install
+    dan.login()
+    assert dan.ns.db.chatTitles is False
+    assert "filter added with nothing" in dan.ns.ChatTitleReport()
+    show = dan.lua.eval("ShowChat")
+    assert show("CHAT_MSG_GUILD", "hi", "Bob-Realm") == "hi"
+    # Upgrading from 4.5.2, where it was on: off once.
+    old = Guild(M, setup=lambda c: c.run("WarcrestDB = { chatTitles = true }"))["Cara"]
+    old.login()
+    assert old.ns.db.chatTitles is False
+    assert guild["Cara"].ns.db.chatTitles is True   # turned on stays on
+
+
+def test_a_blocked_chat_action_is_explained_once():
+    guild = titled_bob()
+    cara = guild["Cara"]
+    cara.said()
+    for _ in range(3):
+        cara.fire("ADDON_ACTION_BLOCKED", "Warcrest", "ChatFrame1:Show()")
+    lines = cara.said("blocked")
+    assert len(lines) == 1 and "Show titles in chat" in lines[0]
